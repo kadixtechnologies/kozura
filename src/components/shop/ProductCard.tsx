@@ -7,25 +7,25 @@ import { Product, formatNGN, store } from "@/lib/mock-data";
 export function ProductCard({ product, compact = false }: { product: Product; compact?: boolean }) {
   const hasVariants = product.variants.length > 0;
   return (
-    <Card className="overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow group">
+    <Card className="overflow-hidden">
       <Link to={`/${store.slug}/p/${product.slug}`} className="block">
-        <div className="aspect-square bg-muted flex items-center justify-center">
-          <ImageIcon className="h-12 w-12 text-muted-foreground/40" />
+        <div className="aspect-square bg-muted flex items-center justify-center border-b">
+          <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
         </div>
       </Link>
       <div className={compact ? "p-3" : "p-4"}>
         <div className="text-xs text-muted-foreground">{product.brand}</div>
         <Link to={`/${store.slug}/p/${product.slug}`}>
-          <div className={`font-semibold mt-0.5 line-clamp-1 ${compact ? "text-sm" : ""}`}>
+          <div className={`font-medium mt-1 line-clamp-1 ${compact ? "text-sm" : "text-[15px]"}`}>
             {product.name}
           </div>
         </Link>
-        <div className={`font-bold text-primary mt-1 ${compact ? "text-sm" : "text-lg"}`}>
+        <div className={`font-semibold mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
           {formatNGN(product.price)}
         </div>
         {!compact && (
-          <Button className="w-full mt-3" size="sm">
-            {hasVariants ? "See Options" : "Add to Cart"}
+          <Button variant="outline" className="w-full mt-3" size="sm">
+            {hasVariants ? "See options" : "Add to cart"}
           </Button>
         )}
       </div>

@@ -26,7 +26,7 @@ export default function AdminOrderDetail() {
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Customer Information</h2>
               <dl className="grid sm:grid-cols-2 gap-3 text-sm">
                 <div><dt className="text-muted-foreground">Name</dt><dd className="font-medium">{order.customerName}</dd></div>
@@ -36,7 +36,7 @@ export default function AdminOrderDetail() {
               </dl>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Order Items</h2>
               <div className="space-y-3">
                 {(order.items.length ? order.items : [{ productId: "—", name: "Sample item", variant: "Default", qty: 1, price: order.total }]).map((it, i) => (
@@ -54,7 +54,7 @@ export default function AdminOrderDetail() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-6">Order Timeline</h2>
               <OrderTimeline steps={orderTimeline} />
               <Separator className="my-6" />
@@ -66,7 +66,7 @@ export default function AdminOrderDetail() {
           </div>
 
           <div className="space-y-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Order Summary</h2>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatNGN(itemsTotal)}</span></div>
@@ -78,7 +78,7 @@ export default function AdminOrderDetail() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Order Actions</h2>
               <div className="space-y-2">
                 <Button className="w-full gap-2"><Truck className="h-4 w-4" /> Mark as Shipped</Button>

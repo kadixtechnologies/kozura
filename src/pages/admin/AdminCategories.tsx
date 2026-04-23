@@ -14,7 +14,7 @@ export default function AdminCategories() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.filter((c) => c.id !== "all").map((c) => (
-            <Card key={c.id} className="p-5 rounded-xl shadow-sm flex items-center justify-between">
+            <Card key={c.id} className="p-5 rounded-lg flex items-center justify-between">
               <div>
                 <div className="font-semibold">{c.label}</div>
                 <div className="text-xs text-muted-foreground mt-0.5">12 products</div>

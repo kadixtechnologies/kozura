@@ -16,33 +16,33 @@
     /* Emerald green primary #16a34a */
     --primary: 142 71% 37%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 142 71% 95%;
+    --primary-soft: 142 60% 96%;
 
-    --secondary: 240 5% 96%;
+    --secondary: 240 5% 97%;
     --secondary-foreground: 240 10% 10%;
 
-    --muted: 240 5% 96%;
+    --muted: 240 5% 97%;
     --muted-foreground: 240 4% 46%;
 
-    --accent: 142 71% 95%;
-    --accent-foreground: 142 71% 27%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 10% 10%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
-    --warning-foreground: 38 92% 15%;
-    --warning-soft: 48 96% 92%;
+    --warning-foreground: 30 60% 25%;
+    --warning-soft: 45 100% 96%;
 
     --success: 142 71% 37%;
     --success-foreground: 0 0% 100%;
-    --success-soft: 142 71% 95%;
+    --success-soft: 142 60% 96%;
 
-    --border: 240 6% 90%;
+    --border: 240 6% 92%;
     --input: 240 6% 90%;
     --ring: 142 71% 37%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 10% 10%;

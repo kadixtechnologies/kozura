@@ -19,7 +19,7 @@ export default function AdminProductForm() {
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Product Information</h2>
               <div className="space-y-4">
                 <div><Label>Name</Label><Input className="mt-1.5" placeholder="Galaxy S24 Ultra" /></div>
@@ -41,19 +41,19 @@ export default function AdminProductForm() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Product Variants</h2>
               <VariantBuilder />
             </Card>
           </div>
 
           <div className="space-y-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Product Images</h2>
               <ImageUploader />
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Product Status</h2>
               <div className="flex items-center justify-between">
                 <div>

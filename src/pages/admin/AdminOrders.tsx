@@ -22,7 +22,7 @@ export default function AdminOrders() {
           </TabsList>
         </Tabs>
 
-        <Card className="rounded-xl shadow-sm overflow-hidden">
+        <Card className="rounded-lg overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>

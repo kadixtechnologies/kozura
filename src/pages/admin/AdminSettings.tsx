@@ -25,7 +25,7 @@ export default function AdminSettings() {
           </TabsList>
 
           <TabsContent value="general" className="space-y-6 mt-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Store Information</h2>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div><Label>Store Name</Label><Input defaultValue={store.name} className="mt-1.5" /></div>
@@ -49,7 +49,7 @@ export default function AdminSettings() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Appearance</h2>
               <div className="space-y-4">
                 <div>
@@ -66,7 +66,7 @@ export default function AdminSettings() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Store Status</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -89,7 +89,7 @@ export default function AdminSettings() {
 
           <TabsContent value="shipping" className="space-y-6 mt-6">
             <div className="grid md:grid-cols-2 gap-4">
-              <Card className="p-6 rounded-xl shadow-sm">
+              <Card className="p-6 rounded-lg">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">Pickup</h3>
                   <span className="inline-flex items-center rounded-full bg-success-soft text-success px-2.5 py-0.5 text-xs font-medium">FREE</span>
@@ -103,7 +103,7 @@ export default function AdminSettings() {
                 </div>
               </Card>
 
-              <Card className="p-6 rounded-xl shadow-sm">
+              <Card className="p-6 rounded-lg">
                 <h3 className="font-semibold">Delivery</h3>
                 <div className="mt-4 space-y-3">
                   <div><Label>Label</Label><Input defaultValue="Delivery" className="mt-1.5" /></div>
@@ -116,7 +116,7 @@ export default function AdminSettings() {
               </Card>
             </div>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Address Fields</h2>
               <div className="space-y-3">
                 {["Address Line 1", "City", "State", "Postal Code"].map((f) => (
@@ -130,7 +130,7 @@ export default function AdminSettings() {
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">Payment Methods</h2>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -152,7 +152,7 @@ export default function AdminSettings() {
           </TabsContent>
 
           <TabsContent value="seo" className="mt-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold mb-4">SEO</h2>
               <div className="space-y-4">
                 <div><Label>Meta Title</Label><Input defaultValue="Cruz Gadgets — Future Forward Gadgets" className="mt-1.5" /></div>

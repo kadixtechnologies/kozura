@@ -13,7 +13,7 @@ export default function CartPage() {
       <StoreNavbar />
       <div className="container py-8 max-w-3xl">
         <h1 className="text-2xl font-bold">Your Cart ({cartItems.length} items)</h1>
-        <Card className="mt-6 p-6 rounded-xl shadow-sm">
+        <Card className="mt-6 p-6 rounded-lg">
           {cartItems.map((it) => <CartItem key={it.id} {...it} />)}
           <Separator className="my-4" />
           <div className="flex justify-between text-lg font-semibold">

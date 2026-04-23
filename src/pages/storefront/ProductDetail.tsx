@@ -20,30 +20,30 @@ export default function ProductDetail() {
   return (
     <div className="min-h-screen bg-background">
       <StoreNavbar />
-      <div className="container py-8">
-        <div className="grid lg:grid-cols-2 gap-8">
+      <div className="container py-10">
+        <div className="grid lg:grid-cols-2 gap-10">
           <div>
-            <div className="aspect-square rounded-xl bg-muted flex items-center justify-center">
-              <ImageIcon className="h-20 w-20 text-muted-foreground/40" />
+            <div className="aspect-square rounded-lg bg-muted border flex items-center justify-center">
+              <ImageIcon className="h-16 w-16 text-muted-foreground/40" />
             </div>
-            <div className="grid grid-cols-3 gap-3 mt-3">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="aspect-square rounded-lg bg-muted flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary">
-                  <ImageIcon className="h-6 w-6 text-muted-foreground/40" />
+            <div className="grid grid-cols-4 gap-2 mt-2">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="aspect-square rounded-md bg-muted border flex items-center justify-center cursor-pointer">
+                  <ImageIcon className="h-5 w-5 text-muted-foreground/40" />
                 </div>
               ))}
             </div>
           </div>
 
           <div>
-            <div className="text-sm text-muted-foreground">{product.brand}</div>
-            <h1 className="text-3xl font-bold mt-1">{product.name}</h1>
-            <div className="text-3xl font-bold text-primary mt-3">{formatNGN(product.price)}</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide">{product.brand}</div>
+            <h1 className="text-2xl font-semibold tracking-tight mt-2">{product.name}</h1>
+            <div className="text-2xl font-semibold mt-4">{formatNGN(product.price)}</div>
 
-            <div className="space-y-5 mt-6">
+            <div className="space-y-5 mt-8">
               {product.variants.map((v) => (
                 <div key={v.type}>
-                  <div className="text-sm font-medium mb-2">{v.type}</div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">{v.type}</div>
                   <div className="flex flex-wrap gap-2">
                     {v.values.map((val) => {
                       const isSel = selected[v.type] === val;
@@ -52,10 +52,10 @@ export default function ProductDetail() {
                           key={val}
                           onClick={() => setSelected({ ...selected, [v.type]: val })}
                           className={cn(
-                            "px-4 py-2 rounded-full border text-sm font-medium transition-colors",
+                            "px-3.5 py-1.5 rounded-md border text-sm font-medium transition-colors",
                             isSel
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-background hover:bg-muted",
+                              ? "bg-foreground text-background border-foreground"
+                              : "bg-background text-foreground border-border",
                           )}
                         >
                           {val}
@@ -68,30 +68,30 @@ export default function ProductDetail() {
             </div>
 
             <div className="mt-6">
-              <div className="text-sm font-medium mb-2">Quantity</div>
-              <div className="inline-flex items-center border rounded-lg">
-                <Button variant="ghost" size="icon" onClick={() => setQty(Math.max(1, qty - 1))}>
-                  <Minus className="h-4 w-4" />
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">Quantity</div>
+              <div className="inline-flex items-center border rounded-md">
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-none" onClick={() => setQty(Math.max(1, qty - 1))}>
+                  <Minus className="h-3.5 w-3.5" />
                 </Button>
-                <span className="px-4 font-medium w-10 text-center">{qty}</span>
-                <Button variant="ghost" size="icon" onClick={() => setQty(qty + 1)}>
-                  <Plus className="h-4 w-4" />
+                <span className="px-4 text-sm font-medium w-10 text-center">{qty}</span>
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-none" onClick={() => setQty(qty + 1)}>
+                  <Plus className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
 
-            <Button size="lg" className="w-full mt-6">Add to Cart</Button>
+            <Button size="lg" className="w-full mt-8">Add to cart</Button>
 
-            <Accordion type="single" collapsible className="mt-6" defaultValue="desc">
+            <Accordion type="single" collapsible className="mt-8" defaultValue="desc">
               <AccordionItem value="desc">
-                <AccordionTrigger>Description</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
+                <AccordionTrigger className="text-sm">Description</AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
                   {product.description ?? "No description provided."}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="ship">
-                <AccordionTrigger>Shipping & Returns</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
+                <AccordionTrigger className="text-sm">Shipping & Returns</AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
                   Free pickup available. Delivery within 2-5 business days.
                 </AccordionContent>
               </AccordionItem>
@@ -99,8 +99,8 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        <div className="mt-16">
-          <h2 className="text-xl font-bold mb-4">Similar Products</h2>
+        <div className="mt-20 pt-10 border-t">
+          <h2 className="text-base font-semibold mb-5">Similar products</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {similar.map((p) => <ProductCard key={p.id} product={p} compact />)}
           </div>

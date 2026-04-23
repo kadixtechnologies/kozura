@@ -1,10 +1,10 @@
-import { LayoutDashboard, Package, Tag, ShoppingBag, Settings, ExternalLink, Store } from "lucide-react";
+import { LayoutDashboard, Package, Tag, ShoppingBag, Settings, ExternalLink } from "lucide-react";
 import { NavLink, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { store } from "@/lib/mock-data";
 
 const navItems = [
-  { to: "/admin", end: true, icon: LayoutDashboard, label: "Home" },
+  { to: "/admin", end: true, icon: LayoutDashboard, label: "Dashboard" },
   { to: "/admin/products", icon: Package, label: "Products" },
   { to: "/admin/categories", icon: Tag, label: "Categories" },
   { to: "/admin/orders", icon: ShoppingBag, label: "Orders" },
@@ -13,19 +13,16 @@ const navItems = [
 
 export function AdminSidebar() {
   return (
-    <aside className="hidden md:flex flex-col w-60 shrink-0 border-r bg-sidebar h-screen sticky top-0">
-      <div className="p-5 border-b">
+    <aside className="hidden md:flex flex-col w-56 shrink-0 border-r bg-background h-screen sticky top-0">
+      <div className="px-5 h-14 border-b flex items-center">
         <Link to="/admin" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">
-            <Store className="h-4 w-4" />
+          <div className="h-6 w-6 rounded bg-foreground text-background flex items-center justify-center text-[10px] font-semibold">
+            S
           </div>
-          <div>
-            <div className="font-bold text-sm leading-tight">ShopLink</div>
-            <div className="text-xs text-muted-foreground">Admin</div>
-          </div>
+          <span className="font-semibold text-sm tracking-tight">ShopLink</span>
         </Link>
       </div>
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-2 space-y-0.5">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
@@ -33,10 +30,10 @@ export function AdminSidebar() {
             end={item.end}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                "flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm transition-colors",
                 isActive
-                  ? "bg-primary-soft text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "bg-muted text-foreground font-medium"
+                  : "text-muted-foreground",
               )
             }
           >
@@ -45,13 +42,13 @@ export function AdminSidebar() {
           </NavLink>
         ))}
       </nav>
-      <div className="p-3 border-t">
+      <div className="p-2 border-t">
         <Link
           to={`/${store.slug}`}
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm text-muted-foreground"
         >
           <ExternalLink className="h-4 w-4" />
-          View Store
+          View store
         </Link>
       </div>
     </aside>
@@ -60,7 +57,7 @@ export function AdminSidebar() {
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex w-full bg-muted/30">
+    <div className="min-h-screen flex w-full bg-background">
       <AdminSidebar />
       <main className="flex-1 min-w-0">{children}</main>
     </div>

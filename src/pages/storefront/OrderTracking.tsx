@@ -16,7 +16,7 @@ export default function OrderTracking() {
           <StatusBadge status={order.status} />
         </div>
 
-        <Card className="p-6 rounded-xl shadow-sm mt-6">
+        <Card className="p-6 rounded-lg mt-6">
           <h2 className="font-semibold">Order Summary</h2>
           <div className="mt-4 space-y-2">
             {order.items.map((it, i) => (
@@ -33,7 +33,7 @@ export default function OrderTracking() {
           </div>
         </Card>
 
-        <Card className="p-6 rounded-xl shadow-sm mt-6">
+        <Card className="p-6 rounded-lg mt-6">
           <h2 className="font-semibold mb-6">Order Status</h2>
           <OrderTimeline steps={orderTimeline} />
         </Card>

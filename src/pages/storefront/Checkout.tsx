@@ -20,7 +20,7 @@ export default function Checkout() {
         <h1 className="text-2xl font-bold">Checkout</h1>
         <div className="grid lg:grid-cols-3 gap-6 mt-6">
           <div className="lg:col-span-2 space-y-6">
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold text-lg">Contact Details</h2>
               <div className="grid sm:grid-cols-2 gap-4 mt-4">
                 <div><Label>Full Name</Label><Input className="mt-1.5" placeholder="Adaeze Okafor" /></div>
@@ -37,7 +37,7 @@ export default function Checkout() {
               </div>
             </Card>
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold text-lg">Shipping Method</h2>
               <RadioGroup value={shipping} onValueChange={(v: "pickup" | "delivery") => setShipping(v)} className="grid sm:grid-cols-2 gap-3 mt-4">
                 {[
@@ -48,8 +48,8 @@ export default function Checkout() {
                     key={o.v}
                     htmlFor={`ship-${o.v}`}
                     className={cn(
-                      "flex items-center justify-between border rounded-xl p-4 cursor-pointer transition-colors",
-                      shipping === o.v && "border-primary bg-primary-soft",
+                      "flex items-center justify-between border rounded-md p-3.5 cursor-pointer transition-colors",
+                      shipping === o.v ? "border-foreground" : "border-border",
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -63,7 +63,7 @@ export default function Checkout() {
             </Card>
 
             {shipping === "delivery" && (
-              <Card className="p-6 rounded-xl shadow-sm">
+              <Card className="p-6 rounded-lg">
                 <h2 className="font-semibold text-lg">Delivery Address</h2>
                 <div className="grid sm:grid-cols-2 gap-4 mt-4">
                   <div className="sm:col-span-2"><Label>Address Line 1</Label><Input className="mt-1.5" placeholder="12 Allen Avenue" /></div>
@@ -84,7 +84,7 @@ export default function Checkout() {
               </Card>
             )}
 
-            <Card className="p-6 rounded-xl shadow-sm">
+            <Card className="p-6 rounded-lg">
               <h2 className="font-semibold text-lg">Payment Method</h2>
               <RadioGroup value={payment} onValueChange={(v: "cod" | "transfer") => setPayment(v)} className="grid sm:grid-cols-2 gap-3 mt-4">
                 {[{ v: "cod", label: "Cash on Delivery" }, { v: "transfer", label: "Bank Transfer" }].map((o) => (
@@ -92,8 +92,8 @@ export default function Checkout() {
                     key={o.v}
                     htmlFor={`pay-${o.v}`}
                     className={cn(
-                      "flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-colors",
-                      payment === o.v && "border-primary bg-primary-soft",
+                      "flex items-center gap-3 border rounded-md p-3.5 cursor-pointer transition-colors",
+                      payment === o.v ? "border-foreground" : "border-border",
                     )}
                   >
                     <RadioGroupItem id={`pay-${o.v}`} value={o.v} />

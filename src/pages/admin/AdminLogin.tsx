@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 export default function AdminLogin() {
   return (
     <div className="min-h-screen bg-muted/40 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 rounded-xl shadow-sm">
+      <Card className="w-full max-w-md p-8 rounded-lg">
         <div className="flex flex-col items-center text-center">
-          <div className="h-12 w-12 rounded-xl bg-primary text-primary-foreground flex items-center justify-center">
+          <div className="h-12 w-12 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">
             <Store className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-bold mt-4">ShopLink Admin</h1>

@@ -8,7 +8,7 @@ export function OrderSummaryCard({ shippingFee = 5000 }: { shippingFee?: number 
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const total = subtotal + shippingFee;
   return (
-    <Card className="p-6 rounded-xl shadow-sm sticky top-20">
+    <Card className="p-6 rounded-lg sticky top-20">
       <h3 className="font-semibold text-lg">Order Summary</h3>
       <div className="mt-4 space-y-3">
         {cartItems.map((it) => (

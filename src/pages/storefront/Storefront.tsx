@@ -15,16 +15,24 @@ export default function Storefront() {
     <div className="min-h-screen bg-background">
       <StoreNavbar />
 
-      <section className="relative h-64 sm:h-80 bg-gradient-to-br from-primary via-primary to-emerald-600 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_white_0%,_transparent_60%)] opacity-10" />
-        <div className="container relative h-full flex flex-col justify-center text-primary-foreground">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">{store.name}</h1>
-          <p className="mt-2 text-lg opacity-90">{store.tagline}</p>
+      <section className="border-b bg-muted/40">
+        <div className="container py-14 sm:py-20">
+          <div className="text-xs font-medium text-primary uppercase tracking-wider">Verified Seller</div>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight max-w-2xl">
+            {store.name}
+          </h1>
+          <p className="mt-2 text-base text-muted-foreground max-w-xl">{store.tagline}</p>
         </div>
       </section>
 
-      <div className="container py-6">
-        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="container py-8">
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <h2 className="text-sm font-medium text-muted-foreground">
+            {filtered.length} products
+          </h2>
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
           {categories.map((c) => {
             const Icon = iconMap[c.icon];
             const isActive = active === c.id;
@@ -33,13 +41,13 @@ export default function Storefront() {
                 key={c.id}
                 onClick={() => setActive(c.id)}
                 className={cn(
-                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium border whitespace-nowrap transition-colors",
+                  "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium border whitespace-nowrap transition-colors",
                   isActive
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background hover:bg-muted",
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-background text-muted-foreground border-border",
                 )}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-3.5 w-3.5" />
                 {c.label}
               </button>
             );

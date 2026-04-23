@@ -9,24 +9,29 @@ import { orders, stats, formatNGN } from "@/lib/mock-data";
 export default function AdminDashboard() {
   return (
     <AdminLayout>
-      <div className="p-6 lg:p-8 space-y-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+      <div className="border-b">
+        <div className="px-6 lg:px-8 py-6">
+          <h1 className="text-xl font-semibold tracking-tight">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Overview of your store performance.</p>
+        </div>
+      </div>
 
+      <div className="p-6 lg:p-8 space-y-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Total Sales" value={formatNGN(stats.totalSales)} icon={DollarSign} accent="success" />
-          <StatCard label="Total Orders" value={String(stats.totalOrders)} icon={ShoppingBag} accent="primary" />
-          <StatCard label="Pending Orders" value={String(stats.pendingOrders)} icon={Clock} accent="warning" />
+          <StatCard label="Total sales" value={formatNGN(stats.totalSales)} icon={DollarSign} accent="success" />
+          <StatCard label="Total orders" value={String(stats.totalOrders)} icon={ShoppingBag} accent="primary" />
+          <StatCard label="Pending orders" value={String(stats.pendingOrders)} icon={Clock} accent="warning" />
           <StatCard label="Products" value={String(stats.productsCount)} icon={Package} accent="muted" />
         </div>
 
-        <Card className="rounded-lg overflow-hidden">
-          <div className="p-5 border-b">
-            <h2 className="font-semibold">Recent Orders</h2>
+        <Card className="overflow-hidden">
+          <div className="px-5 py-4 border-b">
+            <h2 className="font-medium text-sm">Recent orders</h2>
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order #</TableHead>
+                <TableHead>Order</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Items</TableHead>
                 <TableHead>Total</TableHead>
@@ -39,7 +44,7 @@ export default function AdminDashboard() {
                 <TableRow key={o.id}>
                   <TableCell className="font-medium">#{o.orderNumber}</TableCell>
                   <TableCell>{o.customerName}</TableCell>
-                  <TableCell>{o.itemsCount}</TableCell>
+                  <TableCell className="text-muted-foreground">{o.itemsCount}</TableCell>
                   <TableCell>{formatNGN(o.total)}</TableCell>
                   <TableCell><StatusBadge status={o.status} /></TableCell>
                   <TableCell className="text-muted-foreground">{o.date}</TableCell>

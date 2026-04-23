@@ -48,8 +48,8 @@ export default function Checkout() {
                     key={o.v}
                     htmlFor={`ship-${o.v}`}
                     className={cn(
-                      "flex items-center justify-between border rounded-lg p-4 cursor-pointer transition-colors",
-                      shipping === o.v && "border-primary bg-primary-soft",
+                      "flex items-center justify-between border rounded-md p-3.5 cursor-pointer transition-colors",
+                      shipping === o.v ? "border-foreground" : "border-border",
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -92,8 +92,8 @@ export default function Checkout() {
                     key={o.v}
                     htmlFor={`pay-${o.v}`}
                     className={cn(
-                      "flex items-center gap-3 border rounded-lg p-4 cursor-pointer transition-colors",
-                      payment === o.v && "border-primary bg-primary-soft",
+                      "flex items-center gap-3 border rounded-md p-3.5 cursor-pointer transition-colors",
+                      payment === o.v ? "border-foreground" : "border-border",
                     )}
                   >
                     <RadioGroupItem id={`pay-${o.v}`} value={o.v} />

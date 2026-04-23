@@ -15,14 +15,14 @@ export function StatCard({
     success: "bg-success-soft text-success",
   };
   return (
-    <Card className="p-5 shadow-sm rounded-xl">
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="text-2xl font-bold tracking-tight">{value}</div>
-          <div className="text-sm text-muted-foreground mt-1">{label}</div>
+    <Card className="p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</div>
+          <div className="text-2xl font-semibold tracking-tight mt-2">{value}</div>
         </div>
-        <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center", accentMap[accent])}>
-          <Icon className="h-5 w-5" />
+        <div className={cn("h-9 w-9 rounded-md flex items-center justify-center shrink-0", accentMap[accent])}>
+          <Icon className="h-4 w-4" />
         </div>
       </div>
     </Card>

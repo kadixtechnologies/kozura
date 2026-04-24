@@ -1,31 +1,54 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, ShoppingBag, Heart } from "lucide-react";
 import { CartDrawer } from "./CartDrawer";
 import { cartItems, store } from "@/lib/mock-data";
 
 export function StoreNavbar() {
   const [cartOpen, setCartOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-30 w-full bg-background/90 backdrop-blur border-b">
-      <div className="container flex h-14 items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-xl border-b border-border/60">
+      <div className="container flex h-16 items-center justify-between gap-6">
         <Link to={`/${store.slug}`} className="flex items-center gap-2.5">
-          <div className="h-7 w-7 rounded-md bg-foreground text-background flex items-center justify-center text-xs font-semibold">
+          <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold">
             {store.name.charAt(0)}
           </div>
           <span className="font-semibold text-[15px] tracking-tight">{store.name}</span>
         </Link>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-9 w-9"><Search className="h-4 w-4" /></Button>
-          <Button variant="ghost" size="icon" className="h-9 w-9 relative" onClick={() => setCartOpen(true)}>
-            <ShoppingCart className="h-4 w-4" />
+
+        <div className="hidden md:flex items-center gap-1 bg-muted/70 rounded-full p-1">
+          {["Shop", "New", "Brands", "About"].map((l, i) => (
+            <Link
+              key={l}
+              to={`/${store.slug}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                i === 0 ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {l}
+            </Link>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full hover:bg-muted transition-colors">
+            <Search className="h-[18px] w-[18px]" />
+          </button>
+          <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full hover:bg-muted transition-colors">
+            <Heart className="h-[18px] w-[18px]" />
+          </button>
+          <button
+            onClick={() => setCartOpen(true)}
+            className="inline-flex items-center gap-2 h-10 pl-3 pr-4 rounded-full bg-ink text-ink-foreground hover:bg-ink/90 transition-colors text-sm font-medium"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Cart
             {cartItems.length > 0 && (
-              <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-semibold text-primary-foreground flex items-center justify-center">
+              <span className="ml-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-background text-foreground px-1.5 text-[11px] font-semibold">
                 {cartItems.length}
               </span>
             )}
-          </Button>
+          </button>
         </div>
       </div>
       <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />

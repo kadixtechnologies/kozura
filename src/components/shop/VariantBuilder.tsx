@@ -29,11 +29,11 @@ export function VariantBuilder() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {groups.map((g, gi) => (
-        <div key={gi} className="border rounded-lg p-4">
+        <div key={gi} className="border border-border/60 rounded-2xl p-4 bg-muted/20">
           <div className="flex items-center justify-between mb-3">
-            <div className="font-medium">{g.type}</div>
+            <div className="font-medium text-sm">{g.type}</div>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setGroups(groups.filter((_, i) => i !== gi))}>
               <X className="h-4 w-4" />
             </Button>
@@ -41,24 +41,24 @@ export function VariantBuilder() {
           <div className="space-y-2">
             {g.values.map((v, vi) => (
               <div key={vi} className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-full border px-3 py-1 text-sm bg-muted/40 min-w-[100px]">{v.value}</span>
+                <span className="inline-flex items-center rounded-full bg-background border border-border px-3 py-1 text-xs font-medium min-w-[100px]">{v.value}</span>
                 <span className="text-xs text-muted-foreground">+₦</span>
-                <Input type="number" defaultValue={v.modifier} className="h-8 w-32" />
+                <Input type="number" defaultValue={v.modifier} className="h-8 w-32 rounded-lg" />
               </div>
             ))}
           </div>
         </div>
       ))}
       {adding ? (
-        <div className="border rounded-lg p-4 space-y-3 bg-muted/20">
+        <div className="border border-border/60 rounded-2xl p-4 space-y-3 bg-muted/20">
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs">Type</Label>
-              <Input placeholder="e.g. Size" value={newType} onChange={(e) => setNewType(e.target.value)} />
+              <Label className="text-xs text-muted-foreground">Type</Label>
+              <Input className="rounded-xl mt-1.5" placeholder="e.g. Size" value={newType} onChange={(e) => setNewType(e.target.value)} />
             </div>
             <div>
-              <Label className="text-xs">Values (comma separated)</Label>
-              <Input placeholder="S, M, L" value={newValues} onChange={(e) => setNewValues(e.target.value)} />
+              <Label className="text-xs text-muted-foreground">Values (comma separated)</Label>
+              <Input className="rounded-xl mt-1.5" placeholder="S, M, L" value={newValues} onChange={(e) => setNewValues(e.target.value)} />
             </div>
           </div>
           <div className="flex gap-2">
@@ -68,7 +68,7 @@ export function VariantBuilder() {
         </div>
       ) : (
         <Button variant="outline" onClick={() => setAdding(true)} className="gap-2">
-          <Plus className="h-4 w-4" /> Add Variant Group
+          <Plus className="h-4 w-4" /> Add variant group
         </Button>
       )}
     </div>

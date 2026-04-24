@@ -1,30 +1,31 @@
 import { LucideIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export function StatCard({
-  label, value, icon: Icon, accent = "primary",
+  label, value, icon: Icon, accent = "primary", trend,
 }: {
   label: string; value: string; icon: LucideIcon;
   accent?: "primary" | "warning" | "muted" | "success";
+  trend?: string;
 }) {
   const accentMap = {
-    primary: "bg-primary-soft text-primary",
-    warning: "bg-warning-soft text-warning-foreground",
-    muted: "bg-muted text-muted-foreground",
-    success: "bg-success-soft text-success",
+    primary: "bg-tile-mint",
+    warning: "bg-tile-butter",
+    muted: "bg-tile-mist",
+    success: "bg-tile-sky",
   };
   return (
-    <Card className="p-5">
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</div>
-          <div className="text-2xl font-semibold tracking-tight mt-2">{value}</div>
+    <div className={cn("rounded-[20px] p-5 flex flex-col justify-between min-h-[130px]", accentMap[accent])}>
+      <div className="flex items-center justify-between">
+        <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center">
+          <Icon className="h-4 w-4 text-foreground" />
         </div>
-        <div className={cn("h-9 w-9 rounded-md flex items-center justify-center shrink-0", accentMap[accent])}>
-          <Icon className="h-4 w-4" />
-        </div>
+        {trend && <span className="text-[11px] font-medium text-foreground/70">{trend}</span>}
       </div>
-    </Card>
+      <div>
+        <div className="text-2xl font-semibold tracking-tight">{value}</div>
+        <div className="text-xs text-foreground/60 mt-1">{label}</div>
+      </div>
+    </div>
   );
 }

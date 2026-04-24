@@ -4,75 +4,94 @@
 
 @layer base {
   :root {
+    /* Canvas — the soft tinted page background everything floats on */
+    --canvas: 120 30% 92%;
+
+    /* Surface — white inner shell that holds content */
     --background: 0 0% 100%;
-    --foreground: 240 10% 10%;
+    --foreground: 220 15% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
+    --card-foreground: 220 15% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
+    --popover-foreground: 220 15% 12%;
 
-    /* Emerald green primary #16a34a */
+    /* Emerald primary kept, but UI relies more on neutral dark for CTAs */
     --primary: 142 71% 37%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 142 60% 96%;
+    --primary-soft: 142 50% 94%;
 
-    --secondary: 240 5% 97%;
-    --secondary-foreground: 240 10% 10%;
+    /* Ink — near-black used for primary CTAs (Buy Now pills) */
+    --ink: 220 15% 10%;
+    --ink-foreground: 0 0% 100%;
 
-    --muted: 240 5% 97%;
-    --muted-foreground: 240 4% 46%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 15% 12%;
 
-    --accent: 240 5% 96%;
-    --accent-foreground: 240 10% 10%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 15% 12%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 30 60% 25%;
-    --warning-soft: 45 100% 96%;
+    --warning-soft: 45 100% 95%;
 
     --success: 142 71% 37%;
     --success-foreground: 0 0% 100%;
-    --success-soft: 142 60% 96%;
+    --success-soft: 142 50% 94%;
 
-    --border: 240 6% 92%;
-    --input: 240 6% 90%;
+    /* Pastel accents for tiles / cards */
+    --tile-mint: 142 45% 86%;
+    --tile-butter: 48 95% 86%;
+    --tile-peach: 22 95% 88%;
+    --tile-sky: 200 70% 90%;
+    --tile-mist: 220 25% 94%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 90%;
     --ring: 142 71% 37%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 10% 10%;
-    --sidebar-primary: 142 71% 37%;
+    --sidebar-foreground: 220 15% 12%;
+    --sidebar-primary: 220 15% 10%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 142 71% 95%;
-    --sidebar-accent-foreground: 142 71% 27%;
-    --sidebar-border: 240 6% 90%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 220 15% 12%;
+    --sidebar-border: 220 13% 91%;
     --sidebar-ring: 142 71% 37%;
   }
 
   .dark {
-    --background: 240 10% 6%;
+    --canvas: 220 15% 8%;
+    --background: 220 15% 11%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 8%;
+    --card: 220 15% 11%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 8%;
+    --popover: 220 15% 11%;
     --popover-foreground: 0 0% 98%;
     --primary: 142 71% 45%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 6% 14%;
+    --ink: 0 0% 98%;
+    --ink-foreground: 220 15% 10%;
+    --secondary: 220 12% 16%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 6% 14%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 6% 14%;
+    --muted: 220 12% 16%;
+    --muted-foreground: 220 8% 65%;
+    --accent: 220 12% 16%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 18%;
-    --input: 240 6% 18%;
+    --border: 220 12% 20%;
+    --input: 220 12% 20%;
     --ring: 142 71% 45%;
   }
 }
@@ -81,9 +100,23 @@
   * {
     @apply border-border;
   }
+  html, body, #root {
+    background: hsl(var(--canvas));
+  }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
     font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
+    letter-spacing: -0.005em;
+  }
+  h1, h2, h3, h4 {
+    letter-spacing: -0.022em;
+  }
+}
+
+@layer components {
+  /* The signature white shell that floats over the tinted canvas */
+  .shell {
+    @apply bg-background rounded-[28px] border border-border/60;
   }
 }

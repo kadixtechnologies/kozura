@@ -1,4 +1,4 @@
-import { Check, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type TimelineStep = {
@@ -9,7 +9,7 @@ export type TimelineStep = {
 
 export function OrderTimeline({ steps }: { steps: TimelineStep[] }) {
   return (
-    <ol className="relative space-y-6">
+    <ol className="relative space-y-5">
       {steps.map((step, i) => {
         const isLast = i === steps.length - 1;
         return (
@@ -18,35 +18,35 @@ export function OrderTimeline({ steps }: { steps: TimelineStep[] }) {
               <span
                 className={cn(
                   "absolute left-[15px] top-8 h-full w-px",
-                  step.state === "complete" ? "bg-primary" : "bg-border",
+                  step.state === "complete" ? "bg-ink" : "bg-border",
                 )}
               />
             )}
             <span
               className={cn(
-                "absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full border-2",
-                step.state === "complete" && "bg-primary border-primary text-primary-foreground",
-                step.state === "active" && "bg-primary-soft border-primary text-primary",
-                step.state === "pending" && "bg-background border-border text-muted-foreground",
+                "absolute left-0 top-0 flex h-8 w-8 items-center justify-center rounded-full",
+                step.state === "complete" && "bg-ink text-ink-foreground",
+                step.state === "active" && "bg-background border-2 border-ink text-foreground",
+                step.state === "pending" && "bg-background border border-border text-muted-foreground",
               )}
             >
               {step.state === "complete" ? (
                 <Check className="h-4 w-4" />
               ) : (
-                <Circle className={cn("h-3 w-3", step.state === "active" && "fill-primary")} />
+                <span className={cn("h-2 w-2 rounded-full", step.state === "active" ? "bg-ink" : "bg-muted-foreground/40")} />
               )}
             </span>
             <div>
               <div
                 className={cn(
-                  "font-medium",
+                  "font-medium text-sm",
                   step.state === "pending" ? "text-muted-foreground" : "text-foreground",
                 )}
               >
                 {step.label}
               </div>
               {step.timestamp && (
-                <div className="text-sm text-muted-foreground mt-0.5">{step.timestamp}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{step.timestamp}</div>
               )}
             </div>
           </li>

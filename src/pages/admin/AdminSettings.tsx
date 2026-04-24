@@ -1,6 +1,5 @@
-import { AdminLayout } from "@/components/admin/AdminSidebar";
+import { AdminLayout, AdminTopBar } from "@/components/admin/AdminSidebar";
 import { ImageUploader } from "@/components/shop/ImageUploader";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,35 +9,42 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { store } from "@/lib/mock-data";
 
+function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-[20px] border border-border/60 p-6">
+      <h2 className="font-semibold text-sm">{title}</h2>
+      <div className="mt-4">{children}</div>
+    </div>
+  );
+}
+
 export default function AdminSettings() {
   return (
     <AdminLayout>
-      <div className="p-6 lg:p-8 space-y-6">
-        <h1 className="text-2xl font-bold">Settings</h1>
+      <AdminTopBar title="Settings" subtitle="Configure your store" action={<Button>Save changes</Button>} />
 
+      <div className="p-7">
         <Tabs defaultValue="general">
-          <TabsList>
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="shipping">Shipping</TabsTrigger>
-            <TabsTrigger value="payments">Payments</TabsTrigger>
-            <TabsTrigger value="seo">SEO</TabsTrigger>
+          <TabsList className="bg-muted rounded-full p-1 h-auto">
+            {["general", "shipping", "payments", "seo"].map((t) => (
+              <TabsTrigger key={t} value={t} className="rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-1.5 text-sm capitalize">{t}</TabsTrigger>
+            ))}
           </TabsList>
 
-          <TabsContent value="general" className="space-y-6 mt-6">
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Store Information</h2>
+          <TabsContent value="general" className="space-y-5 mt-6">
+            <Panel title="Store information">
               <div className="grid sm:grid-cols-2 gap-4">
-                <div><Label>Store Name</Label><Input defaultValue={store.name} className="mt-1.5" /></div>
+                <div><Label className="text-xs text-muted-foreground">Store name</Label><Input defaultValue={store.name} className="mt-1.5 rounded-xl" /></div>
                 <div>
-                  <Label>Store Slug</Label>
-                  <Input defaultValue={store.slug} className="mt-1.5" />
-                  <div className="text-xs text-muted-foreground mt-1">shoplink.app/{store.slug}</div>
+                  <Label className="text-xs text-muted-foreground">Store slug</Label>
+                  <Input defaultValue={store.slug} className="mt-1.5 rounded-xl" />
+                  <div className="text-xs text-muted-foreground mt-1.5">shoplink.app/{store.slug}</div>
                 </div>
-                <div><Label>WhatsApp Number</Label><Input defaultValue={store.whatsapp} className="mt-1.5" /></div>
+                <div><Label className="text-xs text-muted-foreground">WhatsApp number</Label><Input defaultValue={store.whatsapp} className="mt-1.5 rounded-xl" /></div>
                 <div>
-                  <Label>Currency</Label>
+                  <Label className="text-xs text-muted-foreground">Currency</Label>
                   <Select defaultValue="NGN">
-                    <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="mt-1.5 rounded-xl"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="NGN">NGN — Nigerian Naira</SelectItem>
                       <SelectItem value="USD">USD — US Dollar</SelectItem>
@@ -47,124 +53,109 @@ export default function AdminSettings() {
                   </Select>
                 </div>
               </div>
-            </Card>
+            </Panel>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Appearance</h2>
-              <div className="space-y-4">
+            <Panel title="Appearance">
+              <div className="space-y-5">
                 <div>
-                  <Label>Logo</Label>
+                  <Label className="text-xs text-muted-foreground">Logo</Label>
                   <div className="mt-1.5"><ImageUploader /></div>
                 </div>
                 <div>
-                  <Label>Primary Color</Label>
+                  <Label className="text-xs text-muted-foreground">Primary color</Label>
                   <div className="mt-1.5 flex items-center gap-2">
-                    <div className="h-10 w-10 rounded-md border" style={{ backgroundColor: store.color }} />
-                    <Input defaultValue={store.color} className="font-mono w-40" />
+                    <div className="h-10 w-10 rounded-xl border border-border" style={{ backgroundColor: store.color }} />
+                    <Input defaultValue={store.color} className="font-mono w-40 rounded-xl" />
                   </div>
                 </div>
               </div>
-            </Card>
+            </Panel>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Store Status</h2>
+            <Panel title="Store status">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Store is Active</div>
+                    <div className="font-medium text-sm">Store is active</div>
                     <div className="text-xs text-muted-foreground mt-0.5">Customers can place orders</div>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Password Protected</div>
+                    <div className="font-medium text-sm">Password protected</div>
                     <div className="text-xs text-muted-foreground mt-0.5">Require password to view storefront</div>
                   </div>
                   <Switch />
                 </div>
               </div>
-            </Card>
+            </Panel>
           </TabsContent>
 
-          <TabsContent value="shipping" className="space-y-6 mt-6">
-            <div className="grid md:grid-cols-2 gap-4">
-              <Card className="p-6 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold">Pickup</h3>
-                  <span className="inline-flex items-center rounded-full bg-success-soft text-success px-2.5 py-0.5 text-xs font-medium">FREE</span>
-                </div>
-                <div className="mt-4 space-y-3">
-                  <div><Label>Label</Label><Input defaultValue="Pickup" className="mt-1.5" /></div>
-                  <div className="flex items-center justify-between">
+          <TabsContent value="shipping" className="space-y-5 mt-6">
+            <div className="grid md:grid-cols-2 gap-5">
+              <Panel title="Pickup">
+                <div className="space-y-3">
+                  <div><Label className="text-xs text-muted-foreground">Label</Label><Input defaultValue="Pickup" className="mt-1.5 rounded-xl" /></div>
+                  <div className="flex items-center justify-between pt-2">
                     <span className="text-sm font-medium">Active</span>
                     <Switch defaultChecked />
                   </div>
                 </div>
-              </Card>
-
-              <Card className="p-6 rounded-lg">
-                <h3 className="font-semibold">Delivery</h3>
-                <div className="mt-4 space-y-3">
-                  <div><Label>Label</Label><Input defaultValue="Delivery" className="mt-1.5" /></div>
-                  <div><Label>Fee</Label><Input defaultValue="₦5,000" className="mt-1.5" /></div>
-                  <div className="flex items-center justify-between">
+              </Panel>
+              <Panel title="Delivery">
+                <div className="space-y-3">
+                  <div><Label className="text-xs text-muted-foreground">Label</Label><Input defaultValue="Delivery" className="mt-1.5 rounded-xl" /></div>
+                  <div><Label className="text-xs text-muted-foreground">Fee</Label><Input defaultValue="₦5,000" className="mt-1.5 rounded-xl" /></div>
+                  <div className="flex items-center justify-between pt-2">
                     <span className="text-sm font-medium">Active</span>
                     <Switch defaultChecked />
                   </div>
                 </div>
-              </Card>
+              </Panel>
             </div>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Address Fields</h2>
+            <Panel title="Address fields">
               <div className="space-y-3">
                 {["Address Line 1", "City", "State", "Postal Code"].map((f) => (
-                  <label key={f} className="flex items-center gap-2 cursor-pointer">
+                  <label key={f} className="flex items-center gap-2.5 cursor-pointer">
                     <Checkbox defaultChecked={f !== "Postal Code"} />
                     <span className="text-sm">{f}</span>
                   </label>
                 ))}
               </div>
-            </Card>
+            </Panel>
           </TabsContent>
 
           <TabsContent value="payments" className="mt-6">
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Payment Methods</h2>
+            <Panel title="Payment methods">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Cash on Delivery</div>
-                    <div className="text-xs text-muted-foreground">Customer pays on delivery</div>
+                    <div className="font-medium text-sm">Cash on delivery</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Customer pays on delivery</div>
                   </div>
                   <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Bank Transfer</div>
-                    <div className="text-xs text-muted-foreground">Show your bank details on checkout</div>
+                    <div className="font-medium text-sm">Bank transfer</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Show your bank details on checkout</div>
                   </div>
                   <Switch defaultChecked />
                 </div>
               </div>
-            </Card>
+            </Panel>
           </TabsContent>
 
           <TabsContent value="seo" className="mt-6">
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">SEO</h2>
+            <Panel title="SEO">
               <div className="space-y-4">
-                <div><Label>Meta Title</Label><Input defaultValue="Cruz Gadgets — Future Forward Gadgets" className="mt-1.5" /></div>
-                <div><Label>Meta Description</Label><Input defaultValue="Shop the latest phones, laptops & accessories." className="mt-1.5" /></div>
+                <div><Label className="text-xs text-muted-foreground">Meta title</Label><Input defaultValue="Cruz Gadgets — Future Forward Gadgets" className="mt-1.5 rounded-xl" /></div>
+                <div><Label className="text-xs text-muted-foreground">Meta description</Label><Input defaultValue="Shop the latest phones, laptops & accessories." className="mt-1.5 rounded-xl" /></div>
               </div>
-            </Card>
+            </Panel>
           </TabsContent>
         </Tabs>
-
-        <div className="flex justify-end">
-          <Button>Save Changes</Button>
-        </div>
       </div>
     </AdminLayout>
   );

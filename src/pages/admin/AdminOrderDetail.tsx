@@ -1,13 +1,21 @@
-import { useParams } from "react-router-dom";
-import { Image as ImageIcon, Printer, Truck, XCircle, MessageCircle } from "lucide-react";
-import { AdminLayout } from "@/components/admin/AdminSidebar";
+import { Link, useParams } from "react-router-dom";
+import { Image as ImageIcon, Printer, Truck, XCircle, MessageCircle, ArrowLeft } from "lucide-react";
+import { AdminLayout, AdminTopBar } from "@/components/admin/AdminSidebar";
 import { StatusBadge } from "@/components/shop/StatusBadge";
 import { OrderTimeline } from "@/components/shop/OrderTimeline";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { orders, orderTimeline, formatNGN } from "@/lib/mock-data";
+
+function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-[20px] border border-border/60 p-6">
+      <h2 className="font-semibold text-sm">{title}</h2>
+      <div className="mt-4">{children}</div>
+    </div>
+  );
+}
 
 export default function AdminOrderDetail() {
   const { id } = useParams();
@@ -17,78 +25,77 @@ export default function AdminOrderDetail() {
 
   return (
     <AdminLayout>
-      <div className="p-6 lg:p-8 space-y-6">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-2xl font-bold">#{order.orderNumber}</h1>
-          <StatusBadge status={order.status} />
-          <span className="text-sm text-muted-foreground">· {order.date}</span>
-        </div>
+      <AdminTopBar
+        count={`#${order.orderNumber}`}
+        title="Order detail"
+        subtitle={order.date}
+        action={<StatusBadge status={order.status} />}
+      />
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Customer Information</h2>
-              <dl className="grid sm:grid-cols-2 gap-3 text-sm">
-                <div><dt className="text-muted-foreground">Name</dt><dd className="font-medium">{order.customerName}</dd></div>
-                <div><dt className="text-muted-foreground">Email</dt><dd className="font-medium">{order.email}</dd></div>
-                <div><dt className="text-muted-foreground">Phone</dt><dd className="font-medium">{order.phone}</dd></div>
-                <div><dt className="text-muted-foreground">Address</dt><dd className="font-medium">{order.address ?? "—"}</dd></div>
+      <div className="p-7">
+        <Link to="/admin/orders" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Back to orders
+        </Link>
+
+        <div className="grid lg:grid-cols-3 gap-5 mt-5">
+          <div className="lg:col-span-2 space-y-5">
+            <Panel title="Customer information">
+              <dl className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div><dt className="text-xs text-muted-foreground">Name</dt><dd className="font-medium mt-0.5">{order.customerName}</dd></div>
+                <div><dt className="text-xs text-muted-foreground">Email</dt><dd className="font-medium mt-0.5">{order.email}</dd></div>
+                <div><dt className="text-xs text-muted-foreground">Phone</dt><dd className="font-medium mt-0.5">{order.phone}</dd></div>
+                <div><dt className="text-xs text-muted-foreground">Address</dt><dd className="font-medium mt-0.5">{order.address ?? "—"}</dd></div>
               </dl>
-            </Card>
+            </Panel>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Order Items</h2>
+            <Panel title="Order items">
               <div className="space-y-3">
                 {(order.items.length ? order.items : [{ productId: "—", name: "Sample item", variant: "Default", qty: 1, price: order.total }]).map((it, i) => (
-                  <div key={i} className="flex items-center gap-3 py-2 border-b last:border-0">
-                    <div className="h-12 w-12 rounded-md bg-muted flex items-center justify-center">
-                      <ImageIcon className="h-5 w-5 text-muted-foreground/40" />
+                  <div key={i} className="flex items-center gap-3 py-3 border-b border-border/60 last:border-0">
+                    <div className="h-12 w-12 rounded-xl bg-tile-mint flex items-center justify-center">
+                      <ImageIcon className="h-5 w-5 text-foreground/30" />
                     </div>
                     <div className="flex-1">
-                      <div className="font-medium">{it.name}</div>
-                      <div className="text-xs text-muted-foreground">{it.variant} · Qty {it.qty}</div>
+                      <div className="font-medium text-sm">{it.name}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{it.variant} · Qty {it.qty}</div>
                     </div>
-                    <div className="font-medium">{formatNGN(it.price * it.qty)}</div>
+                    <div className="font-medium text-sm">{formatNGN(it.price * it.qty)}</div>
                   </div>
                 ))}
               </div>
-            </Card>
+            </Panel>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-6">Order Timeline</h2>
+            <Panel title="Order timeline">
               <OrderTimeline steps={orderTimeline} />
               <Separator className="my-6" />
-              <div>
-                <Textarea placeholder="Add a note..." rows={3} />
-                <Button className="mt-3">Add to Timeline</Button>
-              </div>
-            </Card>
+              <Textarea placeholder="Add a note..." rows={3} className="rounded-2xl resize-none" />
+              <Button className="mt-3" size="sm">Add to timeline</Button>
+            </Panel>
           </div>
 
-          <div className="space-y-6">
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Order Summary</h2>
+          <div className="space-y-5">
+            <Panel title="Order summary">
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>{formatNGN(itemsTotal)}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shipping === 0 ? "FREE" : formatNGN(shipping)}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Shipping</span><span>{shipping === 0 ? "Free" : formatNGN(shipping)}</span></div>
               </div>
-              <Separator className="my-3" />
-              <div className="flex justify-between font-bold">
-                <span>Total</span><span className="text-primary">{formatNGN(order.total)}</span>
+              <Separator className="my-4" />
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm text-muted-foreground">Total</span>
+                <span className="text-xl font-semibold tracking-tight">{formatNGN(order.total)}</span>
               </div>
-            </Card>
+            </Panel>
 
-            <Card className="p-6 rounded-lg">
-              <h2 className="font-semibold mb-4">Order Actions</h2>
+            <Panel title="Order actions">
               <div className="space-y-2">
-                <Button className="w-full gap-2"><Truck className="h-4 w-4" /> Mark as Shipped</Button>
+                <Button className="w-full gap-2"><Truck className="h-4 w-4" /> Mark as shipped</Button>
+                <Button variant="outline" className="w-full gap-2"><Printer className="h-4 w-4" /> Print order</Button>
+                <Button variant="outline" className="w-full gap-2"><MessageCircle className="h-4 w-4" /> Send WhatsApp</Button>
                 <Button variant="outline" className="w-full gap-2 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive">
-                  <XCircle className="h-4 w-4" /> Cancel Order
+                  <XCircle className="h-4 w-4" /> Cancel order
                 </Button>
-                <Button variant="outline" className="w-full gap-2"><Printer className="h-4 w-4" /> Print Order</Button>
-                <Button variant="outline" className="w-full gap-2"><MessageCircle className="h-4 w-4" /> Send WhatsApp Message</Button>
               </div>
-            </Card>
+            </Panel>
           </div>
         </div>
       </div>

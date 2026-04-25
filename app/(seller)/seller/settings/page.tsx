@@ -15,6 +15,12 @@ export default async function SellerSettingsPage() {
 
   if (!store) redirect("/seller/onboarding");
 
+  // Fetch plans
+  const { data: plans } = await supabase
+    .from("plans")
+    .select("*")
+    .order("price_monthly", { ascending: true });
+
   // Count orders this month
   const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
   const { count: ordersThisMonth } = await supabase
@@ -23,5 +29,5 @@ export default async function SellerSettingsPage() {
     .eq("store_id", store.id)
     .gte("created_at", startOfMonth);
 
-  return <ClientSettingsPage store={store} ordersThisMonth={ordersThisMonth || 0} />;
+  return <ClientSettingsPage store={store} ordersThisMonth={ordersThisMonth || 0} plans={plans || []} />;
 }

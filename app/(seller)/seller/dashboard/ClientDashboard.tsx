@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { DollarSign, ShoppingBag, Package, ArrowUpRight, Copy, ExternalLink, Share2, X, Check } from "lucide-react";
@@ -18,9 +18,15 @@ const formatNGN = (amount: number) => {
 
 export function ClientDashboard({ store, stats, recentOrders }: { store: any, stats: any, recentOrders: any[] }) {
   const router = useRouter();
-  const storeUrl = `shoplink.app/${store.slug}`;
+  const [storeUrl, setStoreUrl] = useState(`shoplink.app/${store.slug}`);
   const [showShare, setShowShare] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setStoreUrl(`${window.location.host}/${store.slug}`);
+    }
+  }, [store.slug]);
 
   const copyLink = async () => {
     try { await navigator.clipboard.writeText(`https://${storeUrl}`); } catch {

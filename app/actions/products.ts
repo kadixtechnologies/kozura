@@ -45,6 +45,18 @@ export async function saveProduct(formData: FormData) {
   if (id) {
     res = await supabase.from("products").update(productData).eq("id", id).eq("store_id", store.id);
   } else {
+    // Check plan limits before inserting a new product
+    const { data: storeDetails } = await supabase.from("stores").select("subscription_plan").eq("id", store.id).single();
+    if (storeDetails?.subscription_plan) {
+      const { data: plan } = await supabase.from("plans").select("product_limit").eq("id", storeDetails.subscription_plan).single();
+      if (plan && plan.product_limit !== -1) {
+        const { count } = await supabase.from("products").select("id", { count: "exact", head: true }).eq("store_id", store.id);
+        if (count !== null && count >= plan.product_limit) {
+          return { success: false, error: "You have reached the product limit for your current plan. Please upgrade to add more products." };
+        }
+      }
+    }
+
     res = await supabase.from("products").insert({ ...productData, slug });
   }
 

@@ -28,7 +28,23 @@ export async function placeOrder(formData: FormData) {
     return { success: false, error: "Missing required information" };
   }
 
-  const { data: store } = await supabase.from("stores").select("whatsapp_number, slug").eq("id", storeId).single();
+  const { data: store } = await supabase.from("stores").select("whatsapp_number, slug, subscription_plan").eq("id", storeId).single();
+  if (!store) {
+    return { success: false, error: "Store not found" };
+  }
+
+  // Check order limits
+  if (store.subscription_plan) {
+    const { data: plan } = await supabase.from("plans").select("order_limit").eq("id", store.subscription_plan).single();
+    if (plan && plan.order_limit !== -1) {
+      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
+      const { count } = await supabase.from("orders").select("id", { count: "exact", head: true }).eq("store_id", storeId).gte("created_at", startOfMonth);
+      
+      if (count !== null && count >= plan.order_limit) {
+        return { success: false, error: "This store cannot accept new orders at this time. Please contact the seller directly." };
+      }
+    }
+  }
   
   let paymentReceiptUrl = null;
   if (receiptFile) {

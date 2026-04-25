@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Store, Users, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Store, Users, Settings, LogOut, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/admin", end: true, icon: LayoutDashboard, label: "Overview" },
   { href: "/admin/stores", icon: Store, label: "Stores" },
   { href: "/admin/users", icon: Users, label: "Users" },
+  { href: "/admin/plans", icon: Zap, label: "Plans" },
   { href: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 

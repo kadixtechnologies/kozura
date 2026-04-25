@@ -42,6 +42,18 @@ export async function updateStorePlan(storeId: string, plan: string) {
   return { success: true };
 }
 
+export async function updatePlanLimits(planId: string, updates: { price_monthly: number; order_limit: number; product_limit: number }) {
+  const supabase = await createClient();
+  if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };
+
+  const { error } = await supabase.from("plans").update(updates).eq("id", planId);
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/admin/plans");
+  revalidatePath("/"); // Revalidate landing page pricing
+  return { success: true };
+}
+
 export async function updateUserStatus(userId: string, isSuspended: boolean) {
   const supabase = await createClient();
   if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };

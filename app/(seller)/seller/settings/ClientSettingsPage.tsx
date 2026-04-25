@@ -27,13 +27,6 @@ function Panel({ title, description, children }: { title: string; description?: 
   );
 }
 
-const PLANS = [
-  { id: "free", name: "Starter", price: "Free", ordersLabel: "20 orders/mo", icon: Zap, iconColor: "text-muted-foreground", color: "bg-muted" },
-  { id: "starter", name: "Hustle", price: "₦2,500/mo", ordersLabel: "250 orders/mo", icon: TrendingUp, iconColor: "text-amber-600", color: "bg-tile-butter" },
-  { id: "hustle", name: "Business", price: "₦5,000/mo", ordersLabel: "1,000 orders/mo", icon: Briefcase, iconColor: "text-blue-600", color: "bg-tile-sky" },
-  { id: "boss", name: "Boss", price: "₦12,000/mo", ordersLabel: "Unlimited", icon: Crown, iconColor: "text-orange-500", color: "bg-tile-peach" },
-] as const;
-
 function DeleteDialog({ onClose }: { onClose: () => void }) {
   const [txt, setTxt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -68,8 +61,19 @@ function DeleteDialog({ onClose }: { onClose: () => void }) {
 
 type DeliveryZone = { label: string; fee: number };
 
-export function ClientSettingsPage({ store, ordersThisMonth }: { store: any; ordersThisMonth: number }) {
+export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: any; ordersThisMonth: number; plans: any[] }) {
   const router = useRouter();
+  
+  const dynamicPlans = plans.map(p => ({
+    id: p.name.toLowerCase(), // Or p.id if we update stores table to use plan UUIDs
+    dbId: p.id,
+    name: p.name,
+    price: p.price_monthly === 0 ? "Free" : `₦${p.price_monthly.toLocaleString()}/mo`,
+    ordersLabel: p.order_limit === -1 ? "Unlimited orders" : `${p.order_limit.toLocaleString()} orders/mo`,
+    productsLabel: p.product_limit === -1 ? "Unlimited products" : `${p.product_limit.toLocaleString()} products`,
+    color: p.bg_color
+  }));
+
   const [activeTab, setActiveTab] = useState("general");
   const [saving, setSaving] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -176,7 +180,16 @@ export function ClientSettingsPage({ store, ordersThisMonth }: { store: any; ord
     setSaving(false);
   };
 
-  const currentPlan = PLANS.find(p => p.id === store.subscription_plan) || PLANS[0];
+  const fallbackPlan = {
+    id: "free",
+    name: "Free",
+    price: "Free",
+    ordersLabel: "20 orders/mo",
+    productsLabel: "10 products",
+    color: "bg-muted"
+  };
+
+  const currentPlan = dynamicPlans.find(p => p.id === store.subscription_plan) || dynamicPlans[0] || fallbackPlan;
 
   return (
     <>
@@ -404,10 +417,10 @@ export function ClientSettingsPage({ store, ordersThisMonth }: { store: any; ord
                   <div>
                     <div className="text-xs uppercase tracking-wider text-foreground/60 font-medium mb-1">Current plan</div>
                     <div className="flex items-center gap-2">
-                      <currentPlan.icon className={cn("h-5 w-5", currentPlan.iconColor)} />
                       <span className="text-2xl font-bold">{currentPlan.name}</span>
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">{currentPlan.price}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{currentPlan.ordersLabel} · {currentPlan.productsLabel}</div>
                   </div>
                   <div className="text-right shrink-0">
                     <div className="text-xs text-muted-foreground">Orders this month</div>
@@ -418,17 +431,16 @@ export function ClientSettingsPage({ store, ordersThisMonth }: { store: any; ord
 
               <Panel title="Available plans">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {PLANS.map(plan => {
+                  {dynamicPlans.map(plan => {
                     const isCurrent = plan.id === store.subscription_plan;
                     return (
                       <div key={plan.id} className={cn("relative rounded-2xl border p-5 transition-all", isCurrent ? "border-foreground/30 bg-muted/40" : "border-border hover:border-foreground/20")}>
                         {isCurrent && <span className="absolute top-3 right-3 inline-flex items-center gap-1 bg-foreground text-background text-[10px] font-semibold px-2 py-0.5 rounded-full"><Check className="h-2.5 w-2.5" /> Current</span>}
                         <div className="flex items-center gap-2 mb-2">
-                          <plan.icon className={cn("h-4 w-4", plan.iconColor)} />
                           <span className="font-semibold text-sm">{plan.name}</span>
                         </div>
                         <div className="text-xl font-bold">{plan.price}</div>
-                        <div className="text-xs text-muted-foreground mt-1">{plan.ordersLabel}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{plan.ordersLabel} · {plan.productsLabel}</div>
                         {!isCurrent && (
                           <Button size="sm" variant="outline" className="mt-4 w-full rounded-xl" onClick={() => toast.info(`To upgrade to ${plan.name}, contact support.`)}>
                             Upgrade to {plan.name}

@@ -7,81 +7,57 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, Check } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 type PricingPlan = {
+  id: string;
   plan_bg_color: string;
   plan_name: string;
   plan_descp: string;
   plan_price: number;
-  plan_limit: string;
+  order_limit: number;
+  product_limit: number;
   plan_feature: string[];
   popular?: boolean;
 };
 
-const pricingData: PricingPlan[] = [
-  {
-    plan_bg_color: "bg-slate-500/10 dark:bg-slate-500/20",
-    plan_name: "Free",
-    plan_descp: "Perfect to get started",
-    plan_price: 0,
-    plan_limit: "Up to 20 orders/month",
-    plan_feature: [
-      "1 store",
-      "Up to 10 products",
-      "WhatsApp order alerts",
-      "Customer order tracking",
-      "ShopLink subdomain",
-    ],
-  },
-  {
-    plan_bg_color: "bg-primary/20 ring-2 ring-primary scale-105 z-10",
-    plan_name: "Starter",
-    plan_descp: "For sellers getting serious",
-    plan_price: 2500,
-    plan_limit: "Up to 100 orders/month",
-    plan_feature: [
-      "Everything in Free",
-      "Up to 50 products",
-      "Custom categories",
-      "Coupon codes",
-      "Basic analytics",
-    ],
-    popular: true,
-  },
-  {
-    plan_bg_color: "bg-blue-500/10 dark:bg-blue-500/20",
-    plan_name: "Hustle",
-    plan_descp: "For fast-growing businesses",
-    plan_price: 6000,
-    plan_limit: "Up to 500 orders/month",
-    plan_feature: [
-      "Everything in Starter",
-      "Unlimited products",
-      "Priority WhatsApp support",
-      "Advanced analytics",
-      "Custom store colors & logo",
-    ],
-  },
-  {
-    plan_bg_color: "bg-purple-500/10 dark:bg-purple-500/20",
-    plan_name: "Boss",
-    plan_descp: "For high-volume sellers",
-    plan_price: 15000,
-    plan_limit: "Unlimited orders",
-    plan_feature: [
-      "Everything in Hustle",
-      "Multiple stores",
-      "Dedicated account manager",
-      "Early access to new features",
-      "Custom domain support",
-    ],
-  },
-];
-
 const Pricing = () => {
   const [isYearly, setIsYearly] = useState(false);
+  const [pricingData, setPricingData] = useState<PricingPlan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPlans() {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("plans")
+        .select("*")
+        .order("price_monthly", { ascending: true });
+
+      if (!error && data) {
+        setPricingData(data.map(plan => ({
+          id: plan.id,
+          plan_bg_color: plan.bg_color,
+          plan_name: plan.name,
+          plan_descp: plan.description,
+          plan_price: Number(plan.price_monthly),
+          order_limit: plan.order_limit,
+          product_limit: plan.product_limit,
+          plan_feature: plan.features,
+          popular: plan.popular
+        })));
+      }
+      setIsLoading(false);
+    }
+    loadPlans();
+  }, []);
+
+  const formatLimit = (limit: number) => {
+    if (limit === -1) return "Unlimited";
+    return `Up to ${limit.toLocaleString()}`;
+  };
 
   const cardVariants: Variants = {
     hidden: {
@@ -98,6 +74,15 @@ const Pricing = () => {
       },
     }),
   };
+
+  if (isLoading) {
+    return (
+      <div className="py-24 text-center">
+        <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+      </div>
+    );
+  }
+
 
   return (
     <section id="pricing" className="bg-canvas py-10 xl:py-0 w-full">
@@ -173,7 +158,7 @@ const Pricing = () => {
                           </span>
                         </p>
                         <div className="bg-background/80 p-2 rounded-xl text-xs font-semibold text-center text-foreground/80 w-full mb-2">
-                          {items.plan_limit}
+                          {formatLimit(items.order_limit)} orders/month
                         </div>
                         
                         <Button asChild className="relative bg-ink text-ink-foreground hover:bg-ink/90 text-sm font-medium rounded-full h-12 p-1 ps-6 pe-14 group transition-all duration-500 hover:ps-14 hover:pe-6 w-full overflow-hidden cursor-pointer">

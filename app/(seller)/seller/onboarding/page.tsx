@@ -3,19 +3,79 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Upload, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, ArrowLeft, Upload, Image as ImageIcon, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { completeOnboarding } from "@/app/actions/onboarding";
+import { toast } from "sonner";
+import { uploadStoreAsset } from "@/lib/supabase/storage";
+import { createClient } from "@/lib/supabase/client";
 
-const steps = ["Store Info", "Appearance", "Ready"];
+const steps = ["Store Info", "Contact", "Payout", "Ready"];
 
 export default function SellerOnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Form state
   const [storeName, setStoreName] = useState("");
+  const [category, setCategory] = useState("other");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [primaryColor, setPrimaryColor] = useState("#16a34a");
+
   const slug = storeName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+  const handleNext = () => {
+    if (step === 0 && !storeName.trim()) return toast.error("Store name is required");
+    if (step === 1 && !whatsappNumber.trim()) return toast.error("WhatsApp number is required");
+    if (step === 2 && (!bankName || !accountNumber || !accountName)) return toast.error("All bank details are required");
+    setStep(step + 1);
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      let logoUrl = "";
+      if (logoFile) {
+        // We simulate having a store ID by using user.id for onboarding asset path temp
+        const result = await uploadStoreAsset(user.id, logoFile, "logo");
+        if (result.success) logoUrl = result.url || "";
+      }
+
+      const formData = new FormData();
+      formData.append("storeName", storeName);
+      formData.append("category", category);
+      formData.append("whatsappNumber", whatsappNumber);
+      formData.append("bankName", bankName);
+      formData.append("accountNumber", accountNumber);
+      formData.append("accountName", accountName);
+      formData.append("logoUrl", logoUrl);
+      formData.append("primaryColor", primaryColor);
+
+      const res = await completeOnboarding(formData);
+      if (res.success) {
+        toast.success("Store created successfully!");
+        setStep(3);
+      } else {
+        toast.error(res.error || "Failed to create store");
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-canvas grid lg:grid-cols-2">
@@ -30,8 +90,9 @@ export default function SellerOnboardingPage() {
             <div className="text-xs uppercase tracking-[0.18em] font-medium text-ink-foreground/60">Step {step + 1} of {steps.length}</div>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight leading-tight max-w-md">
               {step === 0 && "Tell us about your store."}
-              {step === 1 && "Make it yours."}
-              {step === 2 && "You're all set!"}
+              {step === 1 && "How can customers reach you?"}
+              {step === 2 && "Where should we send your payouts?"}
+              {step === 3 && "You're all set!"}
             </h2>
           </div>
           <div className="flex gap-2">
@@ -69,7 +130,7 @@ export default function SellerOnboardingPage() {
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Category</Label>
-                <Select>
+                <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger className="mt-1.5 rounded-xl"><SelectValue placeholder="Select a category" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="electronics">Electronics</SelectItem>
@@ -81,8 +142,8 @@ export default function SellerOnboardingPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">WhatsApp number</Label>
-                <Input className="mt-1.5 rounded-xl" placeholder="+234 801 234 5678" />
+                <Label className="text-xs text-muted-foreground">Logo (Optional)</Label>
+                <Input type="file" className="mt-1.5" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] || null)} />
               </div>
             </div>
           )}
@@ -90,24 +151,18 @@ export default function SellerOnboardingPage() {
           {step === 1 && (
             <div className="space-y-5">
               <div>
-                <h1 className="text-2xl font-semibold tracking-tight">Customize</h1>
-                <p className="text-sm text-muted-foreground mt-1">Upload a logo and pick a color.</p>
+                <h1 className="text-2xl font-semibold tracking-tight">Contact</h1>
+                <p className="text-sm text-muted-foreground mt-1">Your WhatsApp number for orders and inquiries.</p>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground">Logo</Label>
-                <div className="mt-1.5 border-2 border-dashed border-border rounded-2xl p-8 text-center bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors">
-                  <div className="h-10 w-10 rounded-full bg-background border border-border mx-auto flex items-center justify-center">
-                    <Upload className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <p className="mt-3 font-medium text-sm">Upload logo</p>
-                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 2MB</p>
-                </div>
+                <Label className="text-xs text-muted-foreground">WhatsApp number</Label>
+                <Input className="mt-1.5 rounded-xl" placeholder="+234 801 234 5678" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} />
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Primary color</Label>
                 <div className="mt-1.5 flex gap-3">
                   {["#16a34a", "#2563eb", "#9333ea", "#e11d48", "#f97316", "#0d0d0d"].map((c) => (
-                    <button key={c} className="h-10 w-10 rounded-xl border-2 border-transparent hover:border-foreground/30 transition-all" style={{ backgroundColor: c }} />
+                    <button key={c} onClick={() => setPrimaryColor(c)} className={`h-10 w-10 rounded-xl border-2 transition-all ${primaryColor === c ? 'border-foreground' : 'border-transparent hover:border-foreground/30'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
               </div>
@@ -115,6 +170,27 @@ export default function SellerOnboardingPage() {
           )}
 
           {step === 2 && (
+            <div className="space-y-5">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight">Payout Details</h1>
+                <p className="text-sm text-muted-foreground mt-1">Where should we send your money?</p>
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Bank Name</Label>
+                <Input className="mt-1.5 rounded-xl" placeholder="e.g. GTBank" value={bankName} onChange={(e) => setBankName(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Account Number</Label>
+                <Input className="mt-1.5 rounded-xl" placeholder="0123456789" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground">Account Name</Label>
+                <Input className="mt-1.5 rounded-xl" placeholder="John Doe" value={accountName} onChange={(e) => setAccountName(e.target.value)} />
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
             <div className="space-y-5 text-center">
               <div className="h-16 w-16 rounded-2xl bg-tile-mint flex items-center justify-center mx-auto">
                 <ImageIcon className="h-8 w-8 text-foreground/30" />
@@ -127,16 +203,23 @@ export default function SellerOnboardingPage() {
             </div>
           )}
 
-          {step < 2 && (
+          {step < 3 && (
             <div className="flex items-center gap-3 mt-8">
               {step > 0 && (
-                <Button variant="outline" onClick={() => setStep(step - 1)} className="gap-2">
+                <Button variant="outline" onClick={() => setStep(step - 1)} className="gap-2" disabled={isLoading}>
                   <ArrowLeft className="h-4 w-4" /> Back
                 </Button>
               )}
-              <Button className="flex-1 gap-2" onClick={() => setStep(step + 1)}>
-                Continue <ArrowRight className="h-4 w-4" />
-              </Button>
+              {step < 2 ? (
+                <Button className="flex-1 gap-2" onClick={handleNext}>
+                  Continue <ArrowRight className="h-4 w-4" />
+                </Button>
+              ) : (
+                <Button className="flex-1 gap-2" onClick={handleSubmit} disabled={isLoading}>
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Complete Setup"} 
+                  {!isLoading && <ArrowRight className="h-4 w-4" />}
+                </Button>
+              )}
             </div>
           )}
 

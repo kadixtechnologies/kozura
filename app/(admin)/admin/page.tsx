@@ -1,24 +1,37 @@
 import { Activity, Store, Users, DollarSign } from "lucide-react";
 import { AdminLayout, AdminTopBar } from "@/components/admin/AdminSidebar";
 import { StatCard } from "@/components/shop/StatCard";
+import { createClient } from "@/lib/supabase/server";
+import { AdminCharts } from "@/components/admin/AdminCharts";
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const supabase = await createClient();
+  
+  // Get GMV (Sum of non-cancelled orders)
+  const { data: orders } = await supabase.from('orders').select('created_at, total_amount, status').order('created_at', { ascending: false });
+  const gmv = orders?.filter(o => o.status !== 'cancelled').reduce((acc, order) => acc + (order.total_amount || 0), 0) || 0;
+  
+  // Format GMV nicely
+  const formattedGMV = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(gmv);
+
+  // Get Active Stores
+  const { count: activeStoresCount } = await supabase.from('stores').select('*', { count: 'exact', head: true }).eq('is_active', true);
+  
+  // Get Total Users
+  const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+
   return (
     <AdminLayout>
       <AdminTopBar title="Platform Overview" subtitle="Global metrics for ShopLink" />
       <div className="p-7 space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Total GMV" value="₦45.2M" icon={DollarSign} accent="primary" trend="+24%" />
-          <StatCard label="Active Stores" value="1,248" icon={Store} accent="warning" trend="+12" />
-          <StatCard label="Total Users" value="45.9k" icon={Users} accent="success" trend="+845" />
+          <StatCard label="Total GMV" value={formattedGMV} icon={DollarSign} accent="primary" />
+          <StatCard label="Active Stores" value={(activeStoresCount || 0).toString()} icon={Store} accent="warning" />
+          <StatCard label="Total Users" value={(usersCount || 0).toString()} icon={Users} accent="success" />
           <StatCard label="System Status" value="Healthy" icon={Activity} accent="muted" />
         </div>
-        <div className="rounded-[20px] bg-tile-mist p-8 min-h-[300px] flex items-center justify-center border border-border/60">
-          <div className="text-center">
-            <h3 className="font-semibold text-lg">Charts & Analytics</h3>
-            <p className="text-sm text-muted-foreground mt-1">Platform growth charts will be displayed here.</p>
-          </div>
-        </div>
+        
+        <AdminCharts orders={orders || []} />
       </div>
     </AdminLayout>
   );

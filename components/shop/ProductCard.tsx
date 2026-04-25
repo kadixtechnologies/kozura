@@ -1,7 +1,10 @@
 import { Image as ImageIcon, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { Product, formatNGN, store } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+
+const formatNGN = (amount: number) => {
+  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+};
 
 const tilePalette = [
   "bg-tile-mint",
@@ -11,19 +14,25 @@ const tilePalette = [
   "bg-tile-mist",
 ];
 
-export function ProductCard({ product, compact = false, index = 0 }: { product: Product; compact?: boolean; index?: number }) {
+export function ProductCard({ product, compact = false, index = 0, storeSlug }: { product: any; compact?: boolean; index?: number; storeSlug: string }) {
   const tile = tilePalette[index % tilePalette.length];
   return (
     <Link
-      href={`/${store.slug}/p/${product.slug}`}
+      href={`/${storeSlug}/p/${product.slug}`}
       className="group block rounded-[24px] bg-background border border-border/60 overflow-hidden transition-all hover:border-border"
     >
       <div className={cn("relative aspect-[4/5] flex items-center justify-center overflow-hidden", tile)}>
-        <ImageIcon className="h-12 w-12 text-foreground/20 transition-transform duration-500 group-hover:scale-105" />
+        {product.image && product.image !== "/placeholder.png" ? (
+          <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : (
+          <ImageIcon className="h-12 w-12 text-foreground/20 transition-transform duration-500 group-hover:scale-105" />
+        )}
 
-        <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[11px] font-medium">
-          {product.brand}
-        </div>
+        {product.brand && (
+          <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[11px] font-medium">
+            {product.brand}
+          </div>
+        )}
       </div>
 
       <div className={compact ? "p-3.5" : "p-4"}>

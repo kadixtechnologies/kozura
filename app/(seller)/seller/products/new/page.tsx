@@ -1,62 +1,30 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { SellerLayout, SellerTopBar } from "@/components/seller/SellerSidebar";
-import { ImageUploader } from "@/components/shop/ImageUploader";
-import { VariantBuilder } from "@/components/shop/VariantBuilder";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { categories } from "@/lib/mock-data";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { ClientNewProductPage } from "./ClientNewProductPage";
 
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-[20px] border border-border/60 p-6">
-      <h2 className="font-semibold text-sm">{title}</h2>
-      <div className="mt-4">{children}</div>
-    </div>
-  );
-}
+export default async function SellerProductNewPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-export default function SellerProductNewPage() {
-  return (
-    <SellerLayout>
-      <SellerTopBar title="New product" subtitle="Add a product to your store" action={<Button>Publish</Button>} />
+  if (!user) {
+    redirect("/login");
+  }
 
-      <div className="p-7">
-        <Link href="/seller/products" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Back to products
-        </Link>
+  const { data: store } = await supabase
+    .from("stores")
+    .select("id")
+    .eq("seller_id", user.id)
+    .single();
 
-        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-5 mt-5">
-          <div className="space-y-5">
-            <Panel title="Basic info">
-              <div className="space-y-4">
-                <div><Label className="text-xs text-muted-foreground">Product name</Label><Input className="mt-1.5 rounded-xl" placeholder="e.g. iPhone 15 Pro" /></div>
-                <div><Label className="text-xs text-muted-foreground">Description</Label><textarea className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring min-h-[100px] resize-none" placeholder="Describe your product…" /></div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div><Label className="text-xs text-muted-foreground">Price (₦)</Label><Input type="number" className="mt-1.5 rounded-xl" placeholder="0" /></div>
-                  <div><Label className="text-xs text-muted-foreground">Category</Label>
-                    <Select><SelectTrigger className="mt-1.5 rounded-xl"><SelectValue placeholder="Select" /></SelectTrigger><SelectContent>{categories.filter(c => c.id !== "all").map(c => <SelectItem key={c.id} value={c.id}>{c.label}</SelectItem>)}</SelectContent></Select>
-                  </div>
-                </div>
-                <div><Label className="text-xs text-muted-foreground">Stock quantity</Label><Input type="number" className="mt-1.5 rounded-xl" placeholder="0" /></div>
-              </div>
-            </Panel>
-            <Panel title="Variants"><VariantBuilder /></Panel>
-          </div>
-          <div className="space-y-5">
-            <Panel title="Media"><ImageUploader /></Panel>
-            <Panel title="Visibility">
-              <div className="flex items-center justify-between">
-                <div><div className="font-medium text-sm">Active</div><div className="text-xs text-muted-foreground mt-0.5">Product visible on storefront</div></div>
-                <Switch defaultChecked />
-              </div>
-            </Panel>
-          </div>
-        </div>
-      </div>
-    </SellerLayout>
-  );
+  if (!store) {
+    redirect("/seller/onboarding");
+  }
+
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name")
+    .eq("store_id", store.id)
+    .order("name");
+
+  return <ClientNewProductPage categories={categories || []} />;
 }

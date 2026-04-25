@@ -1,13 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, ShoppingBag } from "lucide-react";
 import { CartDrawer } from "./CartDrawer";
-import { cartItems, store } from "@/lib/mock-data";
+import { useCart } from "@/hooks/useCart";
 
-export function StoreNavbar() {
+export function StoreNavbar({ store }: { store: any }) {
   const [cartOpen, setCartOpen] = useState(false);
+  const allItems = useCart(state => state.items);
+  const cartItems = allItems.filter(i => i.storeId === store.id);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-xl border-b border-border/60">
       <div className="container flex h-16 items-center justify-between gap-6">
@@ -19,16 +27,14 @@ export function StoreNavbar() {
         </Link>
 
         <div className="flex items-center gap-1.5">
-          <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-full hover:bg-muted transition-colors">
-            <Search className="h-[18px] w-[18px]" />
-          </button>
+
           <button
             onClick={() => setCartOpen(true)}
             className="inline-flex items-center gap-2 h-10 pl-3 pr-4 rounded-full bg-ink text-ink-foreground hover:bg-ink/90 transition-colors text-sm font-medium"
           >
             <ShoppingBag className="h-4 w-4" />
             Cart
-            {cartItems.length > 0 && (
+            {mounted && cartItems.length > 0 && (
               <span className="ml-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-background text-foreground px-1.5 text-[11px] font-semibold">
                 {cartItems.length}
               </span>
@@ -36,7 +42,7 @@ export function StoreNavbar() {
           </button>
         </div>
       </div>
-      <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
+      <CartDrawer open={cartOpen} onOpenChange={setCartOpen} store={store} />
     </header>
   );
 }

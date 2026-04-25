@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { LayoutDashboard, Store, Users, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
   { href: "/admin", end: true, icon: LayoutDashboard, label: "Overview" },
@@ -14,17 +16,43 @@ const navItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const [adminUser, setAdminUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadUser() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setAdminUser(user);
+      }
+    }
+    loadUser();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = '/admin/login';
+  };
 
   return (
     <aside className="hidden md:flex flex-col w-64 shrink-0 p-5 pr-0">
       <div className="flex flex-col h-full bg-ink text-ink-foreground rounded-[24px] border border-border/60 p-5">
-        <Link href="/admin" className="flex items-center gap-2.5 px-1">
-          <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold">
-            SL
-          </div>
-          <div>
-            <div className="font-semibold text-sm tracking-tight leading-none">ShopLink Core</div>
-            <div className="text-[11px] text-ink-foreground/60 mt-0.5">Super Admin</div>
+        <Link href="/admin" className="flex items-center gap-2.5 px-1 min-w-0">
+          {adminUser?.user_metadata?.avatar_url ? (
+            <img src={adminUser.user_metadata.avatar_url} alt="Admin" className="h-8 w-8 rounded-xl object-cover shrink-0" />
+          ) : (
+            <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold shrink-0">
+              SL
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <div className="font-semibold text-sm tracking-tight leading-none truncate">
+              {adminUser?.user_metadata?.full_name || "ShopLink Core"}
+            </div>
+            <div className="text-[11px] text-ink-foreground/60 mt-0.5 truncate">
+              {adminUser?.email || "Super Admin"}
+            </div>
           </div>
         </Link>
 
@@ -52,9 +80,9 @@ export function AdminSidebar() {
         </nav>
 
         <div className="mt-auto pt-4 border-t border-ink-foreground/10 space-y-1">
-          <Link href="/admin/login" className="flex items-center gap-2 px-3 h-9 rounded-full text-sm text-ink-foreground/70 hover:text-ink-foreground hover:bg-ink-foreground/10 transition-colors">
+          <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 h-9 rounded-full text-sm text-ink-foreground/70 hover:text-ink-foreground hover:bg-ink-foreground/10 transition-colors text-left">
             <LogOut className="h-4 w-4" /> Sign out
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

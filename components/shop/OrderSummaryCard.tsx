@@ -4,14 +4,40 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useParams, useRouter } from "next/navigation";
-import { cartItems, formatNGN } from "@/lib/mock-data";
+import { useCart } from "@/hooks/useCart";
 
-export function OrderSummaryCard({ shippingFee = 5000 }: { shippingFee?: number }) {
+const formatNGN = (amount: number) => {
+  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+};
+
+export function OrderSummaryCard({ 
+  shippingFee = 5000, 
+  isPlaceOrderDisabled = false,
+  onPlaceOrder,
+  store
+}: { 
+  shippingFee?: number,
+  isPlaceOrderDisabled?: boolean,
+  onPlaceOrder?: () => void,
+  store?: any
+}) {
   const params = useParams();
   const storeSlug = params?.["store-slug"];
   const router = useRouter();
+  
+  const allItems = useCart(state => state.items);
+  const cartItems = store ? allItems.filter(i => i.storeId === store.id) : [];
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const total = subtotal + shippingFee;
+
+  const handlePlaceOrder = () => {
+    if (onPlaceOrder) {
+      onPlaceOrder();
+    } else {
+      router.push(`/${storeSlug}/order-confirmation`);
+    }
+  };
+
   return (
     <div className="rounded-[24px] bg-background border border-border/60 p-6 sticky top-24">
       <h3 className="font-semibold text-base">Order summary</h3>
@@ -38,7 +64,8 @@ export function OrderSummaryCard({ shippingFee = 5000 }: { shippingFee?: number 
       <Button 
         size="lg" 
         className="w-full mt-6 gap-2"
-        onClick={() => router.push(`/${storeSlug}/order-confirmation`)}
+        onClick={handlePlaceOrder}
+        disabled={isPlaceOrderDisabled || cartItems.length === 0}
       >
         Place order
         <ArrowRight className="h-4 w-4" />

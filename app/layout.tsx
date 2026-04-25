@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -27,6 +29,8 @@ export default function RootLayout({
           <Toaster />
           <Sonner />
           {children}
+          <Analytics />
+          <SpeedInsights />
         </TooltipProvider>
       </body>
     </html>

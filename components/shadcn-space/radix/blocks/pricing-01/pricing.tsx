@@ -100,7 +100,7 @@ const Pricing = () => {
   };
 
   return (
-    <section id="pricing" className="bg-canvas font-sans py-10 xl:py-0 w-full">
+    <section id="pricing" className="bg-canvas py-10 xl:py-0 w-full">
       <div className="max-w-[1400px] mx-auto px-4 lg:px-8 xl:px-16 lg:py-24 sm:py-16 py-8">
         <div className="flex flex-col gap-8 md:gap-12 justify-center items-center w-full">
           {/* Heading */}

@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -83,7 +83,7 @@ const pricingData: PricingPlan[] = [
 const Pricing = () => {
   const [isYearly, setIsYearly] = useState(false);
 
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 80,
@@ -94,7 +94,7 @@ const Pricing = () => {
       transition: {
         delay: index * 0.2,
         duration: 0.6,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     }),
   };

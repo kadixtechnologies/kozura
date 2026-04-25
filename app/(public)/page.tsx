@@ -310,14 +310,16 @@ export default function LandingPage() {
                 </div>
 
                 {/* Right Column: Visual Element */}
-                <div className="flex-1 w-full flex items-center justify-center lg:justify-end">
-                  <div className="relative w-full max-w-[500px] aspect-[4/5] lg:aspect-square flex items-center justify-center">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
-                    <img
-                      src="/hero_store_ui.png"
-                      alt="Store Dashboard Interface"
-                      className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
-                    />
+                <div className="flex-1 w-full flex items-center justify-center lg:justify-end mt-20 lg:mt-0">
+                  <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/25 blur-[150px] rounded-full pointer-events-none" />
+                    <div className="relative w-full h-full [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]">
+                      <img
+                        src="/hero_image.png"
+                        alt="Store Dashboard Interface"
+                        className="w-full h-full object-contain relative z-10 scale-125 lg:scale-150 transition-transform duration-1000 hover:scale-130 lg:hover:scale-155"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

@@ -11,7 +11,7 @@ export default function OrderTrackingPage() {
   const order = orders[0];
   return (
     <div className="min-h-screen bg-canvas">
-      <StoreNavbar />
+      <StoreNavbar store={store} />
       <div className="container py-8 max-w-3xl">
         <div className="rounded-[24px] bg-tile-mint p-7">
           <div className="h-10 w-10 rounded-full bg-background flex items-center justify-center"><Check className="h-5 w-5 text-foreground" /></div>

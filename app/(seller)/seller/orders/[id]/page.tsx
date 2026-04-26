@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { orderTimeline, formatNGN } from "@/lib/mock-data";
 import { OrderActions } from "@/components/shop/OrderActions";
+import { OrderTimelineForm } from "@/components/shop/OrderTimelineForm";
+import { ReceiptDownloadButton } from "@/components/shop/ReceiptDownloadButton";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
@@ -111,6 +113,17 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
     });
   }
 
+  // Add notes to timeline
+  if (Array.isArray(order.notes)) {
+    order.notes.forEach((note: any) => {
+      timelineSteps.push({
+        label: `Note: ${note.message}`,
+        timestamp: new Date(note.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }),
+        state: "complete",
+      });
+    });
+  }
+
   return (
     <SellerLayout>
       <SellerTopBar
@@ -141,8 +154,8 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
                 {order.order_items.map((it: any) => (
                   <div key={it.id} className="flex items-center gap-3 py-3 border-b border-border/60 last:border-0">
                     <div className="h-12 w-12 rounded-xl bg-tile-mint flex items-center justify-center overflow-hidden shrink-0">
-                      {it.product_image || productImages[it.product_id] ? (
-                        <img src={it.product_image || productImages[it.product_id]} alt="" className="h-full w-full object-cover" />
+                      {productImages[it.product_id] ? (
+                        <img src={productImages[it.product_id]} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <ImageIcon className="h-5 w-5 text-foreground/30" />
                       )}
@@ -161,8 +174,7 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
               <OrderTimeline steps={timelineSteps} />
               <div className="print:hidden">
                 <Separator className="my-6" />
-                <Textarea placeholder="Add a note..." rows={3} className="rounded-2xl resize-none" />
-                <Button className="mt-3" size="sm">Add to timeline</Button>
+                <OrderTimelineForm orderId={id} />
               </div>
             </Panel>
           </div>
@@ -191,11 +203,7 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
                       <div className="text-sm font-medium truncate">Payment Receipt</div>
                       <div className="text-xs text-muted-foreground mt-0.5">View attached file</div>
                     </div>
-                    <Link href={order.payment_receipt_url} target="_blank" rel="noopener noreferrer">
-                      <Button size="icon" variant="outline" className="h-8 w-8 rounded-full shrink-0">
-                        <Download className="h-4 w-4 text-muted-foreground" />
-                      </Button>
-                    </Link>
+                    <ReceiptDownloadButton url={order.payment_receipt_url} />
                   </div>
                 ) : (
                   <div className="text-sm text-muted-foreground text-center py-4">No receipt uploaded</div>

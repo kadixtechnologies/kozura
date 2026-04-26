@@ -51,6 +51,7 @@ export async function saveSettings(formData: FormData) {
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/seller/settings");
+  revalidatePath(`/`, "layout"); // Revalidate all storefront pages so checkout reflects new shipping/payment config
   return { success: true };
 }
 

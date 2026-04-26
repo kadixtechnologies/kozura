@@ -34,3 +34,35 @@ export async function cleanupOldOrders(storeId: string) {
     
   if (error) console.error("Cleanup error:", error);
 }
+
+export async function addOrderNote(orderId: string, note: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated" };
+
+  const { data: store } = await supabase.from("stores").select("id").eq("seller_id", user.id).single();
+  if (!store) return { success: false, error: "Store not found" };
+
+  // First get existing notes
+  const { data: order } = await supabase.from("orders").select("notes").eq("id", orderId).single();
+  
+  const existingNotes = order?.notes || [];
+  const newNote = {
+    message: note,
+    created_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase.from("orders")
+    .update({ notes: [...existingNotes, newNote] })
+    .eq("id", orderId)
+    .eq("store_id", store.id);
+
+  if (error) {
+    // If notes column doesn't exist, we'll just log it and return success for now to satisfy UI
+    console.error("Failed to save note:", error);
+    return { success: false, error: "Notes column might not exist in database." };
+  }
+
+  revalidatePath(`/seller/orders/${orderId}`);
+  return { success: true };
+}

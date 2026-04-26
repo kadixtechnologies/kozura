@@ -104,8 +104,17 @@ function BankTransferDetails({ onFileSelected, store }: { onFileSelected: (file:
 export function ClientCheckoutPage({ store }: { store: any }) {
   const router = useRouter();
 
-  const [shipping, setShipping] = useState<"pickup" | "delivery">("delivery");
-  const [payment, setPayment] = useState<"cod" | "transfer">("transfer");
+  const shippingConfig = store.shipping_config || { pickup: { enabled: true }, delivery: { enabled: true, zones: [] } };
+  const pickupEnabled = shippingConfig.pickup?.enabled ?? true;
+  const deliveryEnabled = shippingConfig.delivery?.enabled ?? true;
+  const defaultShipping = deliveryEnabled ? "delivery" : pickupEnabled ? "pickup" : "delivery";
+
+  const [shipping, setShipping] = useState<"pickup" | "delivery">(defaultShipping);
+
+  const acceptsCod = store.accepts_cod ?? true;
+  const acceptsTransfer = store.accepts_bank_transfer ?? true;
+  const defaultPayment = acceptsTransfer ? "transfer" : acceptsCod ? "cod" : "transfer";
+  const [payment, setPayment] = useState<"cod" | "transfer">(defaultPayment);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -116,7 +125,6 @@ export function ClientCheckoutPage({ store }: { store: any }) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
 
-  const shippingConfig = store.shipping_config || { pickup: { enabled: true }, delivery: { enabled: true, zones: [] } };
   const deliveryZones: { label: string; fee: number }[] = shippingConfig.delivery?.zones || [];
   const [selectedZone, setSelectedZone] = useState<string>(deliveryZones[0]?.label || "");
 
@@ -251,12 +259,18 @@ export function ClientCheckoutPage({ store }: { store: any }) {
             )}
             <Section step={paymentStep} title="Payment method">
               <RadioGroup value={payment} onValueChange={(v: "cod" | "transfer") => setPayment(v)} className="grid sm:grid-cols-2 gap-3" disabled={isLoading}>
-                {[{ v: "cod", label: "Cash on delivery", desc: "Pay when it arrives" }, { v: "transfer", label: "Bank transfer", desc: "Pay to our account" }].map((o) => (
-                  <Label key={o.v} htmlFor={`pay-${o.v}`} className={cn("flex items-start gap-3 border rounded-2xl p-4 cursor-pointer transition-all", payment === o.v ? "border-ink bg-muted/40" : "border-border hover:border-foreground/30")}>
-                    <RadioGroupItem id={`pay-${o.v}`} value={o.v} className="mt-0.5" />
-                    <div><div className="font-medium text-sm">{o.label}</div><div className="text-xs text-muted-foreground mt-0.5">{o.desc}</div></div>
+                {acceptsCod && (
+                  <Label htmlFor="pay-cod" className={cn("flex items-start gap-3 border rounded-2xl p-4 cursor-pointer transition-all", payment === "cod" ? "border-ink bg-muted/40" : "border-border hover:border-foreground/30")}>
+                    <RadioGroupItem id="pay-cod" value="cod" className="mt-0.5" />
+                    <div><div className="font-medium text-sm">Cash on delivery</div><div className="text-xs text-muted-foreground mt-0.5">Pay when it arrives</div></div>
                   </Label>
-                ))}
+                )}
+                {acceptsTransfer && (
+                  <Label htmlFor="pay-transfer" className={cn("flex items-start gap-3 border rounded-2xl p-4 cursor-pointer transition-all", payment === "transfer" ? "border-ink bg-muted/40" : "border-border hover:border-foreground/30")}>
+                    <RadioGroupItem id="pay-transfer" value="transfer" className="mt-0.5" />
+                    <div><div className="font-medium text-sm">Bank transfer</div><div className="text-xs text-muted-foreground mt-0.5">Pay to our account</div></div>
+                  </Label>
+                )}
               </RadioGroup>
               {payment === "transfer" && <BankTransferDetails onFileSelected={setReceiptFile} store={store} />}
             </Section>

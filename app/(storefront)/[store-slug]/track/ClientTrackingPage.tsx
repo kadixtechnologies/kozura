@@ -12,7 +12,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const formatNGN = (amount: number) =>
-  new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 0 }).format(amount);
+  `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 
 function buildTimeline(order: any) {
   const steps: any[] = [];
@@ -55,6 +55,14 @@ function buildTimeline(order: any) {
     });
   }
 
+  if (order.status === "returned") {
+    steps.push({
+      label: "Order returned",
+      timestamp: new Date(order.updated_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }),
+      state: "complete",
+    });
+  }
+
   return steps;
 }
 
@@ -80,7 +88,7 @@ export function ClientTrackingPage({
   const shipping = parseFloat(order?.shipping_fee) || 0;
 
   const statusLabel = (s: string): Status =>
-    (({ pending: "Pending", processing: "Processing", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled" } as Record<string, Status>)[s] ?? "Pending");
+    (({ pending: "Pending", processing: "Processing", shipped: "Shipped", delivered: "Delivered", cancelled: "Cancelled", returned: "Returned" } as Record<string, Status>)[s] ?? "Pending");
 
   return (
     <div className="min-h-screen bg-canvas">

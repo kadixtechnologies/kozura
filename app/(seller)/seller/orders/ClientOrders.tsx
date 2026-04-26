@@ -13,7 +13,7 @@ const tabs = [
 ];
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function ClientOrders({ orders }: { orders: any[] }) {

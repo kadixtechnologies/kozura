@@ -1,6 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { ClientProductPage } from "./ClientProductPage";
+
+export async function generateMetadata({ params }: { params: Promise<{ "product-slug": string }> }): Promise<Metadata> {
+  const { "product-slug": productSlug } = await params;
+  const supabase = await createClient();
+  const { data: product } = await supabase.from("products").select("name, description").eq("slug", productSlug).single();
+  
+  if (!product) return {};
+  
+  return {
+    title: product.name,
+    description: product.description?.substring(0, 160) || `Buy ${product.name} on ShopLink`,
+  };
+}
 
 export default async function ProductDetailPage({
   params,

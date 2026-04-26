@@ -91,6 +91,12 @@ export function AdminSidebar() {
 }
 
 export function AdminTopBar({ title, count, subtitle, action }: { title: string; count?: string; subtitle?: string; action?: React.ReactNode }) {
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = '/admin/login';
+  };
+
   return (
     <div className="flex items-center justify-between flex-wrap gap-4 px-4 md:px-7 py-4 md:py-5 border-b border-border/60">
       <div className="flex items-baseline gap-3">
@@ -100,7 +106,12 @@ export function AdminTopBar({ title, count, subtitle, action }: { title: string;
           {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
         </div>
       </div>
-      <div className="flex items-center gap-2">{action}</div>
+      <div className="flex items-center gap-2">
+        {action}
+        <button onClick={handleSignOut} className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-ink/5 text-ink hover:bg-ink/10 transition-colors" title="Sign out">
+          <LogOut className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

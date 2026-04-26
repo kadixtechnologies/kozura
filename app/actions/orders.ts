@@ -18,3 +18,19 @@ export async function updateOrderStatus(orderId: string, status: string, message
   revalidatePath(`/seller/orders/${orderId}`);
   return { success: true };
 }
+
+export async function cleanupOldOrders(storeId: string) {
+  const supabase = await createClient();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  
+  // Delete orders that are 'delivered' and were updated more than 7 days ago
+  const { error } = await supabase
+    .from("orders")
+    .delete()
+    .eq("store_id", storeId)
+    .eq("status", "delivered")
+    .lt("created_at", sevenDaysAgo.toISOString()); // Using created_at as a fallback if updated_at isn't reliable, but usually updated_at is better
+    
+  if (error) console.error("Cleanup error:", error);
+}

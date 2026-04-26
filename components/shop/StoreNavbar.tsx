@@ -27,6 +27,12 @@ export function StoreNavbar({ store }: { store: any }) {
         </Link>
 
         <div className="flex items-center gap-1.5">
+          <Link
+            href={`/${store.slug}/track`}
+            className="hidden sm:inline-flex items-center justify-center h-10 px-4 rounded-full hover:bg-muted transition-colors text-sm font-medium"
+          >
+            Track Order
+          </Link>
 
           <button
             onClick={() => setCartOpen(true)}

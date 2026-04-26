@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 // Format currency
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function ClientDashboard({ store, stats, recentOrders }: { store: any, stats: any, recentOrders: any[] }) {
@@ -64,8 +64,9 @@ export function ClientDashboard({ store, stats, recentOrders }: { store: any, st
               </Button>
             </div>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             <StatCard label="Total Sales" value={formatNGN(stats.totalSales)} icon={DollarSign} accent="primary" />
+            <StatCard label="Lost Sales" value={formatNGN(stats.lostSales)} icon={DollarSign} accent="destructive" />
             <StatCard label="Total Orders" value={String(stats.totalOrders)} icon={ShoppingBag} accent="warning" />
             <StatCard label="Pending" value={String(stats.pendingOrders)} icon={ShoppingBag} accent="muted" />
             <StatCard label="Products" value={String(stats.productsCount)} icon={Package} accent="success" />

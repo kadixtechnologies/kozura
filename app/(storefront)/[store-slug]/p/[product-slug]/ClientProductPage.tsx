@@ -12,7 +12,7 @@ import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function ClientProductPage({ store, product, similarProducts }: { store: any; product: any; similarProducts: any[] }) {
@@ -121,12 +121,12 @@ export function ClientProductPage({ store, product, similarProducts }: { store: 
               ))}
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3 mt-7">
-              <div className="inline-flex items-center bg-muted rounded-full p-1 self-start sm:self-auto w-full sm:w-auto justify-between sm:justify-start">
-                <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-10 w-10 sm:h-9 sm:w-9 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors"><Minus className="h-3.5 w-3.5" /></button>
-                <span className="px-4 text-sm font-medium w-12 text-center">{qty}</span>
-                <button onClick={() => setQty(qty + 1)} className="h-10 w-10 sm:h-9 sm:w-9 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors"><Plus className="h-3.5 w-3.5" /></button>
+              <div className="inline-flex items-center bg-muted rounded-full p-1.5 sm:p-1 self-start sm:self-auto w-full sm:w-auto justify-between sm:justify-start">
+                <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 sm:h-9 sm:w-9 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors"><Minus className="h-4 w-4 sm:h-3.5 sm:w-3.5" /></button>
+                <span className="px-4 text-base sm:text-sm font-medium w-14 sm:w-12 text-center">{qty}</span>
+                <button onClick={() => setQty(qty + 1)} className="h-11 w-11 sm:h-9 sm:w-9 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors"><Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5" /></button>
               </div>
-              <Button size="lg" className="flex-1 w-full" onClick={handleAddToCart} disabled={adding}>
+              <Button size="lg" className="flex-1 w-full h-14 sm:h-12 text-base sm:text-sm" onClick={handleAddToCart} disabled={adding}>
                 {adding ? "Adding..." : "Add to cart"}
               </Button>
             </div>

@@ -33,7 +33,13 @@ function DeleteDialog({ onClose }: { onClose: () => void }) {
   const handle = async () => {
     setLoading(true);
     const res = await deleteAccount();
-    if (res.success) { toast.success("Account deletion requested. Our team will process this within 24 hours."); onClose(); }
+    if (res.success) { 
+      toast.success("Your account has been permanently deleted."); 
+      onClose();
+      window.location.href = "/";
+    } else {
+      toast.error(res.error || "Failed to delete account");
+    }
     setLoading(false);
   };
   return (

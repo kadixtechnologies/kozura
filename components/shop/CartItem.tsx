@@ -4,7 +4,7 @@ import { Image as ImageIcon, Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function CartItem({

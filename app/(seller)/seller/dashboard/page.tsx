@@ -44,17 +44,23 @@ export default async function SellerDashboardPage() {
   let totalSales = 0;
   let totalOrders = 0;
   let pendingOrders = 0;
+  let lostSales = 0;
 
   if (allOrders) {
     totalOrders = allOrders.length;
     allOrders.forEach(o => {
-      totalSales += parseFloat(o.total_amount) || 0;
-      if (o.status === 'pending') pendingOrders++;
+      if (['pending', 'processing', 'shipped', 'delivered'].includes(o.status)) {
+        totalSales += parseFloat(o.total_amount) || 0;
+        if (o.status === 'pending') pendingOrders++;
+      } else if (['cancelled', 'returned'].includes(o.status)) {
+        lostSales += parseFloat(o.total_amount) || 0;
+      }
     });
   }
 
   const stats = {
     totalSales,
+    lostSales,
     totalOrders,
     pendingOrders,
     productsCount: productsCount || 0

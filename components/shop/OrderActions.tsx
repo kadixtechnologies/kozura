@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Truck, Printer, MessageCircle, XCircle, Loader2 } from "lucide-react";
+import { Truck, Printer, MessageCircle, XCircle, Loader2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { updateOrderStatus } from "@/app/actions/orders";
@@ -42,9 +42,14 @@ export function OrderActions({ orderId, currentStatus }: { orderId: string, curr
       <Button variant="outline" className="w-full gap-2" disabled={isLoading}>
         <MessageCircle className="h-4 w-4" /> Send WhatsApp
       </Button>
-      {currentStatus !== 'cancelled' && currentStatus !== 'shipped' && currentStatus !== 'delivered' && (
+      {currentStatus !== 'cancelled' && currentStatus !== 'returned' && currentStatus !== 'shipped' && currentStatus !== 'delivered' && (
         <Button variant="outline" className="w-full gap-2 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleUpdateStatus('cancelled')} disabled={isLoading}>
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />} Cancel order
+        </Button>
+      )}
+      {(currentStatus === 'shipped' || currentStatus === 'delivered') && currentStatus !== 'returned' && (
+        <Button variant="outline" className="w-full gap-2 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => handleUpdateStatus('returned')} disabled={isLoading}>
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />} Mark as returned
         </Button>
       )}
     </div>

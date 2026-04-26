@@ -8,7 +8,7 @@ import { CartItem } from "./CartItem";
 import { useCart } from "@/hooks/useCart";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function CartDrawer({ open, onOpenChange, store }: { open: boolean; onOpenChange: (o: boolean) => void, store: any }) {

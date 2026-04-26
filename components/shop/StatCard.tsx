@@ -5,7 +5,7 @@ export function StatCard({
   label, value, icon: Icon, accent = "primary", trend,
 }: {
   label: string; value: string; icon: LucideIcon;
-  accent?: "primary" | "warning" | "muted" | "success";
+  accent?: "primary" | "warning" | "muted" | "success" | "destructive";
   trend?: string;
 }) {
   const accentMap = {
@@ -13,6 +13,7 @@ export function StatCard({
     warning: "bg-tile-butter",
     muted: "bg-tile-mist",
     success: "bg-tile-sky",
+    destructive: "bg-tile-peach text-destructive",
   };
   return (
     <div className={cn("rounded-[20px] p-5 flex flex-col justify-between min-h-[130px]", accentMap[accent])}>

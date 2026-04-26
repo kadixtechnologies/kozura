@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 export function ClientCartPage({ store }: { store: any }) {

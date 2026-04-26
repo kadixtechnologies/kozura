@@ -42,6 +42,25 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
   const itemsTotal = order.subtotal_amount || 0;
   const shipping = parseFloat(order.shipping_fee) || 0;
   
+  // Fetch product images for order items
+  const productIds = order.order_items.map((item: any) => item.product_id).filter(Boolean);
+  let productImages: Record<string, string> = {};
+  if (productIds.length > 0) {
+    const { data: products } = await supabase
+      .from("products")
+      .select("id, images, image")
+      .in("id", productIds);
+    if (products) {
+      products.forEach((p: any) => {
+        if (p.images?.[0]) {
+          productImages[p.id] = p.images[0];
+        } else if (p.image) {
+          productImages[p.id] = p.image;
+        }
+      });
+    }
+  }
+  
   // Format date
   const orderDate = new Date(order.created_at).toLocaleDateString("en-US", {
     month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit"
@@ -117,10 +136,14 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
               <div className="space-y-3">
                 {order.order_items.map((it: any) => (
                   <div key={it.id} className="flex items-center gap-3 py-3 border-b border-border/60 last:border-0">
-                    <div className="h-12 w-12 rounded-xl bg-tile-mint flex items-center justify-center">
-                      <ImageIcon className="h-5 w-5 text-foreground/30" />
+                    <div className="h-12 w-12 rounded-xl bg-tile-mint flex items-center justify-center overflow-hidden shrink-0">
+                      {productImages[it.product_id] ? (
+                        <img src={productImages[it.product_id]} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <ImageIcon className="h-5 w-5 text-foreground/30" />
+                      )}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="font-medium text-sm">{it.product_name}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">{it.variant_label || "Default"} · Qty {it.quantity}</div>
                     </div>

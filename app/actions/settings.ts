@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function saveSettings(formData: FormData) {
@@ -88,6 +88,23 @@ export async function deleteAccount() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
-  // Flag for admin to process — in production you'd handle cascade deletion
-  return { success: true, message: "Account deletion requested. Our team will process this within 24 hours." };
+
+  try {
+    const supabaseAdmin = await createAdminClient();
+    
+    // First delete store related data (cascade should handle most, but we target the store explicitly)
+    await supabaseAdmin.from("stores").delete().eq("seller_id", user.id);
+    
+    // Delete profile
+    await supabaseAdmin.from("profiles").delete().eq("id", user.id);
+    
+    // Finally delete the user from Supabase Auth
+    const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(user.id);
+    if (deleteError) throw deleteError;
+
+    return { success: true };
+  } catch (err: any) {
+    console.error("Account deletion error:", err);
+    return { success: false, error: err.message || "Failed to delete account" };
+  }
 }

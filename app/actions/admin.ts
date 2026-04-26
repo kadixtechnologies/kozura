@@ -2,11 +2,30 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 async function isSuperAdmin(supabase: any) {
+  // 1. Check for admin session cookie (Password flow)
+  const cookieStore = await cookies();
+  const adminSession = cookieStore.get("admin_session");
+  if (adminSession) {
+    try {
+      const data = JSON.parse(adminSession.value);
+      if (data.expiresAt > Date.now()) return true;
+    } catch (e) {}
+  }
+
+  // 2. Check for whitelisted email (Google flow)
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_WHITELISTED_EMAIL) return false;
-  return true;
+  if (user && user.email === process.env.ADMIN_WHITELISTED_EMAIL) return true;
+
+  // 3. Check for admin role in profiles
+  if (user) {
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+    if (profile?.role === "admin") return true;
+  }
+  
+  return false;
 }
 
 export async function updateStoreStatus(storeId: string, status: string) {
@@ -50,6 +69,7 @@ export async function updatePlanLimits(planId: string, updates: { price_monthly:
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/admin/plans");
+  revalidatePath("/seller/settings");
   revalidatePath("/"); // Revalidate landing page pricing
   return { success: true };
 }
@@ -68,8 +88,6 @@ export async function updateUserStatus(userId: string, isSuspended: boolean) {
   revalidatePath("/admin/users");
   return { success: true };
 }
-
-import { cookies } from "next/headers";
 
 export async function verifyAdminPassword(password: string) {
   const adminPassword = process.env.ADMIN_PASSWORD;

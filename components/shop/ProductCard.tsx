@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 const tilePalette = [
@@ -22,7 +22,9 @@ export function ProductCard({ product, compact = false, index = 0, storeSlug }: 
       className="group block rounded-[24px] bg-background border border-border/60 overflow-hidden transition-all hover:border-border"
     >
       <div className={cn("relative aspect-[4/5] flex items-center justify-center overflow-hidden", tile)}>
-        {product.image && product.image !== "/placeholder.png" ? (
+        {product.images?.[0] ? (
+          <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        ) : product.image && product.image !== "/placeholder.png" ? (
           <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         ) : (
           <ImageIcon className="h-12 w-12 text-foreground/20 transition-transform duration-500 group-hover:scale-105" />

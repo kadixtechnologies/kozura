@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ClientOrders } from "./ClientOrders";
+import { cleanupOldOrders } from "@/app/actions/orders";
 
 export default async function SellerOrdersPage() {
   const supabase = await createClient();
@@ -20,6 +21,9 @@ export default async function SellerOrdersPage() {
   if (!store) {
     redirect("/seller/onboarding");
   }
+  
+  // Clean up old delivered orders (7 days+)
+  await cleanupOldOrders(store.id);
 
   // Fetch all orders for this store
   const { data: orders } = await supabase

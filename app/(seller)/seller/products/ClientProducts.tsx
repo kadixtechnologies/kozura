@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Image as ImageIcon, MoreHorizontal, Plus, Search, SlidersHorizontal, X, Edit, Trash2 } from "lucide-react";
+import { Image as ImageIcon, MoreHorizontal, Plus, Search, SlidersHorizontal, X, Edit, Trash2, Loader2 } from "lucide-react";
 import { SellerLayout, SellerTopBar } from "@/components/seller/SellerSidebar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const formatNGN = (amount: number) => {
-  return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
+  return `₦${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 };
 
 function ActionMenu({ product, onDelete }: { product: any; onDelete: () => void }) {
@@ -58,6 +58,8 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
   const [filterOpen, setFilterOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [deletingBulk, setDeletingBulk] = useState(false);
 
   const filteredProducts = useMemo(() => {
     let list = productList;
@@ -85,10 +87,43 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
     const res = await deleteProduct(id);
     if (res.success) {
       setProductList((prev) => prev.filter((item) => item.id !== id)); 
+      setSelectedIds((prev) => prev.filter((item) => item !== id));
       toast.success(`${name} deleted`); 
     } else {
       toast.error(res.error || "Failed to delete product");
     }
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === filteredProducts.length && filteredProducts.length > 0) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredProducts.map(p => p.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(prev => prev.filter(i => i !== id));
+    } else {
+      setSelectedIds(prev => [...prev, id]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!confirm("Are you sure you want to delete the selected products?")) return;
+    setDeletingBulk(true);
+    let successCount = 0;
+    for (const id of selectedIds) {
+      const res = await deleteProduct(id);
+      if (res.success) {
+        successCount++;
+        setProductList(prev => prev.filter(p => p.id !== id));
+      }
+    }
+    setDeletingBulk(false);
+    setSelectedIds([]);
+    toast.success(`Deleted ${successCount} product(s)`);
   };
 
   return (
@@ -98,9 +133,17 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
         title="Products"
         subtitle="Manage your catalog"
         action={
-          <Button asChild className="gap-2">
-            <Link href="/seller/products/new"><Plus className="h-4 w-4" /> Add product</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            {selectedIds.length > 0 && (
+              <Button variant="destructive" onClick={handleBulkDelete} disabled={deletingBulk} className="gap-2 rounded-xl">
+                {deletingBulk ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                Delete ({selectedIds.length})
+              </Button>
+            )}
+            <Button asChild className="gap-2 rounded-xl">
+              <Link href="/seller/products/new"><Plus className="h-4 w-4" /> Add product</Link>
+            </Button>
+          </div>
         }
       />
 
@@ -187,7 +230,12 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border/60 text-left text-muted-foreground text-xs">
-                <th className="pl-5 pr-2 py-3 w-10"><Checkbox /></th>
+                <th className="pl-5 pr-2 py-3 w-10">
+                  <Checkbox 
+                    checked={filteredProducts.length > 0 && selectedIds.length === filteredProducts.length}
+                    onCheckedChange={toggleSelectAll}
+                  />
+                </th>
                 <th className="px-3 py-3 font-medium">Product</th>
                 <th className="px-3 py-3 font-medium hidden sm:table-cell">Category</th>
                 <th className="px-3 py-3 font-medium">Price</th>
@@ -215,8 +263,13 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
                 filteredProducts.map((p) => {
                   const catName = categories.find(c => c.id === p.category_id)?.name || "Uncategorized";
                   return (
-                    <tr key={p.id} className="border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors">
-                      <td className="pl-5 pr-2 py-3"><Checkbox /></td>
+                    <tr key={p.id} className={cn("border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors", selectedIds.includes(p.id) ? "bg-muted/40" : "")}>
+                      <td className="pl-5 pr-2 py-3">
+                        <Checkbox 
+                          checked={selectedIds.includes(p.id)}
+                          onCheckedChange={() => toggleSelect(p.id)}
+                        />
+                      </td>
                       <td className="px-3 py-3">
                         <Link href={`/seller/products/${p.id}/edit`} className="flex items-center gap-3 group">
                           {p.images?.[0] ? (

@@ -1,14 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ClientAdminStoresPage } from "./ClientAdminStoresPage";
+import { checkAdminAuth } from "@/lib/admin";
 
 export default async function AdminStoresPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user || user.email !== process.env.ADMIN_WHITELISTED_EMAIL) {
+  if (!(await checkAdminAuth())) {
     redirect("/admin/login");
   }
+  const supabase = await createClient();
 
   // Fetch all stores with their owner profiles
   const { data: stores } = await supabase

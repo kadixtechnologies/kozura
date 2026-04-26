@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type Status = "Pending" | "Processing" | "Shipped" | "Cancelled" | "Active" | "Inactive" | "Delivered";
+export type Status = "Pending" | "Processing" | "Shipped" | "Cancelled" | "Active" | "Inactive" | "Delivered" | "Returned";
 
 const styles: Record<Status, string> = {
   Pending: "bg-tile-butter text-foreground",
@@ -9,6 +9,7 @@ const styles: Record<Status, string> = {
   Delivered: "bg-tile-mint text-foreground",
   Active: "bg-tile-mint text-foreground",
   Cancelled: "bg-destructive/10 text-destructive",
+  Returned: "bg-destructive/10 text-destructive",
   Inactive: "bg-muted text-muted-foreground",
 };
 

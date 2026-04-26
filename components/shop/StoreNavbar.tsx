@@ -29,7 +29,7 @@ export function StoreNavbar({ store }: { store: any }) {
         <div className="flex items-center gap-1.5">
           <Link
             href={`/${store.slug}/track`}
-            className="hidden sm:inline-flex items-center justify-center h-10 px-4 rounded-full hover:bg-muted transition-colors text-sm font-medium"
+            className="inline-flex items-center justify-center h-10 px-3 sm:px-4 rounded-full bg-muted/50 border border-border/40 hover:bg-muted transition-colors text-[13px] sm:text-sm font-medium"
           >
             Track Order
           </Link>

@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { completeOnboarding } from "@/app/actions/onboarding";
 import { toast } from "sonner";
-import { uploadStoreAsset } from "@/lib/supabase/storage";
 import { createClient } from "@/lib/supabase/client";
 
 const steps = ["Store Info", "Contact", "Payout", "Ready"];
@@ -46,21 +45,16 @@ export default function SellerOnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      let logoUrl = "";
-      if (logoFile) {
-        // We simulate having a store ID by using user.id for onboarding asset path temp
-        const publicUrl = await uploadStoreAsset(logoFile, user.id, "logo");
-        logoUrl = publicUrl;
-      }
-
       const formData = new FormData();
+      if (logoFile) {
+        formData.append("logoFile", logoFile);
+      }
       formData.append("storeName", storeName);
       formData.append("category", category);
       formData.append("whatsappNumber", whatsappNumber);
       formData.append("bankName", bankName);
       formData.append("accountNumber", accountNumber);
       formData.append("accountName", accountName);
-      formData.append("logoUrl", logoUrl);
       formData.append("primaryColor", primaryColor);
 
       const res = await completeOnboarding(formData);
@@ -222,11 +216,6 @@ export default function SellerOnboardingPage() {
               )}
             </div>
           )}
-
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            Already have a store?{" "}
-            <Link href="/seller/login" className="underline hover:text-foreground">Sign in</Link>
-          </p>
         </div>
       </div>
     </div>

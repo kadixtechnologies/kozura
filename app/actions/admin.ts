@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -65,7 +65,8 @@ export async function updatePlanLimits(planId: string, updates: { price_monthly:
   const supabase = await createClient();
   if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };
 
-  const { error } = await supabase.from("plans").update(updates).eq("id", planId);
+  const supabaseAdmin = await createAdminClient();
+  const { error } = await supabaseAdmin.from("plans").update(updates).eq("id", planId);
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/admin/plans");

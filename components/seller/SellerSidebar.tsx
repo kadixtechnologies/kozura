@@ -49,16 +49,18 @@ export function SellerSidebar() {
     <aside className="hidden md:flex flex-col w-64 shrink-0 p-5 pr-0 print:hidden">
       <div className="flex flex-col h-full bg-background rounded-[24px] border border-border/60 p-5">
         <Link href="/seller/dashboard" className="flex items-center gap-2.5 px-1 min-w-0">
-          {profile?.avatar_url ? (
+          {activeStore?.logo_url ? (
+            <img src={activeStore.logo_url} alt="Store Logo" className="h-8 w-8 rounded-xl object-cover shrink-0" />
+          ) : profile?.avatar_url ? (
             <img src={profile.avatar_url} alt="Avatar" className="h-8 w-8 rounded-xl object-cover shrink-0" />
           ) : (
             <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold shrink-0">
-              {profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : "S"}
+              {activeStore?.name ? activeStore.name.charAt(0).toUpperCase() : profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : "S"}
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <div className="font-semibold text-sm tracking-tight leading-none truncate">{profile?.full_name || "Seller"}</div>
-            <div className="text-[11px] text-muted-foreground mt-0.5 truncate">{activeStore?.name || "No Store Yet"}</div>
+            <div className="font-semibold text-sm tracking-tight leading-none truncate">{activeStore?.name || profile?.full_name || "Seller"}</div>
+            <div className="text-[11px] text-muted-foreground mt-0.5 truncate">{activeStore?.name ? "Store" : "No Store Yet"}</div>
           </div>
         </Link>
 

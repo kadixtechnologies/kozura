@@ -20,9 +20,13 @@ export function StoreNavbar({ store }: { store: any }) {
     <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-xl border-b border-border/60">
       <div className="container flex h-16 items-center justify-between gap-6">
         <Link href={`/${store.slug}`} className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold">
-            {store.name.charAt(0)}
-          </div>
+          {store.logo_url ? (
+            <img src={store.logo_url} alt={store.name} className="h-8 w-8 rounded-xl object-cover" />
+          ) : (
+            <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold">
+              {store.name.charAt(0)}
+            </div>
+          )}
           <span className="font-semibold text-[15px] tracking-tight">{store.name}</span>
         </Link>
 

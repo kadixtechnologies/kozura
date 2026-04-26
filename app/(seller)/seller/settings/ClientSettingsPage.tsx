@@ -348,8 +348,8 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
 
                 <div className="space-y-3">
                   {zones.map((zone, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/60">
-                      <div className="flex-1">
+                    <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 rounded-xl bg-muted/30 border border-border/60">
+                      <div className="w-full sm:flex-1">
                         <Label className="text-xs text-muted-foreground">Location name</Label>
                         <Input
                           value={zone.label}
@@ -358,19 +358,21 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
                           placeholder="e.g. Lagos Island"
                         />
                       </div>
-                      <div className="w-36">
-                        <Label className="text-xs text-muted-foreground">Fee (₦)</Label>
-                        <Input
-                          type="number"
-                          value={zone.fee}
-                          onChange={e => updateZone(i, "fee", parseFloat(e.target.value) || 0)}
-                          className="mt-1 rounded-lg h-9 text-sm"
-                          placeholder="2000"
-                        />
+                      <div className="flex items-end gap-3 w-full sm:w-auto">
+                        <div className="flex-1 sm:w-36">
+                          <Label className="text-xs text-muted-foreground">Fee (₦)</Label>
+                          <Input
+                            type="number"
+                            value={zone.fee}
+                            onChange={e => updateZone(i, "fee", parseFloat(e.target.value) || 0)}
+                            className="mt-1 rounded-lg h-9 text-sm"
+                            placeholder="2000"
+                          />
+                        </div>
+                        <button onClick={() => removeZone(i)} className="h-9 w-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shrink-0">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
-                      <button onClick={() => removeZone(i)} className="mt-5 h-9 w-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shrink-0">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </div>
                   ))}
                 </div>

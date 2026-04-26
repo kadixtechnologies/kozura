@@ -52,8 +52,12 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
       .in("id", productIds);
     if (products) {
       products.forEach((p: any) => {
-        if (p.images?.[0]) {
-          productImages[p.id] = p.images[0];
+        let imgs = p.images;
+        if (typeof imgs === 'string') {
+          try { imgs = JSON.parse(imgs); } catch(e) {}
+        }
+        if (Array.isArray(imgs) && imgs[0]) {
+          productImages[p.id] = imgs[0];
         } else if (p.image) {
           productImages[p.id] = p.image;
         }
@@ -137,8 +141,8 @@ export default async function SellerOrderDetailPage({ params }: { params: Promis
                 {order.order_items.map((it: any) => (
                   <div key={it.id} className="flex items-center gap-3 py-3 border-b border-border/60 last:border-0">
                     <div className="h-12 w-12 rounded-xl bg-tile-mint flex items-center justify-center overflow-hidden shrink-0">
-                      {productImages[it.product_id] ? (
-                        <img src={productImages[it.product_id]} alt="" className="h-full w-full object-cover" />
+                      {it.product_image || productImages[it.product_id] ? (
+                        <img src={it.product_image || productImages[it.product_id]} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <ImageIcon className="h-5 w-5 text-foreground/30" />
                       )}

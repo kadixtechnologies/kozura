@@ -9,7 +9,7 @@ export async function completeOnboarding(formData: FormData) {
   const bankName = formData.get("bankName") as string;
   const accountNumber = formData.get("accountNumber") as string;
   const accountName = formData.get("accountName") as string;
-  const logoUrl = formData.get("logoUrl") as string;
+  const logoFile = formData.get("logoFile") as File | null;
   const primaryColor = formData.get("primaryColor") as string;
   
   if (!storeName || !category || !whatsappNumber) {
@@ -41,7 +41,7 @@ export async function completeOnboarding(formData: FormData) {
   }
 
   // Insert store
-  const { error } = await supabase.from("stores").insert({
+  const { data: store, error } = await supabase.from("stores").insert({
     seller_id: user.id,
     name: storeName,
     slug: slug,
@@ -50,14 +50,31 @@ export async function completeOnboarding(formData: FormData) {
     bank_name: bankName,
     account_number: accountNumber,
     account_name: accountName,
-    logo_url: logoUrl || null,
     primary_color: primaryColor || '#16a34a',
     is_active: true,
     subscription_plan: 'free',
-  });
+  }).select().single();
 
   if (error) {
     return { success: false, error: error.message };
+  }
+
+  // Upload logo if provided
+  let logoUrl = null;
+  if (logoFile && store) {
+    const fileExt = logoFile.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `${store.id}/logo/${fileName}`;
+
+    const { data, error: uploadError } = await supabaseAdmin.storage
+      .from('store-assets')
+      .upload(filePath, logoFile, { cacheControl: '3600', upsert: false });
+
+    if (!uploadError && data) {
+      const { data: publicUrlData } = supabaseAdmin.storage.from('store-assets').getPublicUrl(data.path);
+      logoUrl = publicUrlData.publicUrl;
+      await supabaseAdmin.from("stores").update({ logo_url: logoUrl }).eq("id", store.id);
+    }
   }
 
   // The DB defaults handle shipping_config and accepts_cod/accepts_bank_transfer

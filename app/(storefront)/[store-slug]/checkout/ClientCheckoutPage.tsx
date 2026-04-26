@@ -161,7 +161,8 @@ export function ClientCheckoutPage({ store }: { store: any }) {
       name: item.name,
       variantLabel: item.variantLabel,
       quantity: item.qty,
-      price: item.price
+      price: item.price,
+      image: item.image
     }));
     formData.append("items", JSON.stringify(formattedItems));
 

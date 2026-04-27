@@ -211,7 +211,7 @@ export function ClientCheckoutPage({ store }: { store: any }) {
                 <div><Label className="text-xs text-muted-foreground">Full name</Label><Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1.5 rounded-xl" placeholder="Adaeze Okafor" disabled={isLoading} /></div>
                 <div><Label className="text-xs text-muted-foreground">Email</Label><Input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 rounded-xl" type="email" placeholder="you@example.com" disabled={isLoading} /></div>
                 <div className="sm:col-span-2"><Label className="text-xs text-muted-foreground">Phone</Label>
-                  <div className="flex mt-1.5 h-10"><span className="inline-flex items-center gap-1.5 h-full border border-r-0 border-input rounded-l-xl px-3 text-sm bg-muted/60 text-foreground whitespace-nowrap shrink-0 select-none">🇳🇬 +234</span><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="rounded-l-none rounded-r-xl border-l-0 h-full focus-visible:ring-offset-0" placeholder="801 234 5678" type="tel" disabled={isLoading} /></div>
+                  <div className="flex mt-1.5 h-10"><span className="inline-flex items-center gap-1.5 h-full border border-r-0 border-input rounded-l-xl px-3 text-sm bg-muted/60 text-foreground whitespace-nowrap shrink-0 select-none">+234</span><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="rounded-l-none rounded-r-xl border-l-0 h-full focus-visible:ring-offset-0" placeholder="801 234 5678" type="tel" disabled={isLoading} /></div>
                 </div>
               </div>
             </Section>

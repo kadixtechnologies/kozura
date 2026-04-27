@@ -55,7 +55,7 @@ export function SellerSidebar() {
             <img src={profile.avatar_url} alt="Avatar" className="h-8 w-8 rounded-xl object-cover shrink-0" />
           ) : (
             <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold shrink-0">
-              {activeStore?.name ? activeStore.name.charAt(0).toUpperCase() : profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : "S"}
+              {activeStore?.name ? activeStore.name.charAt(0).toUpperCase() : profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />}
             </div>
           )}
           <div className="min-w-0 flex-1">

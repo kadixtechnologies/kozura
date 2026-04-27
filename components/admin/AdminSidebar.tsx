@@ -43,8 +43,8 @@ export function AdminSidebar() {
           {adminUser?.user_metadata?.avatar_url ? (
             <img src={adminUser.user_metadata.avatar_url} alt="Admin" className="h-8 w-8 rounded-xl object-cover shrink-0" />
           ) : (
-            <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold shrink-0">
-              SL
+            <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
+              <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
             </div>
           )}
           <div className="min-w-0 flex-1">

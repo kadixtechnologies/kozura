@@ -70,7 +70,7 @@ export default function AdminLoginPage() {
       <div className="hidden lg:flex p-5">
         <div className="flex-1 rounded-[28px] bg-ink text-ink-foreground p-12 flex flex-col justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold">SL</div>
+            <img src="/logo.png" alt="Kozura Logo" className="h-8 w-8 object-contain" />
             <span className="font-semibold tracking-tight">Kozura Core</span>
           </div>
           <div>
@@ -84,7 +84,7 @@ export default function AdminLoginPage() {
       <div className="flex items-center justify-center p-5">
         <div className="w-full max-w-sm">
           <div className="lg:hidden flex items-center gap-2.5 mb-8">
-            <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-bold">SL</div>
+            <img src="/logo.png" alt="Kozura Logo" className="h-8 w-8 object-contain" />
             <span className="font-semibold tracking-tight">Kozura Core</span>
           </div>
           

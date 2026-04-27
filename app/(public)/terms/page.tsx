@@ -41,9 +41,7 @@ export default function TermsPage() {
       <header className="sticky top-0 z-50 bg-canvas/80 backdrop-blur-md border-b border-border/40">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-            <div className="h-9 w-9 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-bold shadow-sm">
-              S
-            </div>
+            <img src="/logo.png" alt="Kozura Logo" className="h-9 w-9 object-contain" />
             <span className="font-bold text-xl tracking-tight text-foreground hidden sm:block">Kozura</span>
           </Link>
           
@@ -187,9 +185,7 @@ export default function TermsPage() {
           {/* 1. Branding Area */}
           <div className="flex flex-col items-center md:items-start mb-16">
             <div className="flex items-center gap-3 mb-8">
-              <div className="h-10 w-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold shadow-sm">
-                S
-              </div>
+              <img src="/logo.png" alt="Kozura Logo" className="h-10 w-10 object-contain" />
               <span className="font-semibold text-2xl tracking-tight text-white">Kozura</span>
             </div>
             

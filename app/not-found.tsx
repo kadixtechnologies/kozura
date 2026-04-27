@@ -12,9 +12,7 @@ export default function NotFound() {
         <header className="absolute top-0 inset-x-0 z-50 bg-transparent pointer-events-none">
           <div className="container mx-auto px-6 h-24 flex items-center justify-center md:justify-start">
             <div className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-bold shadow-sm">
-                S
-              </div>
+              <img src="/logo.png" alt="Kozura Logo" className="h-8 w-8 object-contain" />
               <span className="font-semibold text-xl tracking-tight text-foreground">Kozura</span>
             </div>
           </div>

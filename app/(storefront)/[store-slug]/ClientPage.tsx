@@ -6,6 +6,11 @@ import { StoreNavbar } from "@/components/shop/StoreNavbar";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { cn } from "@/lib/utils";
 
+const ensureExternalLink = (url: string) => {
+  if (!url) return "";
+  return url.startsWith("http") ? url : `https://${url}`;
+};
+
 export function StorefrontClient({ store, products, categories }: { store: any, products: any[], categories: any[] }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -104,17 +109,17 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
           </div>
           <div className="flex items-center gap-4">
             {store.social_facebook_enabled && store.social_facebook && (
-              <a href={store.social_facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href={ensureExternalLink(store.social_facebook)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Facebook className="h-4 w-4" />
               </a>
             )}
             {store.social_instagram_enabled && store.social_instagram && (
-              <a href={store.social_instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href={ensureExternalLink(store.social_instagram)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Instagram className="h-4 w-4" />
               </a>
             )}
             {store.social_tiktok_enabled && store.social_tiktok && (
-              <a href={store.social_tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href={ensureExternalLink(store.social_tiktok)} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
                 </svg>

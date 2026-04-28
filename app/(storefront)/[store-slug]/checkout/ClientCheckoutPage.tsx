@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StoreNavbar } from "@/components/shop/StoreNavbar";
 import { OrderSummaryCard } from "@/components/shop/OrderSummaryCard";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Copy, Check, Building2, UploadCloud, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Copy, Check, Building2, UploadCloud, Loader2, Sparkles, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { placeOrder } from "@/app/actions/checkout";
 import { useRouter } from "next/navigation";
@@ -124,6 +125,38 @@ export function ClientCheckoutPage({ store }: { store: any }) {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [showWelcomeBack, setShowWelcomeBack] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(`kozura_customer_${store.id}`);
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.name) setName(data.name);
+        if (data.email) setEmail(data.email);
+        if (data.phone) setPhone(data.phone);
+        if (data.address) setAddress(data.address);
+        if (data.city) setCity(data.city);
+        if (data.state) setState(data.state);
+        if (data.zone) setSelectedZone(data.zone);
+        setShowWelcomeBack(true);
+      } catch (e) {
+        console.error("Failed to parse saved details", e);
+      }
+    }
+  }, [store.id]);
+
+  const clearSavedDetails = () => {
+    localStorage.removeItem(`kozura_customer_${store.id}`);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setAddress("");
+    setCity("");
+    setState("");
+    setShowWelcomeBack(false);
+    toast.success("Saved details cleared.");
+  };
 
   const deliveryZones: { label: string; fee: number }[] = shippingConfig.delivery?.zones || [];
   const [selectedZone, setSelectedZone] = useState<string>(deliveryZones[0]?.label || "");
@@ -178,6 +211,10 @@ export function ClientCheckoutPage({ store }: { store: any }) {
       const res = await placeOrder(formData);
       if (res.success) {
         toast.success("Order placed successfully!");
+        // Save details for next time
+        localStorage.setItem(`kozura_customer_${store.id}`, JSON.stringify({
+          name, email, phone, address, city, state, zone: selectedZone
+        }));
         clearCart(store.id);
         router.push(`/${store.slug}/order-confirmation?orderId=${res.orderId}`);
       } else {
@@ -204,6 +241,31 @@ export function ClientCheckoutPage({ store }: { store: any }) {
       <div className="container py-8">
         <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground font-medium">Checkout</div>
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mt-2">Almost there</h1>
+
+        {showWelcomeBack && (
+          <div className="mt-6 animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-primary/5 border border-primary/20 rounded-[20px] p-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Welcome back!</p>
+                  <p className="text-xs text-muted-foreground">We've pre-filled the form with your last used details.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setShowWelcomeBack(false)} className="h-8 rounded-lg text-xs">
+                  <Check className="h-3.5 w-3.5 mr-1" /> Use these
+                </Button>
+                <Button variant="ghost" size="sm" onClick={clearSavedDetails} className="h-8 rounded-lg text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
+                  <X className="h-3.5 w-3.5 mr-1" /> Clear
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid lg:grid-cols-[1.6fr_1fr] gap-6 mt-7">
           <div className="space-y-5">
             <Section step={1} title="Contact details">

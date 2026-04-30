@@ -32,7 +32,8 @@ export async function updateStoreStatus(storeId: string, status: string) {
   const supabase = await createClient();
   if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };
 
-  const { error } = await supabase.from("stores").update({ is_active: status === 'active' }).eq("id", storeId);
+  const adminClient = await createAdminClient();
+  const { error } = await adminClient.from("stores").update({ is_active: status === 'active' }).eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/admin/stores");
@@ -43,7 +44,8 @@ export async function deleteStore(storeId: string) {
   const supabase = await createClient();
   if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };
 
-  const { error } = await supabase.from("stores").delete().eq("id", storeId);
+  const adminClient = await createAdminClient();
+  const { error } = await adminClient.from("stores").delete().eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/admin/stores");
@@ -54,7 +56,8 @@ export async function updateStorePlan(storeId: string, plan: string) {
   const supabase = await createClient();
   if (!(await isSuperAdmin(supabase))) return { success: false, error: "Unauthorized" };
 
-  const { error } = await supabase.from("stores").update({ subscription_plan: plan as any }).eq("id", storeId);
+  const adminClient = await createAdminClient();
+  const { error } = await adminClient.from("stores").update({ subscription_plan: plan as any }).eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
   revalidatePath("/admin/stores");

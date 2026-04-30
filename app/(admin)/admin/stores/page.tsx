@@ -21,6 +21,12 @@ export default async function AdminStoresPage() {
     .select("store_id, total_amount")
     .neq("status", "cancelled");
 
+  // Fetch plans from DB so the Change Plan dialog shows real data
+  const { data: plans } = await supabase
+    .from("plans")
+    .select("id, name, price_monthly, order_limit")
+    .order("price_monthly", { ascending: true });
+
   const revenueByStore = (orders || []).reduce((acc: any, order) => {
     acc[order.store_id] = (acc[order.store_id] || 0) + Number(order.total_amount);
     return acc;
@@ -31,5 +37,5 @@ export default async function AdminStoresPage() {
     totalRevenue: revenueByStore[store.id] || 0
   }));
 
-  return <ClientAdminStoresPage initialStores={storesWithRevenue} />;
+  return <ClientAdminStoresPage initialStores={storesWithRevenue} plans={plans || []} />;
 }

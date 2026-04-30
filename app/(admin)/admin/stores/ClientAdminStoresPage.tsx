@@ -6,9 +6,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Zap, TrendingUp, Briefcase, Crown, AlertTriangle, X, ChevronDown, Loader2, MoreVertical } from "lucide-react";
+import { Zap, TrendingUp, Briefcase, Crown, AlertTriangle, X, ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { updateStoreStatus, updateStorePlan, deleteStore as deleteStoreAction } from "@/app/actions/admin";
+
+export type DbPlan = {
+  id: string;
+  name: string;
+  price_monthly: number;
+  order_limit: number;
+};
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,39 +24,73 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-const PLANS = [
-  { id: "free", name: "Free", price: "Free", orders: "20 orders", icon: Zap, color: "bg-muted", badge: "bg-zinc-100 text-zinc-700" },
-  { id: "starter", name: "Starter", price: "Free", orders: "20 orders", icon: Zap, color: "bg-muted", badge: "bg-zinc-100 text-zinc-700" },
-  { id: "hustle", name: "Hustle", price: "₦2,500/mo", orders: "250 orders", icon: TrendingUp, color: "bg-tile-butter", badge: "bg-amber-100 text-amber-700" },
-  { id: "business", name: "Business", price: "₦5,000/mo", orders: "1,000 orders", icon: Briefcase, color: "bg-tile-sky", badge: "bg-blue-100 text-blue-700" },
-  { id: "boss", name: "Boss", price: "₦12,000/mo", orders: "Unlimited", icon: Crown, color: "bg-tile-peach", badge: "bg-orange-100 text-orange-700" },
-] as const;
+// Static visual config keyed by lowercase plan name
+const PLAN_VISUALS: Record<string, { icon: React.ElementType; color: string; badge: string }> = {
+  free:     { icon: Zap,      color: "bg-muted",       badge: "bg-zinc-100 text-zinc-700" },
+  starter:  { icon: Zap,      color: "bg-muted",       badge: "bg-zinc-100 text-zinc-700" },
+  hustle:   { icon: TrendingUp, color: "bg-tile-butter", badge: "bg-amber-100 text-amber-700" },
+  business: { icon: Briefcase, color: "bg-tile-sky",    badge: "bg-blue-100 text-blue-700" },
+  boss:     { icon: Crown,    color: "bg-tile-peach",   badge: "bg-orange-100 text-orange-700" },
+};
 
-type PlanId = typeof PLANS[number]["id"];
+const DEFAULT_VISUAL = { icon: Zap, color: "bg-muted", badge: "bg-zinc-100 text-zinc-700" };
 
-function PlanBadge({ planId }: { planId: PlanId }) {
-  const plan = PLANS.find((p) => p.id === planId) || PLANS[0];
-  const Icon = plan.icon;
-  return (<span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold", plan.badge)}><Icon className="h-3 w-3" />{plan.name}</span>);
+function formatOrderLimit(limit: number) {
+  return limit === -1 ? "Unlimited orders" : `${limit} orders/mo`;
 }
 
-function ChangePlanDialog({ store, onSave, onClose }: { store: any; onSave: (planId: PlanId) => Promise<void>; onClose: () => void }) {
-  const [selected, setSelected] = useState<PlanId>(store.subscription_plan || "free");
+function formatPrice(price: number) {
+  return price === 0 ? "Free" : `₦${price.toLocaleString("en-NG")}/mo`;
+}
+
+function PlanBadge({ planName }: { planName: string }) {
+  const key = (planName || "free").toLowerCase();
+  const visual = PLAN_VISUALS[key] || DEFAULT_VISUAL;
+  const Icon = visual.icon;
+  return (<span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold", visual.badge)}><Icon className="h-3 w-3" />{planName}</span>);
+}
+
+function ChangePlanDialog({ store, plans, onSave, onClose }: { store: any; plans: DbPlan[]; onSave: (planName: string) => Promise<void>; onClose: () => void }) {
+  // Current plan is stored as the plan name (e.g. "Hustle") on the store row
+  const currentPlanName = (store.subscription_plan || "free").toLowerCase();
+  const [selected, setSelected] = useState<string>(currentPlanName);
   const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }} onClick={(e) => !isLoading && e.target === e.currentTarget && onClose()}>
       <div className="bg-background rounded-[24px] border border-border/60 shadow-2xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between mb-5"><div><h2 className="font-semibold text-base">Change plan</h2><p className="text-sm text-muted-foreground mt-0.5">{store.name}</p></div><button onClick={onClose} disabled={isLoading} className="h-8 w-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 transition-colors"><X className="h-4 w-4" /></button></div>
-        <div className="space-y-2">
-          {PLANS.map((plan) => { const Icon = plan.icon; const isSelected = selected === plan.id; return (
-            <button key={plan.id} onClick={() => setSelected(plan.id)} disabled={isLoading} className={cn("w-full flex items-center gap-3 rounded-2xl border p-4 text-left transition-all", isSelected ? "border-foreground/30 bg-muted/50" : "border-border hover:border-foreground/20")}>
-              <div className={cn("h-9 w-9 rounded-xl flex items-center justify-center shrink-0", plan.color)}><Icon className="h-4 w-4" /></div>
-              <div className="flex-1 min-w-0"><div className="font-semibold text-sm">{plan.name}</div><div className="text-xs text-muted-foreground">{plan.orders} · {plan.price}</div></div>
-              <div className={cn("h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all", isSelected ? "border-foreground bg-foreground" : "border-border")}>{isSelected && <div className="h-2 w-2 rounded-full bg-background" />}</div>
-            </button>
-          ); })}
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="font-semibold text-base">Change plan</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">{store.name}</p>
+          </div>
+          <button onClick={onClose} disabled={isLoading} className="h-8 w-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 transition-colors"><X className="h-4 w-4" /></button>
         </div>
-        <div className="flex gap-2 mt-5"><Button variant="outline" className="flex-1 rounded-xl" onClick={onClose} disabled={isLoading}>Cancel</Button><Button className="flex-1 rounded-xl" onClick={async () => { setIsLoading(true); await onSave(selected); setIsLoading(false); }} disabled={selected === store.subscription_plan || isLoading}>{isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save plan"}</Button></div>
+        <div className="space-y-2">
+          {plans.map((plan) => {
+            const key = plan.name.toLowerCase();
+            const visual = PLAN_VISUALS[key] || DEFAULT_VISUAL;
+            const Icon = visual.icon;
+            const isSelected = selected === key;
+            const isCurrent = currentPlanName === key;
+            return (
+              <button key={plan.id} onClick={() => setSelected(key)} disabled={isLoading} className={cn("w-full flex items-center gap-3 rounded-2xl border p-4 text-left transition-all", isSelected ? "border-foreground/30 bg-muted/50" : "border-border hover:border-foreground/20")}>
+                <div className={cn("h-9 w-9 rounded-xl flex items-center justify-center shrink-0", visual.color)}><Icon className="h-4 w-4" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm">{plan.name}</span>
+                    {isCurrent && <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">Current</span>}
+                  </div>
+                  <div className="text-xs text-muted-foreground">{formatOrderLimit(plan.order_limit)} · {formatPrice(plan.price_monthly)}</div>
+                </div>
+                <div className={cn("h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all", isSelected ? "border-foreground bg-foreground" : "border-border")}>{isSelected && <div className="h-2 w-2 rounded-full bg-background" />}</div>
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex gap-2 mt-5">
+          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose} disabled={isLoading}>Cancel</Button>
+          <Button className="flex-1 rounded-xl" onClick={async () => { setIsLoading(true); await onSave(selected); setIsLoading(false); }} disabled={selected === currentPlanName || isLoading}>{isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save plan"}</Button>
+        </div>
       </div>
     </div>
   );
@@ -94,7 +135,7 @@ function ActionMenu({ store, onToggle, onChangePlan, onDelete }: { store: any; o
   );
 }
 
-export function ClientAdminStoresPage({ initialStores }: { initialStores: any[] }) {
+export function ClientAdminStoresPage({ initialStores, plans }: { initialStores: any[]; plans: DbPlan[] }) {
   const [stores, setStores] = useState(initialStores);
   const [planDialog, setPlanDialog] = useState<any | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<any | null>(null);
@@ -116,11 +157,12 @@ export function ClientAdminStoresPage({ initialStores }: { initialStores: any[] 
     }
   };
 
-  const changePlan = async (id: string, planId: PlanId) => {
-    const res = await updateStorePlan(id, planId);
+  const changePlan = async (id: string, planName: string) => {
+    const res = await updateStorePlan(id, planName);
     if (res.success) {
-      setStores((prev) => prev.map((s) => (s.id === id ? { ...s, subscription_plan: planId } : s)));
-      toast.success(`${stores.find((s) => s.id === id)!.name} moved to ${PLANS.find((p) => p.id === planId)!.name}`);
+      setStores((prev) => prev.map((s) => (s.id === id ? { ...s, subscription_plan: planName } : s)));
+      const displayName = plans.find((p) => p.name.toLowerCase() === planName)?.name || planName;
+      toast.success(`${stores.find((s) => s.id === id)!.name} moved to ${displayName}`);
       setPlanDialog(null);
     } else {
       toast.error(res.error || "Failed to update store plan");
@@ -158,7 +200,7 @@ export function ClientAdminStoresPage({ initialStores }: { initialStores: any[] 
                   <TableRow key={s.id}>
                     <TableCell className="font-semibold">{s.name}</TableCell>
                     <TableCell><div className="flex flex-col"><span className="font-medium text-sm">{s.seller?.full_name || s.account_name}</span><span className="text-[11px] text-muted-foreground">{s.seller?.email || s.contact_email}</span><span className="text-[11px] text-muted-foreground">{s.whatsapp_number}</span></div></TableCell>
-                    <TableCell><PlanBadge planId={s.subscription_plan} /></TableCell>
+                    <TableCell><PlanBadge planName={s.subscription_plan} /></TableCell>
                     <TableCell className="font-medium">{formatCurrency(s.totalRevenue)}</TableCell>
                     <TableCell><span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", s.is_active ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{s.is_active ? "Active" : "Inactive"}</span></TableCell>
                     <TableCell className="text-right"><ActionMenu store={s} onToggle={() => toggleStatus(s.id)} onChangePlan={() => setPlanDialog(s)} onDelete={() => setDeleteDialog(s)} /></TableCell>
@@ -192,7 +234,7 @@ export function ClientAdminStoresPage({ initialStores }: { initialStores: any[] 
           )}
         </div>
       </AdminLayout>
-      {planDialog && <ChangePlanDialog store={planDialog} onSave={(planId) => changePlan(planDialog.id, planId)} onClose={() => setPlanDialog(null)} />}
+      {planDialog && <ChangePlanDialog store={planDialog} plans={plans} onSave={(planName) => changePlan(planDialog.id, planName)} onClose={() => setPlanDialog(null)} />}
       {deleteDialog && <DeleteStoreDialog store={deleteDialog} onConfirm={() => deleteStore(deleteDialog.id)} onClose={() => setDeleteDialog(null)} />}
     </>
   );

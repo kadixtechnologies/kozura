@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -172,8 +173,16 @@ function FaqGroup({
 }
 
 export default function LandingPage() {
+  const [user, setUser] = useState<any>(null);
   const [openFaqGroup, setOpenFaqGroup] = useState<number>(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+  }, []);
   const testimonials = [
     {
       quote:
@@ -210,9 +219,9 @@ export default function LandingPage() {
       <main>
         {/* HERO CONTAINER CARD */}
         <div className="p-4 md:p-6 lg:p-8 pt-6 md:pt-8">
-          <section className="relative mx-auto max-w-[1400px] bg-canvas border border-border/60 rounded-[32px] md:rounded-[48px] overflow-hidden px-4 md:px-10 pb-20 md:pb-32 shadow-sm">
+          <section className="relative mx-auto max-w-[1400px] bg-canvas border border-border/60 rounded-[32px] md:rounded-[48px] px-4 md:px-10 pb-20 md:pb-32 shadow-sm">
             {/* Subtle Background Layering */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none rounded-[32px] md:rounded-[48px] overflow-hidden" />
 
             {/* SECTION 1 — IN-CARD NAVBAR */}
             <header className="relative z-50 flex items-center justify-between pt-6 md:pt-8 mb-16 md:mb-24">
@@ -257,7 +266,11 @@ export default function LandingPage() {
                   asChild
                   className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 font-medium shadow-sm h-10 md:h-11"
                 >
-                  <Link href="/seller/login">Open account</Link>
+                  {user ? (
+                    <Link href="/seller/dashboard">Dashboard</Link>
+                  ) : (
+                    <Link href="/seller/login">Open account</Link>
+                  )}
                 </Button>
               </div>
             </header>
@@ -266,7 +279,7 @@ export default function LandingPage() {
             <div className="container mx-auto max-w-6xl relative z-10">
               <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
                 {/* Left Column: Text Content */}
-                <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start max-w-2xl mx-auto lg:mx-0">
+                <div className="flex-1 text-center lg:text-left flex flex-col items-center lg:items-start max-w-2xl mx-auto lg:mx-0 relative z-50">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background border border-border text-sm font-medium mb-6 shadow-sm text-foreground">
                     Built for Nigerian Sellers
                   </div>
@@ -282,27 +295,9 @@ export default function LandingPage() {
                     set up in minutes, not months.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                    <Button
-                      asChild
-                      size="lg"
-                      className="h-14 px-8 text-base rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm w-full sm:w-auto"
-                    >
-                      <Link href="/seller/login">
-                        Open account <ArrowRight className="ml-2 h-5 w-5" />
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      size="lg"
-                      variant="outline"
-                      className="h-14 px-8 text-base rounded-full bg-background hover:bg-muted transition-all border-border text-foreground w-full sm:w-auto"
-                    >
-                      <Link href="/cruz-gadgets">See a Live Store</Link>
-                    </Button>
-                  </div>
 
-                  <div className="w-full mt-12">
+
+                  <div className="w-full mt-12 relative z-[100]">
                     <StoreSearch />
                   </div>
 
@@ -316,7 +311,7 @@ export default function LandingPage() {
                 <div className="flex-1 w-full flex items-center justify-center lg:justify-end mt-20 lg:mt-0">
                   <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/25 blur-[150px] rounded-full pointer-events-none" />
-                    <div className="relative w-full h-full [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]">
+                    <div className="relative w-full h-full overflow-hidden [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]">
                       <img
                         src="/hero_image.png"
                         alt="Store Dashboard Interface"

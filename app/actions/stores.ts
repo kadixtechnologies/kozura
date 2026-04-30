@@ -19,9 +19,9 @@ export async function searchStores(query: string): Promise<StoreSearchResult[]> 
 
   const { data, error } = await supabase
     .from("stores")
-    .select("id, name, slug, tagline, logo_url, profiles(full_name)")
+    .select("id, name, slug, tagline, logo_url, profiles!inner(full_name)")
     .eq("is_active", true)
-    .or(`name.ilike.%${q}%,slug.ilike.%${q}%`)
+    .or(`name.ilike.%${q}%,slug.ilike.%${q}%,profiles.full_name.ilike.%${q}%`)
     .limit(8);
 
   if (error || !data) return [];

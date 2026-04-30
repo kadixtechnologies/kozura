@@ -54,6 +54,20 @@ export function ClientProductPage({
   const { addItem, updateQuantity, items: cartItems } = useCart();
   const [adding, setAdding] = useState(false);
 
+  // Compute effective price = base price + sum of selected variant modifiers
+  const effectivePrice = variants.reduce((total: number, v: any) => {
+    const selectedVal = selected[v.type];
+    const matchedValue = v.values?.find((item: any) => {
+      const val = typeof item === "object" && item !== null ? item.value : item;
+      return val === selectedVal;
+    });
+    const modifier =
+      typeof matchedValue === "object" && matchedValue !== null
+        ? (matchedValue.modifier || 0)
+        : 0;
+    return total + modifier;
+  }, product.price as number);
+
   const maxQty = product.stock_quantity ?? Infinity;
   const images = product.images || [];
 
@@ -73,7 +87,7 @@ export function ClientProductPage({
       productId: product.id,
       name: product.name,
       variantLabel,
-      price: product.price,
+      price: effectivePrice, // ← variant-adjusted price
       qty,
       image: images[0] || "",
       storeId: store.id,
@@ -161,9 +175,16 @@ export function ClientProductPage({
             </div>
             <div className="mt-5 inline-flex items-baseline gap-3">
               <span className="text-3xl font-semibold tracking-tight">
-                {formatNGN(product.price)}
+                {formatNGN(effectivePrice)}
               </span>
-              {product.compare_at_price && (
+              {/* Show base price struck-through when a variant modifier is active */}
+              {effectivePrice !== product.price && (
+                <span className="text-sm text-muted-foreground line-through">
+                  {formatNGN(product.price)}
+                </span>
+              )}
+              {/* Show compare_at_price struck-through only when no modifier changes the price */}
+              {effectivePrice === product.price && product.compare_at_price && (
                 <span className="text-sm text-muted-foreground line-through">
                   {formatNGN(product.compare_at_price)}
                 </span>
@@ -186,6 +207,10 @@ export function ClientProductPage({
                         typeof item === "object" && item !== null
                           ? item.value
                           : item;
+                      const modifier =
+                        typeof item === "object" && item !== null
+                          ? (item.modifier || 0)
+                          : 0;
                       const isSel = selected[v.type] === val;
                       return (
                         <button
@@ -194,13 +219,21 @@ export function ClientProductPage({
                             setSelected({ ...selected, [v.type]: val })
                           }
                           className={cn(
-                            "h-10 px-4 rounded-full border text-sm font-medium transition-all",
+                            "h-10 px-4 rounded-full border text-sm font-medium transition-all flex items-center gap-1.5",
                             isSel
                               ? "bg-ink text-ink-foreground border-ink"
                               : "bg-background text-foreground border-border hover:border-foreground/30",
                           )}
                         >
                           {val}
+                          {modifier !== 0 && (
+                            <span className={cn(
+                              "text-[10px] font-semibold",
+                              isSel ? "text-ink-foreground/70" : "text-muted-foreground"
+                            )}>
+                              {modifier > 0 ? `+${formatNGN(modifier)}` : formatNGN(modifier)}
+                            </span>
+                          )}
                         </button>
                       );
                     })}

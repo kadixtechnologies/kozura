@@ -36,12 +36,18 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [shuffledProducts, setShuffledProducts] = useState(products);
+
+  // Shuffle products on initial load
+  useEffect(() => {
+    setShuffledProducts([...products].sort(() => Math.random() - 0.5));
+  }, [products]);
 
   // Add "all" to categories for the UI
   const allCategories = [{ id: "all", label: "All", slug: "all" }, ...categories];
 
   const filtered = useMemo(() => {
-    let list = activeCategory === "all" ? products : products.filter((p) => p.category_id === activeCategory);
+    let list = activeCategory === "all" ? shuffledProducts : shuffledProducts.filter((p) => p.category_id === activeCategory);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       list = list.filter((p) => {
@@ -53,7 +59,7 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
     if (sortBy === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (sortBy === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     return list;
-  }, [activeCategory, searchQuery, sortBy, products, categories]);
+  }, [activeCategory, searchQuery, sortBy, shuffledProducts, categories]);
 
   // Reset pagination when filters change
   useEffect(() => {

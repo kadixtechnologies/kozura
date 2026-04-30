@@ -39,6 +39,18 @@ export function VariantBuilder({ defaultGroups = [], onChange }: { defaultGroups
     updateGroups(groups.filter((_, i) => i !== gi));
   };
 
+  const removeValue = (gi: number, vi: number) => {
+    const newGroups = [...groups];
+    newGroups[gi] = { ...newGroups[gi], values: newGroups[gi].values.filter((_, i) => i !== vi) };
+    
+    // If no values left, remove the entire group
+    if (newGroups[gi].values.length === 0) {
+      updateGroups(newGroups.filter((_, i) => i !== gi));
+    } else {
+      updateGroups(newGroups);
+    }
+  };
+
   return (
     <div className="space-y-3">
       {groups.map((g, gi) => (
@@ -52,7 +64,12 @@ export function VariantBuilder({ defaultGroups = [], onChange }: { defaultGroups
           <div className="space-y-2">
             {g.values.map((v, vi) => (
               <div key={vi} className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-background border border-border px-3 py-1 text-xs font-medium min-w-[100px]">{v.value}</span>
+                <span className="inline-flex items-center justify-between rounded-full bg-background border border-border px-3 py-1 text-xs font-medium min-w-[100px]">
+                  <span>{v.value}</span>
+                  <button type="button" onClick={() => removeValue(gi, vi)} className="ml-2 text-muted-foreground hover:text-destructive shrink-0">
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
                 <span className="text-xs text-muted-foreground">+₦</span>
                 <Input type="number" defaultValue={v.modifier} onChange={(e) => updateModifier(gi, vi, Number(e.target.value))} className="h-8 w-32 rounded-lg" />
               </div>

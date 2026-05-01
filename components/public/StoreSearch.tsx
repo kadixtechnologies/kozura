@@ -42,7 +42,7 @@ export function StoreSearch() {
 
   return (
     <div className="relative w-full max-w-2xl mx-auto" ref={searchContainerRef}>
-      <div className="relative flex items-center w-full h-14 md:h-16 rounded-full bg-background border border-border/60 shadow-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 transition-all z-20">
+      <div className="relative flex items-center w-full h-14 md:h-16 rounded-full bg-background border border-border/60 overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 transition-all z-20">
         <div className="flex items-center justify-center pl-6 pr-4">
           <Search className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground" />
         </div>
@@ -64,7 +64,7 @@ export function StoreSearch() {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-3 bg-background border border-border/60 rounded-[24px] shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="absolute top-full left-0 right-0 mt-3 bg-background border border-border/60 rounded-[24px] overflow-hidden z-50 animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="p-2">
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-4 py-2">
               {results.length > 0 ? "Search Results" : "No stores found"}
@@ -80,7 +80,7 @@ export function StoreSearch() {
                       className="group flex items-center justify-between p-3 md:p-4 rounded-[16px] hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 shrink-0 rounded-full bg-muted flex items-center justify-center border border-border/50 overflow-hidden shadow-sm">
+                        <div className="h-12 w-12 shrink-0 rounded-full bg-muted flex items-center justify-center border border-border/50 overflow-hidden">
                           {store.logo_url ? (
                             <img src={store.logo_url} alt={store.name} className="h-full w-full object-cover" />
                           ) : (

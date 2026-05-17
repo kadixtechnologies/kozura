@@ -37,13 +37,14 @@ export default function WaitlistLandingPage() {
                     <span className="text-primary">a Real Store</span>
                   </h1>
 
-                  <p className="text-lg md:text-xl text-muted-foreground mb-10 leading-relaxed lg:max-w-[90%]">
-                    Stop sending price lists on WhatsApp. Kozura gives you a
-                    professional storefront, linked directly to your WhatsApp.
-                    Join the waitlist to get early access.
+                  <p className="text-lg md:text-xl text-muted-foreground mb-5 leading-relaxed lg:max-w-[90%]">
+                    Stop posting on your WhatsApp Status everyday. Kozura gives you a
+                    professional storefront, linked directly to your WhatsApp. 
+                    <br /><br />
+                    <b>Join the waitlist to get early access.</b>
                   </p>
 
-                  <div className="w-full mt-8 relative z-[100] flex justify-center lg:justify-start">
+                  <div className="w-full mt-1 relative z-[100] flex justify-center lg:justify-start">
                     <WaitlistForm />
                   </div>
                 </div>

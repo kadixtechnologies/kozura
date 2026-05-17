@@ -11,12 +11,12 @@ export default function SellerLoginPage() {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     const supabase = createClient();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const origin = window.location.origin;
     
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${siteUrl}/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
   };

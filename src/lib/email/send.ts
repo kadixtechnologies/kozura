@@ -62,7 +62,7 @@ export async function sendPaymentFailedWarning({ sellerEmail, storeName, daysRem
   if (!isEmailEnabled) { console.log(`[Email] Skipped: payment-failed-warning → ${sellerEmail}`); return { success: true }; }
 
   try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kozura.ng';
     const loginUrl = `${siteUrl}/seller/settings`;
     const { data, error } = await resend.emails.send({
       from: fromEmail,
@@ -84,7 +84,7 @@ export async function sendSubscriptionCancelled({ sellerEmail, storeName }: any)
   if (!isEmailEnabled) { console.log(`[Email] Skipped: subscription-cancelled → ${sellerEmail}`); return { success: true }; }
 
   try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kozura.ng';
     const loginUrl = `${siteUrl}/seller/settings`;
     const { data, error } = await resend.emails.send({
       from: fromEmail,
@@ -108,7 +108,7 @@ export async function sendNewStoreNotification({ storeName, ownerName, ownerEmai
   const subject = `New Store Alert: ${storeName}`;
 
   try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kozura.ng';
     const loginUrl = `${siteUrl}/admin`;
     const { data, error } = await resend.emails.send({
       from: fromEmail,

@@ -13,7 +13,7 @@ function AdminLoginForm() {
   const handleGoogleSignInClick = async () => {
     setIsLoading(true);
     const supabase = createClient();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kozura.ng';
     
     await supabase.auth.signInWithOAuth({
       provider: 'google',

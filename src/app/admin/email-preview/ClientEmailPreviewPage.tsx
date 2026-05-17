@@ -38,13 +38,13 @@ export function ClientEmailPreviewPage() {
     storeName: "My Awesome Store",
     daysRemaining: 7,
     gracePeriodEnds: new Date(Date.now() + 7 * 86400000).toLocaleDateString(),
-    loginUrl: "http://localhost:3000/seller/settings"
+    loginUrl: "https://www.kozura.ng/seller/settings"
   });
 
   // State for Cancelled
   const [cancelledProps, setCancelledProps] = useState({
     storeName: "My Awesome Store",
-    loginUrl: "http://localhost:3000/seller/settings"
+    loginUrl: "https://www.kozura.ng/seller/settings"
   });
 
   // State for Notification
@@ -52,7 +52,7 @@ export function ClientEmailPreviewPage() {
     storeName: "My Awesome Store",
     ownerName: "Jane Doe",
     ownerEmail: "jane@example.com",
-    loginUrl: "http://localhost:3000/admin"
+    loginUrl: "https://www.kozura.ng/admin"
   });
 
   const getTemplateHtml = () => {

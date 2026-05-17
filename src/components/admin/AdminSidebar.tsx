@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Store, Users, Settings, LogOut, Zap } from "lucide-react";
+import {
+  LayoutDashboard,
+  Store,
+  Users,
+  Settings,
+  LogOut,
+  Zap,
+  Mail,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -12,13 +20,14 @@ const navItems = [
   { href: "/admin/stores", icon: Store, label: "Stores" },
   { href: "/admin/users", icon: Users, label: "Users" },
   { href: "/admin/plans", icon: Zap, label: "Plans" },
+  { href: "/admin/email-preview", icon: Mail, label: "Emails" },
   { href: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 
 async function handleSignOut() {
   const supabase = createClient();
   await supabase.auth.signOut();
-  window.location.href = '/admin/login';
+  window.location.href = "/admin/login";
 }
 
 export function AdminSidebar() {
@@ -28,7 +37,9 @@ export function AdminSidebar() {
   useEffect(() => {
     async function loadUser() {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) setAdminUser(user);
     }
     loadUser();
@@ -39,10 +50,18 @@ export function AdminSidebar() {
       <div className="flex flex-col h-full bg-ink text-ink-foreground rounded-[24px] border border-border/60 p-5">
         <Link href="/admin" className="flex items-center gap-2.5 px-1 min-w-0">
           {adminUser?.user_metadata?.avatar_url ? (
-            <img src={adminUser.user_metadata.avatar_url} alt="Admin" className="h-8 w-8 rounded-xl object-cover shrink-0" />
+            <img
+              src={adminUser.user_metadata.avatar_url}
+              alt="Admin"
+              className="h-8 w-8 rounded-xl object-cover shrink-0"
+            />
           ) : (
             <div className="h-8 w-8 rounded-xl bg-background text-foreground flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
-              <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="h-8 w-8 object-contain"
+              />
             </div>
           )}
           <div className="min-w-0 flex-1">
@@ -79,7 +98,10 @@ export function AdminSidebar() {
         </nav>
 
         <div className="mt-auto pt-4 border-t border-ink-foreground/10 space-y-1">
-          <button onClick={handleSignOut} className="w-full flex items-center gap-2 px-3 h-9 rounded-full text-sm text-ink-foreground/70 hover:text-ink-foreground hover:bg-ink-foreground/10 transition-colors text-left">
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-2 px-3 h-9 rounded-full text-sm text-ink-foreground/70 hover:text-ink-foreground hover:bg-ink-foreground/10 transition-colors text-left"
+          >
             <LogOut className="h-4 w-4" /> Sign out
           </button>
         </div>
@@ -88,20 +110,39 @@ export function AdminSidebar() {
   );
 }
 
-export function AdminTopBar({ title, count, subtitle, action }: { title: string; count?: string; subtitle?: string; action?: React.ReactNode }) {
-
+export function AdminTopBar({
+  title,
+  count,
+  subtitle,
+  action,
+}: {
+  title: string;
+  count?: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="flex items-center justify-between flex-wrap gap-4 px-4 md:px-7 py-4 md:py-5 border-b border-border/60">
       <div className="flex items-baseline gap-3">
-        {count && <span className="text-3xl font-semibold tracking-tight">{count}</span>}
+        {count && (
+          <span className="text-3xl font-semibold tracking-tight">{count}</span>
+        )}
         <div>
-          <div className="text-base font-semibold tracking-tight leading-none">{title}</div>
-          {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
+          <div className="text-base font-semibold tracking-tight leading-none">
+            {title}
+          </div>
+          {subtitle && (
+            <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-2">
         {action}
-        <button onClick={handleSignOut} className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-ink/5 text-ink hover:bg-ink/10 transition-colors" title="Sign out">
+        <button
+          onClick={handleSignOut}
+          className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-ink/5 text-ink hover:bg-ink/10 transition-colors"
+          title="Sign out"
+        >
           <LogOut className="h-4 w-4" />
         </button>
       </div>
@@ -135,7 +176,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                 "flex flex-col items-center justify-center gap-1 w-14 h-12 rounded-xl text-[10px] font-medium transition-colors",
                 isActive
                   ? "bg-background text-foreground"
-                  : "text-ink-foreground/70 hover:text-ink-foreground"
+                  : "text-ink-foreground/70 hover:text-ink-foreground",
               )}
             >
               <item.icon className="h-5 w-5 mb-0.5" />

@@ -51,9 +51,9 @@ export default function TermsPage() {
               <Link href="/#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Pricing</Link>
               <Link href="/#faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
             </nav>
-            <Button asChild className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 shadow-sm">
+            {/* <Button asChild className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 shadow-sm">
               <Link href="/seller/login">Open account</Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </header>
@@ -210,10 +210,10 @@ export default function TermsPage() {
             <div>
               <h4 className="font-semibold text-white mb-6">Product</h4>
               <ul className="space-y-4 text-sm text-white/60">
-                <li><Link href="/#features" className="hover:text-white hover:underline transition-all">Features</Link></li>
-                <li><Link href="/#how-it-works" className="hover:text-white hover:underline transition-all">How it works</Link></li>
-                <li><Link href="/#pricing" className="hover:text-white hover:underline transition-all">Pricing</Link></li>
-                <li><Link href="/#faq" className="hover:text-white hover:underline transition-all">FAQ</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">Features</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">How it works</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">Pricing</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">FAQ</Link></li>
               </ul>
             </div>
             
@@ -232,9 +232,8 @@ export default function TermsPage() {
             <div>
               <h4 className="font-semibold text-white mb-6">Portal</h4>
               <ul className="space-y-4 text-sm text-white/60">
-                <li><Link href="/seller/login" className="hover:text-white hover:underline transition-all">Seller Login</Link></li>
-                <li><Link href="/seller/login" className="hover:text-white hover:underline transition-all">Create Store</Link></li>
-                <li><Link href="/admin/login" className="hover:text-white hover:underline transition-all">Admin Dashboard</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">Seller Login</Link></li>
+                <li><Link href="#" className="hover:text-white hover:underline transition-all">Create Store</Link></li>
               </ul>
             </div>
 

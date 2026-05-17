@@ -76,6 +76,11 @@ export default function WaitlistLandingPage() {
               Kozura
             </span>
           </div>
+          <div>
+            <Link href="/terms#privacy" className="text-sm text-white/50 hover:text-white/80 hover:underline transition-colors">
+              Privacy Policy
+            </Link>
+          </div>
         </div>
 
         <div className="w-full h-px bg-white/10 mb-8" />

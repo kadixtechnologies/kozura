@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   ArrowRight,
@@ -173,16 +174,50 @@ function FaqGroup({
 }
 
 export default function LandingPage() {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [openFaqGroup, setOpenFaqGroup] = useState<number>(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
-  }, []);
+    
+    const checkRedirect = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+        
+        // Fetch user profile role
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profile?.role === "super_admin") {
+          router.push("/admin");
+        } else {
+          // Check if store exists
+          const { data: store } = await supabase
+            .from("stores")
+            .select("id")
+            .eq("seller_id", session.user.id)
+            .single();
+
+          if (store) {
+            router.push("/seller/dashboard");
+          } else {
+            router.push("/seller/onboarding");
+          }
+        }
+      } else {
+        const { data } = await supabase.auth.getUser();
+        setUser(data.user);
+      }
+    };
+
+    checkRedirect();
+  }, [router]);
   const testimonials = [
     {
       quote:

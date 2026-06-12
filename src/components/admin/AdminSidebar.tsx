@@ -16,18 +16,18 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
-  { href: "/admin", end: true, icon: LayoutDashboard, label: "Overview" },
-  { href: "/admin/stores", icon: Store, label: "Stores" },
-  { href: "/admin/users", icon: Users, label: "Users" },
-  { href: "/admin/plans", icon: Zap, label: "Plans" },
-  { href: "/admin/email-preview", icon: Mail, label: "Emails" },
-  { href: "/admin/settings", icon: Settings, label: "Settings" },
+  { href: "/hq", end: true, icon: LayoutDashboard, label: "Overview" },
+  { href: "/hq/stores", icon: Store, label: "Stores" },
+  { href: "/hq/users", icon: Users, label: "Users" },
+  { href: "/hq/plans", icon: Zap, label: "Plans" },
+  { href: "/hq/email-preview", icon: Mail, label: "Emails" },
+  { href: "/hq/settings", icon: Settings, label: "Settings" },
 ];
 
 async function handleSignOut() {
   const supabase = createClient();
   await supabase.auth.signOut();
-  window.location.href = "/admin/login";
+  window.location.href = "/hq/login";
 }
 
 export function AdminSidebar() {
@@ -48,7 +48,7 @@ export function AdminSidebar() {
   return (
     <aside className="hidden md:flex flex-col w-64 shrink-0 p-5 pr-0">
       <div className="flex flex-col h-full bg-ink text-ink-foreground rounded-[24px] border border-border/60 p-5">
-        <Link href="/admin" className="flex items-center gap-2.5 px-1 min-w-0">
+        <Link href="/hq" className="flex items-center gap-2.5 px-1 min-w-0">
           {adminUser?.user_metadata?.avatar_url ? (
             <img
               src={adminUser.user_metadata.avatar_url}

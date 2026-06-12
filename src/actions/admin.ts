@@ -13,7 +13,7 @@ export async function updateStoreStatus(storeId: string, status: string) {
   const { error } = await adminClient.from("stores").update({ is_active: status === 'active' }).eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
-  revalidatePath("/admin/stores");
+  revalidatePath("/hq/stores");
   return { success: true };
 }
 
@@ -24,7 +24,7 @@ export async function deleteStore(storeId: string) {
   const { error } = await adminClient.from("stores").delete().eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
-  revalidatePath("/admin/stores");
+  revalidatePath("/hq/stores");
   return { success: true };
 }
 
@@ -35,7 +35,7 @@ export async function updateStorePlan(storeId: string, plan: string) {
   const { error } = await adminClient.from("stores").update({ subscription_plan: plan as any }).eq("id", storeId);
   if (error) return { success: false, error: error.message };
 
-  revalidatePath("/admin/stores");
+  revalidatePath("/hq/stores");
   return { success: true };
 }
 
@@ -46,7 +46,7 @@ export async function updatePlanLimits(planId: string, updates: { price_monthly:
   const { error } = await supabaseAdmin.from("plans").update(updates).eq("id", planId);
   if (error) return { success: false, error: error.message };
 
-  revalidatePath("/admin/plans");
+  revalidatePath("/hq/plans");
   revalidatePath("/seller/settings");
   revalidatePath("/"); // Revalidate landing page pricing
   return { success: true };
@@ -63,7 +63,7 @@ export async function updateUserStatus(userId: string, isSuspended: boolean) {
   const { error } = await supabase.from("stores").update({ is_active: !isSuspended }).eq("seller_id", userId);
   if (error) return { success: false, error: error.message };
 
-  revalidatePath("/admin/users");
+  revalidatePath("/hq/users");
   return { success: true };
 }
 

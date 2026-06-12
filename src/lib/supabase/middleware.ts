@@ -36,7 +36,7 @@ export async function supabaseMiddleware(request: NextRequest) {
   const url = request.nextUrl.clone()
   const pathname = url.pathname
 
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/hq')) {
     const whitelistedEmail = process.env.ADMIN_WHITELISTED_EMAIL
     const isAuthorized = user && user.email === whitelistedEmail
     
@@ -71,30 +71,30 @@ export async function supabaseMiddleware(request: NextRequest) {
       return NextResponse.redirect(url)
     }
 
-    if (pathname === '/admin/login') {
+    if (pathname === '/hq/login') {
       if (isAuthorized) {
         if (isVerified) {
-          url.pathname = '/admin'
+          url.pathname = '/hq'
           return NextResponse.redirect(url)
         } else {
-          url.pathname = '/admin/verify'
+          url.pathname = '/hq/verify'
           return NextResponse.redirect(url)
         }
       }
-    } else if (pathname === '/admin/verify') {
+    } else if (pathname === '/hq/verify') {
       if (!isAuthorized) {
-        url.pathname = '/admin/login'
+        url.pathname = '/hq/login'
         return NextResponse.redirect(url)
       } else if (isVerified) {
-        url.pathname = '/admin'
+        url.pathname = '/hq'
         return NextResponse.redirect(url)
       }
     } else {
       if (!isAuthorized) {
-        url.pathname = '/admin/login'
+        url.pathname = '/hq/login'
         return NextResponse.redirect(url)
       } else if (!isVerified) {
-        url.pathname = '/admin/verify'
+        url.pathname = '/hq/verify'
         return NextResponse.redirect(url)
       }
     }

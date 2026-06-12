@@ -52,7 +52,7 @@ export function ClientEmailPreviewPage() {
     storeName: "My Awesome Store",
     ownerName: "Jane Doe",
     ownerEmail: "jane@example.com",
-    loginUrl: "https://www.kozura.ng/admin"
+    loginUrl: "https://www.kozura.ng/hq"
   });
 
   const getTemplateHtml = () => {

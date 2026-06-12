@@ -10,5 +10,5 @@ export async function GET(request: Request) {
   cookieStore.delete('admin_session')
   
   const url = new URL(request.url)
-  return NextResponse.redirect(`${url.origin}/admin/login?expired=true`)
+  return NextResponse.redirect(`${url.origin}/hq/login?expired=true`)
 }

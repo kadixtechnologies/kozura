@@ -21,7 +21,7 @@ export default function AdminVerifyPage() {
       const res = await verifyAdminPassword(password);
       if (res.success) {
         toast.success("Identity verified");
-        router.push("/admin");
+        router.push("/hq");
       } else {
         toast.error(res.error || "Incorrect password");
         setPassword("");

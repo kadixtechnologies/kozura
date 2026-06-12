@@ -1,8 +1,48 @@
 "use client";
 import Link from "next/link";
 import { WaitlistForm } from "@/components/marketing/WaitlistForm";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function WaitlistLandingPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    
+    const checkRedirect = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        // Fetch user profile role
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profile?.role === "super_admin") {
+          router.push("/admin");
+        } else {
+          // Check if store exists
+          const { data: store } = await supabase
+            .from("stores")
+            .select("id")
+            .eq("seller_id", session.user.id)
+            .single();
+
+          if (store) {
+            router.push("/seller/dashboard");
+          } else {
+            router.push("/seller/onboarding");
+          }
+        }
+      }
+    };
+
+    checkRedirect();
+  }, [router]);
+
   return (
     <div className="min-h-screen bg-background selection:bg-primary/20 scroll-smooth overflow-x-hidden">
       <main>

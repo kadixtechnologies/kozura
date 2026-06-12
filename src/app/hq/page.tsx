@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 
 export default async function AdminDashboardPage() {
   if (!(await checkAdminAuth())) {
-    redirect("/admin/login");
+    redirect("/hq/login");
   }
   const supabase = await createClient();
   

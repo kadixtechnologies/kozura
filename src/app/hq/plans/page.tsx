@@ -1,11 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { ClientAdminPlansPage } from "@/app/admin/plans/ClientAdminPlansPage";
+import { ClientAdminPlansPage } from "./ClientAdminPlansPage";
 import { checkAdminAuth } from "@/lib/auth/admin";
 
 export default async function AdminPlansPage() {
   if (!(await checkAdminAuth())) {
-    redirect("/admin/login");
+    redirect("/hq/login");
   }
   const supabase = await createClient();
 

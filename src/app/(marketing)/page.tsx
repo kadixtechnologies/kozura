@@ -22,7 +22,7 @@ export default function WaitlistLandingPage() {
           .single();
 
         if (profile?.role === "super_admin") {
-          router.push("/admin");
+          router.push("/hq");
         } else {
           // Check if store exists
           const { data: store } = await supabase

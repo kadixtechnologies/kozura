@@ -109,7 +109,7 @@ export async function sendNewStoreNotification({ storeName, ownerName, ownerEmai
 
   try {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kozura.ng';
-    const loginUrl = `${siteUrl}/admin`;
+    const loginUrl = `${siteUrl}/hq`;
     const { data, error } = await resend.emails.send({
       from: fromEmail,
       to: adminEmail,

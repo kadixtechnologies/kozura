@@ -22,14 +22,14 @@ export async function GET(request: Request) {
           role: 'super_admin'
         })
         
-        return NextResponse.redirect(`${origin}/admin/verify`)
+        return NextResponse.redirect(`${origin}/hq/verify`)
       } else {
         // Unauthorized email, sign out immediately
         await supabase.auth.signOut()
-        return NextResponse.redirect(`${origin}/admin/login?error=unauthorized`)
+        return NextResponse.redirect(`${origin}/hq/login?error=unauthorized`)
       }
     }
   }
 
-  return NextResponse.redirect(`${origin}/admin/login?error=unauthorized`)
+  return NextResponse.redirect(`${origin}/hq/login?error=unauthorized`)
 }

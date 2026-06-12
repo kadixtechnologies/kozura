@@ -4,7 +4,7 @@ import { ClientEmailPreviewPage } from "./ClientEmailPreviewPage";
 
 export default async function AdminEmailPreviewPage() {
   if (!(await checkAdminAuth())) {
-    redirect("/admin/login");
+    redirect("/hq/login");
   }
 
   return <ClientEmailPreviewPage />;

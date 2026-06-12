@@ -5,7 +5,7 @@ import { checkAdminAuth } from "@/lib/auth/admin";
 
 export default async function AdminUsersPage() {
   if (!(await checkAdminAuth())) {
-    redirect("/admin/login");
+    redirect("/hq/login");
   }
   const supabase = await createClient();
 

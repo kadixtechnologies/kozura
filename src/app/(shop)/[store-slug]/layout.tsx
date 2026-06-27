@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: Promise<{ "store-sl
 
   const { data: store } = await supabase
     .from("stores")
-    .select("name, seo_meta_title, seo_meta_description")
+    .select("name, seo_meta_title, seo_meta_description, logo_url")
     .eq("slug", slug)
     .single();
 
@@ -22,6 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ "store-sl
       default: store.seo_meta_title || store.name,
     },
     description: store.seo_meta_description || `Welcome to ${store.name}`,
+    icons: store.logo_url ? {
+      icon: store.logo_url,
+      shortcut: store.logo_url,
+      apple: store.logo_url,
+    } : undefined,
   };
 }
 

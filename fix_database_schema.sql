@@ -56,8 +56,14 @@ CREATE POLICY "Owners can view their order items" ON public.order_items FOR SELE
   )
 );
 
--- 5. Fix permissions on profiles table
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO service_role;
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO postgres;
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO authenticated;
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO anon;
+-- 5. Fix permissions on all tables and sequences in the public schema
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO service_role;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO authenticated;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO anon;
+
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO service_role;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO postgres;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO authenticated;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon;
+

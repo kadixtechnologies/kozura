@@ -8,8 +8,8 @@ const formatNGN = (amount: number) => {
 };
 
 export function CartItem({
-  id, name, variantLabel, price, qty, image
-}: { id: string; name: string; variantLabel: string; price: number; qty: number; image?: string }) {
+  id, name, variantLabel, price, qty, image, maxStock
+}: { id: string; name: string; variantLabel: string; price: number; qty: number; image?: string; maxStock?: number | null }) {
   const { updateQuantity, removeItem } = useCart();
 
   return (
@@ -45,7 +45,8 @@ export function CartItem({
             <span className="px-2 text-xs font-medium w-6 text-center">{qty}</span>
             <button 
               onClick={() => updateQuantity(id, qty + 1)}
-              className="h-7 w-7 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors"
+              disabled={maxStock !== null && maxStock !== undefined && qty >= maxStock}
+              className="h-7 w-7 rounded-full bg-background flex items-center justify-center hover:bg-background/80 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Plus className="h-3 w-3" />
             </button>

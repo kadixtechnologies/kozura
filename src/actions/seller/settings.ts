@@ -15,7 +15,24 @@ export async function saveSettings(formData: FormData) {
 
   // We can just process everything since the client sends all state
   updates.name = formData.get("name") as string;
-  updates.whatsapp_number = formData.get("whatsapp_number") as string;
+  
+  const whatsappNumber = formData.get("whatsapp_number") as string;
+  if (!whatsappNumber) {
+    return { success: false, error: "WhatsApp number is required." };
+  }
+  
+  const { data: existingPhone } = await supabase
+    .from("stores")
+    .select("id")
+    .eq("whatsapp_number", whatsappNumber)
+    .neq("id", store.id)
+    .maybeSingle();
+    
+  if (existingPhone) {
+    return { success: false, error: "This phone number is already in use by another store." };
+  }
+  updates.whatsapp_number = whatsappNumber;
+
   updates.tagline = formData.get("tagline") as string;
   updates.description = formData.get("description") as string;
   updates.currency = "NGN";

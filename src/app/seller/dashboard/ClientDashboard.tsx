@@ -44,7 +44,11 @@ export function ClientDashboard({ store, stats, recentOrders }: { store: any, st
         <div className="p-4 md:p-7 space-y-6">
           <div className="rounded-[20px] border border-border/60 bg-muted/30 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className="h-10 w-10 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold shrink-0">{store.name.charAt(0)}</div>
+              {store.logo_url ? (
+                <img src={store.logo_url} alt={store.name} className="h-10 w-10 rounded-xl object-cover shrink-0" />
+              ) : (
+                <div className="h-10 w-10 rounded-xl bg-ink text-ink-foreground flex items-center justify-center text-sm font-semibold shrink-0">{store.name.charAt(0)}</div>
+              )}
               <div className="min-w-0">
                 <div className="text-xs text-muted-foreground">Your store link</div>
                 <div className="font-medium text-sm truncate">{storeUrl}</div>

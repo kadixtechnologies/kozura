@@ -240,7 +240,10 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
     fd.append("social_tiktok_enabled", String(socialTiktokEnabled));
 
     const res = await saveSettings(fd);
-    if (res.success) { toast.success("Settings saved!"); router.refresh(); }
+    if (res.success) { 
+      toast.success("Settings saved!"); 
+      window.location.reload(); 
+    }
     else toast.error(res.error || "Failed to save");
     setSaving(false);
   };

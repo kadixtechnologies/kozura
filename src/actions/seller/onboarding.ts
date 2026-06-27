@@ -41,6 +41,17 @@ export async function completeOnboarding(formData: FormData) {
     // Continue anyway, it might just be an RLS or permission issue, let the store insert try
   }
 
+  // Check if phone number is already in use
+  const { data: existingPhone } = await supabaseAdmin
+    .from("stores")
+    .select("id")
+    .eq("whatsapp_number", whatsappNumber)
+    .maybeSingle();
+
+  if (existingPhone) {
+    return { success: false, error: "This phone number is already in use by another store." };
+  }
+
   // Insert store
   const { data: store, error } = await supabase.from("stores").insert({
     seller_id: user.id,

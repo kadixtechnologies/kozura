@@ -10,6 +10,7 @@ export interface CartItem {
   qty: number;
   image?: string;
   storeId: string;
+  maxStock?: number | null; // Optional stock limit
 }
 
 interface CartStore {
@@ -28,19 +29,36 @@ export const useCart = create<CartStore>()(
         set((state) => {
           const existing = state.items.find((i) => i.id === item.id);
           if (existing) {
+            let newQty = existing.qty + item.qty;
+            if (existing.maxStock !== null && existing.maxStock !== undefined && newQty > existing.maxStock) {
+              newQty = existing.maxStock;
+            }
             return {
               items: state.items.map((i) =>
-                i.id === item.id ? { ...i, qty: i.qty + item.qty } : i
+                i.id === item.id ? { ...i, qty: newQty } : i
               ),
             };
           }
-          return { items: [...state.items, item] };
+          let newQty = item.qty;
+          if (item.maxStock !== null && item.maxStock !== undefined && newQty > item.maxStock) {
+            newQty = item.maxStock;
+          }
+          return { items: [...state.items, { ...item, qty: newQty }] };
         }),
       removeItem: (id) =>
         set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
       updateQuantity: (id, qty) =>
         set((state) => ({
-          items: state.items.map((i) => (i.id === id ? { ...i, qty } : i)),
+          items: state.items.map((i) => {
+            if (i.id === id) {
+              let newQty = qty;
+              if (i.maxStock !== null && i.maxStock !== undefined && newQty > i.maxStock) {
+                newQty = i.maxStock;
+              }
+              return { ...i, qty: newQty };
+            }
+            return i;
+          }),
         })),
       clearCart: (storeId) =>
         set((state) => ({

@@ -18,7 +18,7 @@ export default function SellerOnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Form state
   const [storeName, setStoreName] = useState("");
   const [category, setCategory] = useState("other");
@@ -128,16 +128,39 @@ export default function SellerOnboardingPage() {
                   <SelectTrigger className="mt-1.5 rounded-xl"><SelectValue placeholder="Select a category" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="electronics">Electronics</SelectItem>
+                    <SelectItem value="gadgets">Gadgets & Accessories</SelectItem>
                     <SelectItem value="fashion">Fashion & Clothing</SelectItem>
                     <SelectItem value="food">Food & Beverages</SelectItem>
                     <SelectItem value="beauty">Beauty & Skincare</SelectItem>
+                    <SelectItem value="health">Health & Wellness</SelectItem>
+                    <SelectItem value="home">Home & Kitchen</SelectItem>
+                    <SelectItem value="sports">Sports & Outdoors</SelectItem>
+                    <SelectItem value="books">Books & Stationery</SelectItem>
+                    <SelectItem value="toys">Toys & Games</SelectItem>
+                    <SelectItem value="art">Art & Collectibles</SelectItem>
+                    <SelectItem value="services">Services</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label className="text-xs text-muted-foreground">Logo (Optional)</Label>
-                <Input type="file" className="mt-1.5" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] || null)} />
+                <Input
+                  type="file"
+                  className="mt-1.5"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file && file.size > 1024 * 1024) {
+                      toast.error("The logo image is more than 1MB");
+                      e.target.value = '';
+                      setLogoFile(null);
+                    } else {
+                      setLogoFile(file || null);
+                    }
+                  }}
+                />
+                <p className="text-xs text-muted-foreground mt-1.5">Size not more than 1MB</p>
               </div>
             </div>
           )}
@@ -186,8 +209,12 @@ export default function SellerOnboardingPage() {
 
           {step === 3 && (
             <div className="space-y-5 text-center">
-              <div className="h-16 w-16 rounded-2xl bg-tile-mint flex items-center justify-center mx-auto">
-                <ImageIcon className="h-8 w-8 text-foreground/30" />
+              <div className="h-20 w-20 rounded-2xl bg-tile-mint flex items-center justify-center mx-auto overflow-hidden">
+                {logoFile ? (
+                  <img src={URL.createObjectURL(logoFile)} alt="Store Logo" className="h-full w-full object-cover" />
+                ) : (
+                  <ImageIcon className="h-8 w-8 text-foreground/30" />
+                )}
               </div>
               <h1 className="text-2xl font-semibold tracking-tight">Your store is ready!</h1>
               <p className="text-sm text-muted-foreground">Start adding products and share your link with the world.</p>
@@ -210,7 +237,7 @@ export default function SellerOnboardingPage() {
                 </Button>
               ) : (
                 <Button className="flex-1 gap-2" onClick={handleSubmit} disabled={isLoading}>
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Complete Setup"} 
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Complete Setup"}
                   {!isLoading && <ArrowRight className="h-4 w-4" />}
                 </Button>
               )}

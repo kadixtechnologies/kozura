@@ -32,15 +32,15 @@ function ActionMenu({ product, onDelete }: { product: any; onDelete: () => void 
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40 rounded-2xl p-1.5">
-        <DropdownMenuItem 
-          className="rounded-xl px-3 py-2 cursor-pointer flex items-center gap-2" 
+        <DropdownMenuItem
+          className="rounded-xl px-3 py-2 cursor-pointer flex items-center gap-2"
           onClick={() => router.push(`/seller/products/${product.id}/edit`)}
         >
           <Edit className="h-3.5 w-3.5" /> Edit
         </DropdownMenuItem>
         <DropdownMenuSeparator className="my-1 border-t border-border/60" />
-        <DropdownMenuItem 
-          className="rounded-xl px-3 py-2 cursor-pointer flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10" 
+        <DropdownMenuItem
+          className="rounded-xl px-3 py-2 cursor-pointer flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
           onClick={onDelete}
         >
           <Trash2 className="h-3.5 w-3.5" /> Delete
@@ -93,9 +93,9 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
   const handleDelete = async (id: string, name: string) => {
     const res = await deleteProduct(id);
     if (res.success) {
-      setProductList((prev) => prev.filter((item) => item.id !== id)); 
+      setProductList((prev) => prev.filter((item) => item.id !== id));
       setSelectedIds((prev) => prev.filter((item) => item !== id));
-      toast.success(`${name} deleted`); 
+      toast.success(`${name} deleted`);
     } else {
       toast.error(res.error || "Failed to delete product");
     }
@@ -158,14 +158,14 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-5">
           <div className="relative flex-1 w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <input 
+            <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products…" 
-              className="w-full h-10 pl-10 pr-10 rounded-full border border-border bg-background text-sm outline-none focus:border-foreground/30 transition-colors" 
+              placeholder="Search products…"
+              className="w-full h-10 pl-10 pr-10 rounded-full border border-border bg-background text-sm outline-none focus:border-foreground/30 transition-colors"
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 text-muted-foreground"
               >
@@ -173,8 +173,8 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
               </button>
             )}
           </div>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className={cn("rounded-full h-10 gap-2 transition-colors", filterOpen || activeFiltersCount > 0 ? "border-ink text-ink bg-muted/40" : "")}
             onClick={() => setFilterOpen(!filterOpen)}
           >
@@ -193,7 +193,7 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-sm">Filter products</h3>
               {activeFiltersCount > 0 && (
-                <button 
+                <button
                   onClick={() => { setStatusFilter("all"); setCategoryFilter("all"); }}
                   className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
                 >
@@ -235,84 +235,83 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
 
         <div className="rounded-[20px] border border-border/60 overflow-hidden bg-background">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[700px]">
+            <table className="w-full text-sm">
               <thead>
-              <tr className="border-b border-border/60 text-left text-muted-foreground text-xs">
-                <th className="pl-5 pr-2 py-3 w-10">
-                  <Checkbox 
-                    checked={paginatedProducts.length > 0 && selectedIds.length === paginatedProducts.length}
-                    onCheckedChange={toggleSelectAll}
-                  />
-                </th>
-                <th className="px-3 py-3 font-medium">Product</th>
-                <th className="px-3 py-3 font-medium hidden sm:table-cell">Category</th>
-                <th className="px-3 py-3 font-medium">Price</th>
-                <th className="px-3 py-3 font-medium hidden md:table-cell">Stock</th>
-                <th className="px-3 py-3 font-medium">Status</th>
-                <th className="px-3 py-3 w-10"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-5 py-16 text-center">
-                    <div className="flex flex-col items-center justify-center text-center gap-3">
-                      <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mx-auto">
-                        <Search className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      <p className="font-semibold">No products found</p>
-                      <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                        Try adjusting your search or filter to find what you&apos;re looking for.
-                      </p>
-                    </div>
-                  </td>
+                <tr className="border-b border-border/60 text-left text-muted-foreground text-xs">
+                  <th className="pl-2 sm:pl-5 pr-1 sm:pr-2 py-3 w-8 sm:w-10">
+                    <Checkbox
+                      checked={paginatedProducts.length > 0 && selectedIds.length === paginatedProducts.length}
+                      onCheckedChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th className="px-2 sm:px-3 py-3 font-medium">Product</th>
+                  <th className="px-3 py-3 font-medium hidden sm:table-cell">Category</th>
+                  <th className="px-2 sm:px-3 py-3 font-medium">Price</th>
+                  <th className="px-3 py-3 font-medium hidden md:table-cell">Stock</th>
+                  <th className="px-2 sm:px-3 py-3 font-medium">Status</th>
+                  <th className="px-1 sm:px-3 py-3 w-8 sm:w-10"></th>
                 </tr>
-              ) : (
-                paginatedProducts.map((p) => {
-                  const catName = categories.find(c => c.id === p.category_id)?.name || "Uncategorized";
-                  return (
-                    <tr key={p.id} className={cn("border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors", selectedIds.includes(p.id) ? "bg-muted/40" : "")}>
-                      <td className="pl-5 pr-2 py-3">
-                        <Checkbox 
-                          checked={selectedIds.includes(p.id)}
-                          onCheckedChange={() => toggleSelect(p.id)}
-                        />
-                      </td>
-                      <td className="px-3 py-3">
-                        <Link href={`/seller/products/${p.id}/edit`} className="flex items-center gap-3 group">
-                          {p.images?.[0] ? (
-                            <img src={p.images[0]} alt={p.name} className="h-10 w-10 rounded-xl object-cover shrink-0" />
-                          ) : (
-                            <div className="h-10 w-10 rounded-xl bg-tile-mint flex items-center justify-center shrink-0">
-                              <ImageIcon className="h-4 w-4 text-foreground/20" />
+              </thead>
+              <tbody>
+                {filteredProducts.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-5 py-16 text-center">
+                      <div className="flex flex-col items-center justify-center text-center gap-3">
+                        <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mx-auto">
+                          <Search className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <p className="font-semibold">No products found</p>
+                        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                          Try adjusting your search or filter to find what you&apos;re looking for.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedProducts.map((p) => {
+                    const catName = categories.find(c => c.id === p.category_id)?.name || "Uncategorized";
+                    return (
+                      <tr key={p.id} className={cn("border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors", selectedIds.includes(p.id) ? "bg-muted/40" : "")}>
+                        <td className="pl-2 sm:pl-5 pr-1 sm:pr-2 py-3">
+                          <Checkbox
+                            checked={selectedIds.includes(p.id)}
+                            onCheckedChange={() => toggleSelect(p.id)}
+                          />
+                        </td>
+                        <td className="px-2 sm:px-3 py-3 w-full max-w-[100px] sm:w-auto sm:max-w-none">
+                          <Link href={`/seller/products/${p.id}/edit`} className="flex items-center gap-2 sm:gap-3 group">
+                            {p.images?.[0] ? (
+                              <img src={p.images[0]} alt={p.name} className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl object-cover shrink-0" />
+                            ) : (
+                              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-tile-mint flex items-center justify-center shrink-0">
+                                <ImageIcon className="h-4 w-4 text-foreground/20" />
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <div className="font-medium truncate group-hover:underline">{p.name}</div>
                             </div>
-                          )}
-                          <div className="min-w-0">
-                            <div className="font-medium truncate group-hover:underline">{p.name}</div>
-                            <div className="text-xs text-muted-foreground">{p.brand || "No brand"}</div>
-                          </div>
-                        </Link>
-                      </td>
-                      <td className="px-3 py-3 text-muted-foreground capitalize hidden sm:table-cell">{catName}</td>
-                      <td className="px-3 py-3 font-medium">{formatNGN(p.price)}</td>
-                      <td className="px-3 py-3 hidden md:table-cell">
-                        {p.stock_quantity !== null && p.stock_quantity !== undefined ? (
-                          p.stock_quantity > 0 ? p.stock_quantity : <span className="text-destructive font-medium text-xs bg-destructive/10 px-2 py-1 rounded-full">Out of stock</span>
-                        ) : "Unlimited"}
-                      </td>
-                      <td className="px-3 py-3"><StatusBadge status={p.is_published ? "Active" : "Inactive"} /></td>
-                      <td className="px-3 py-3">
-                        <ActionMenu 
-                          product={p} 
-                          onDelete={() => handleDelete(p.id, p.name)} 
-                        />
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </table>
+                          </Link>
+                        </td>
+                        <td className="px-3 py-3 text-muted-foreground capitalize hidden sm:table-cell">{catName}</td>
+                        <td className="px-2 sm:px-3 py-3 font-medium whitespace-nowrap">{formatNGN(p.price)}</td>
+                        <td className="px-3 py-3 hidden md:table-cell">
+                          {p.stock_quantity !== null && p.stock_quantity !== undefined ? (
+                            p.stock_quantity > 0 ? p.stock_quantity : <span className="text-destructive font-medium text-xs bg-destructive/10 px-2 py-1 rounded-full">Out of stock</span>
+                          ) : "Unlimited"}
+                        </td>
+                        <td className="px-2 sm:px-3 py-3"><StatusBadge status={p.is_published ? "Active" : "Inactive"} /></td>
+                        <td className="px-1 sm:px-3 py-3 text-right">
+                          <ActionMenu
+                            product={p}
+                            onDelete={() => handleDelete(p.id, p.name)}
+                          />
+                        </td>
+                      </tr>
+                    )
+                  })
+                )}
+              </tbody>
+            </table>
           </div>
           {filteredProducts.length > 0 && (
             <TablePagination

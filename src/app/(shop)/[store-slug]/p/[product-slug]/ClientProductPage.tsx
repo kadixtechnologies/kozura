@@ -91,6 +91,7 @@ export function ClientProductPage({
       qty,
       image: images[0] || "",
       storeId: store.id,
+      maxStock: maxQty !== Infinity ? maxQty : null,
     });
 
     toast.success("Added to cart");

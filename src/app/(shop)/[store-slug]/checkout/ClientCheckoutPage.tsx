@@ -171,7 +171,7 @@ export function ClientCheckoutPage({ store }: { store: any }) {
 
   const handlePlaceOrder = async () => {
     if (!name || !phone) return toast.error("Please fill in your contact details.");
-    
+
     if (email && email.trim() !== "") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) return toast.error("Please enter a valid email address.");
@@ -255,9 +255,6 @@ export function ClientCheckoutPage({ store }: { store: any }) {
           <div className="mt-6 animate-in fade-in slide-in-from-top-4 duration-500">
             <div className="bg-primary/5 border border-primary/20 rounded-[20px] p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">Welcome back!</p>
                   <p className="text-xs text-muted-foreground">We've pre-filled the form with your last used details.</p>
@@ -265,10 +262,10 @@ export function ClientCheckoutPage({ store }: { store: any }) {
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setShowWelcomeBack(false)} className="h-8 rounded-lg text-xs">
-                  <Check className="h-3.5 w-3.5 mr-1" />
+                  <Check className="h-5 w-5 mr-1.5" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={clearSavedDetails} className="h-8 rounded-lg text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
-                  <X className="h-3.5 w-3.5 mr-1" />
+                  <X className="h-5 w-5 mr-1.5" />
                 </Button>
               </div>
             </div>

@@ -16,9 +16,9 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/hooks/useCart";
 
 const NIGERIAN_STATES = [
-  "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River", 
-  "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT - Abuja", "Gombe", "Imo", "Jigawa", "Kaduna", 
-  "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", 
+  "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", "Cross River",
+  "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT - Abuja", "Gombe", "Imo", "Jigawa", "Kaduna",
+  "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo",
   "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
 ];
 
@@ -37,13 +37,13 @@ function Section({ step, title, children }: { step: number; title: string; child
 function BankTransferDetails({ onFileSelected, store }: { onFileSelected: (file: File | null) => void, store: any }) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  
+
   const bankDetails = {
     bankName: store.bank_name || "Not set",
     accountName: store.account_name || store.name,
     accountNumber: store.account_number || "Not set",
   };
-  
+
   const copyField = async (label: string, value: string) => {
     try { await navigator.clipboard.writeText(value); } catch {
       const el = document.createElement("textarea"); el.value = value; el.style.position = "fixed"; el.style.opacity = "0"; document.body.appendChild(el); el.select(); document.execCommand("copy"); document.body.removeChild(el);
@@ -76,14 +76,14 @@ function BankTransferDetails({ onFileSelected, store }: { onFileSelected: (file:
           </div>
         ))}
       </div>
-      
+
       {/* Upload Receipt Section */}
       <div className="p-5 border-t border-border/60 bg-background/50">
         <Label className="text-sm font-semibold mb-3 block">Upload Payment Receipt</Label>
         <div className="relative border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-center hover:bg-muted/30 transition-colors cursor-pointer group">
-          <Input 
-            type="file" 
-            accept="image/*,.pdf,application/pdf" 
+          <Input
+            type="file"
+            accept="image/*,.pdf,application/pdf"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             onChange={handleFileUpload}
           />
@@ -165,7 +165,7 @@ export function ClientCheckoutPage({ store }: { store: any }) {
   const paymentStep = shipping === "delivery" ? 4 : 3;
 
   const isPlaceOrderDisabled = (payment === "transfer" && !receiptFile) || isLoading;
-  
+
   const { items: allItems, clearCart } = useCart();
   const storeItems = allItems.filter(i => i.storeId === store.id);
 
@@ -175,7 +175,7 @@ export function ClientCheckoutPage({ store }: { store: any }) {
     if (storeItems.length === 0) return toast.error("Your cart is empty.");
 
     setIsLoading(true);
-    
+
     const subtotal = storeItems.reduce((s, i) => s + i.price * i.qty, 0);
     const totalAmount = subtotal + fee;
 
@@ -192,11 +192,11 @@ export function ClientCheckoutPage({ store }: { store: any }) {
     formData.append("paymentMethod", payment);
     formData.append("subtotalAmount", subtotal.toString());
     formData.append("totalAmount", totalAmount.toString());
-    
+
     if (receiptFile) {
       formData.append("receiptFile", receiptFile);
     }
-    
+
     const formattedItems = storeItems.map(item => ({
       productId: item.productId, // Use productId because item.id is cart unique identifier
       name: item.name,
@@ -273,9 +273,9 @@ export function ClientCheckoutPage({ store }: { store: any }) {
           <div className="space-y-5">
             <Section step={1} title="Contact details">
               <div className="grid sm:grid-cols-2 gap-4">
-                <div><Label className="text-xs text-muted-foreground">Full name</Label><Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1.5 rounded-xl" placeholder="Adaeze Okafor" disabled={isLoading} /></div>
+                <div><Label className="text-xs text-muted-foreground">Full name <span className="text-red-500">*</span></Label><Input value={name} onChange={(e) => setName(e.target.value)} className="mt-1.5 rounded-xl" placeholder="Adaeze Okafor" disabled={isLoading} /></div>
                 <div><Label className="text-xs text-muted-foreground">Email</Label><Input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 rounded-xl" type="email" placeholder="you@example.com" disabled={isLoading} /></div>
-                <div className="sm:col-span-2"><Label className="text-xs text-muted-foreground">Phone</Label>
+                <div className="sm:col-span-2"><Label className="text-xs text-muted-foreground">Phone Number <span className="text-red-500">*</span></Label>
                   <div className="flex mt-1.5 h-10"><span className="inline-flex items-center gap-1.5 h-full border border-r-0 border-input rounded-l-xl px-3 text-sm bg-muted/60 text-foreground whitespace-nowrap shrink-0 select-none">+234</span><Input value={phone} onChange={(e) => setPhone(e.target.value)} className="rounded-l-none rounded-r-xl border-l-0 h-full focus-visible:ring-offset-0" placeholder="801 234 5678" type="tel" disabled={isLoading} /></div>
                 </div>
               </div>
@@ -341,9 +341,9 @@ export function ClientCheckoutPage({ store }: { store: any }) {
             </Section>
           </div>
           <div className="lg:col-span-1">
-            <OrderSummaryCard 
-              shippingFee={fee} 
-              isPlaceOrderDisabled={isPlaceOrderDisabled} 
+            <OrderSummaryCard
+              shippingFee={fee}
+              isPlaceOrderDisabled={isPlaceOrderDisabled}
               onPlaceOrder={handlePlaceOrder}
               store={store}
             />

@@ -35,16 +35,18 @@ export function ProductCard({ product, compact = false, index = 0, storeSlug }: 
         )}
       </div>
 
-      <div className={compact ? "p-3.5" : "p-4"}>
-        <div className="flex items-start justify-between gap-3">
+      <div className={compact ? "p-3" : "p-3 sm:p-4"}>
+        <div className="flex flex-col gap-2 sm:gap-3">
           <div className="min-w-0">
-            <div className={cn("font-medium line-clamp-1", compact ? "text-[13px]" : "text-[15px]")}>
+            <div className={cn("font-medium line-clamp-2", compact ? "text-[12px] sm:text-[13px]" : "text-[13px] sm:text-[15px]")}>
               {product.name}
             </div>
           </div>
-          <div className="inline-flex items-center gap-1 shrink-0 rounded-full bg-ink text-ink-foreground px-3 py-1.5 text-xs font-semibold">
-            {formatNGN(product.price)}
-            <ArrowUpRight className="h-3 w-3 -mr-0.5" />
+          <div className="flex justify-end">
+            <div className="inline-flex items-center gap-1 shrink-0 rounded-full bg-ink text-ink-foreground px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-semibold">
+              {formatNGN(product.price)}
+              <ArrowUpRight className="h-3 w-3 -mr-0.5" />
+            </div>
           </div>
         </div>
       </div>

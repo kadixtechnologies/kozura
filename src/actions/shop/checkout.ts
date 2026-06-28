@@ -23,14 +23,16 @@ export async function placeOrder(formData: FormData) {
   const items = JSON.parse(formData.get("items") as string || "[]");
   const receiptFile = formData.get("receiptFile") as File | null;
   
-  if (!storeId || !customerName || !customerEmail || !customerPhone || items.length === 0) {
+  if (!storeId || !customerName || !customerPhone || items.length === 0) {
     return { success: false, error: "Missing required information" };
   }
 
-  // Validate email format server-side
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(customerEmail)) {
-    return { success: false, error: "Invalid email address" };
+  // Validate email format server-side if provided
+  if (customerEmail && customerEmail.trim() !== "") {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail)) {
+      return { success: false, error: "Invalid email address" };
+    }
   }
 
   const { data: store } = await supabase.from("stores").select("whatsapp_number, slug, subscription_plan").eq("id", storeId).single();
@@ -107,7 +109,7 @@ export async function placeOrder(formData: FormData) {
   const { data: order, error } = await supabase.from("orders").insert({
     store_id: storeId,
     customer_name: customerName,
-    customer_email: customerEmail,
+    customer_email: customerEmail || "no-email@provided.com",
     customer_phone: customerPhone,
     shipping_method: shippingMethod as any,
     shipping_fee: shippingFee,

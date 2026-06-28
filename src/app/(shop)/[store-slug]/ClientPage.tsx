@@ -92,7 +92,7 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
         <div className="bg-background rounded-[32px] p-8 md:p-12 min-h-[300px] flex flex-col justify-end border border-border/60">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-              <h1 className="text-4xl sm:text-6xl lg:text-8xl font-semibold tracking-tight leading-none">
+              <h1 className="text-6xl sm:text-8xl lg:text-8xl font-semibold tracking-tight leading-none">
                 Explore <br />
                 <span className="text-muted-foreground/40">{store.name}</span>
               </h1>
@@ -165,16 +165,16 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
         ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
-              {paginatedProducts.map((p, i) => (<ProductCard key={p.id} product={{...p, image: p.images?.[0] || "/placeholder.png"}} index={i} storeSlug={store.slug} />))}
+              {paginatedProducts.map((p, i) => (<ProductCard key={p.id} product={{ ...p, image: p.images?.[0] || "/placeholder.png" }} index={i} storeSlug={store.slug} />))}
             </div>
-            
+
             {totalPages > 1 && (
               <div className="mt-12">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
-                        href="#" 
+                      <PaginationPrevious
+                        href="#"
                         onClick={(e) => {
                           e.preventDefault();
                           if (currentPage > 1) setCurrentPage(p => p - 1);
@@ -182,7 +182,7 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
                       />
                     </PaginationItem>
-                    
+
                     {getPageNumbers().map((page, i) => (
                       <PaginationItem key={i}>
                         {page === "ellipsis" ? (
@@ -201,10 +201,10 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
                         )}
                       </PaginationItem>
                     ))}
-                    
+
                     <PaginationItem>
-                      <PaginationNext 
-                        href="#" 
+                      <PaginationNext
+                        href="#"
                         onClick={(e) => {
                           e.preventDefault();
                           if (currentPage < totalPages) setCurrentPage(p => p + 1);
@@ -226,10 +226,10 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
           </div>
           <div className="flex items-center gap-4">
             {store.whatsapp_number && (
-              <a 
-                href={`https://wa.me/${store.whatsapp_number.replace(/\D/g, '')}`} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={`https://wa.me/${store.whatsapp_number.replace(/\D/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
                 style={{ color: '#25D366' }}
               >
@@ -239,10 +239,10 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
               </a>
             )}
             {store.social_facebook_enabled && store.social_facebook && (
-              <a 
-                href={ensureExternalLink(store.social_facebook)} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={ensureExternalLink(store.social_facebook)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
                 style={{ color: '#1877F2' }}
               >
@@ -250,10 +250,10 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
               </a>
             )}
             {store.social_instagram_enabled && store.social_instagram && (
-              <a 
-                href={ensureExternalLink(store.social_instagram)} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={ensureExternalLink(store.social_instagram)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
                 style={{ color: '#E4405F' }}
               >
@@ -261,10 +261,10 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
               </a>
             )}
             {store.social_tiktok_enabled && store.social_tiktok && (
-              <a 
-                href={ensureExternalLink(store.social_tiktok)} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href={ensureExternalLink(store.social_tiktok)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:opacity-80 transition-opacity"
                 style={{ color: '#000000' }}
               >

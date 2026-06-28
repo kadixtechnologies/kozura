@@ -148,9 +148,9 @@ export function SellerTopBar({ title, count, subtitle, action }: { title: string
           {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
         </div>
       </div>
-      <div className="flex items-center gap-2 print:hidden">
+      <div className="flex items-center gap-2 print:hidden w-full md:w-auto justify-between md:justify-end">
         {action}
-        <button onClick={signOutSeller} className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors" title="Log out">
+        <button onClick={signOutSeller} className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0" title="Log out">
           <LogOut className="h-4 w-4" />
         </button>
       </div>

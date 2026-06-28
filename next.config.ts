@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
   images: {
@@ -11,6 +10,12 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  allowedDevOrigins: ['10.199.42.117', '100.93.57.107'],
+
+  turbopack: {
+    root: process.cwd(),
+  },
+
   experimental: {
     serverActions: {
       bodySizeLimit: '6mb',
@@ -19,3 +24,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+

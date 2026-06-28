@@ -36,10 +36,10 @@ export function ClientOrders({ orders }: { orders: any[] }) {
           <thead>
           <tr className="border-b border-border/60 text-left text-muted-foreground text-xs">
             <th className="px-3 sm:px-5 py-3 font-medium">Order</th>
-            <th className="px-3 sm:px-5 py-3 font-medium">Customer</th>
+            <th className="px-3 sm:px-5 py-3 font-medium hidden sm:table-cell">Customer</th>
             <th className="px-3 sm:px-5 py-3 font-medium hidden sm:table-cell">Items</th>
-            <th className="px-3 sm:px-5 py-3 font-medium">Total</th>
-            <th className="px-3 sm:px-5 py-3 font-medium">Status</th>
+            <th className="px-3 sm:px-5 py-3 font-medium hidden sm:table-cell">Total</th>
+            <th className="px-3 sm:px-5 py-3 font-medium text-right sm:text-left">Status</th>
             <th className="px-3 sm:px-5 py-3 font-medium hidden sm:table-cell">Date</th>
           </tr>
         </thead>
@@ -52,11 +52,19 @@ export function ClientOrders({ orders }: { orders: any[] }) {
               className="border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors cursor-pointer"
               onClick={() => router.push(`/seller/orders/${o.id}`)}
             >
-              <td className="px-3 sm:px-5 py-3 font-medium">#{o.order_number}</td>
-              <td className="px-3 sm:px-5 py-3 text-muted-foreground truncate max-w-[120px] sm:max-w-none">{o.customer_name}</td>
+              <td className="px-3 sm:px-5 py-3">
+                <div className="font-medium">#{o.order_number}</div>
+                <div className="text-muted-foreground truncate max-w-[140px] sm:hidden text-xs mt-0.5">{o.customer_name}</div>
+              </td>
+              <td className="px-3 sm:px-5 py-3 text-muted-foreground truncate max-w-[120px] sm:max-w-none hidden sm:table-cell">{o.customer_name}</td>
               <td className="px-3 sm:px-5 py-3 hidden sm:table-cell">{o.order_items?.length || 0}</td>
-              <td className="px-3 sm:px-5 py-3 font-medium">{formatNGN(o.total_amount)}</td>
-              <td className="px-3 sm:px-5 py-3"><StatusBadge status={o.status.charAt(0).toUpperCase() + o.status.slice(1)} /></td>
+              <td className="px-3 sm:px-5 py-3 font-medium hidden sm:table-cell">{formatNGN(o.total_amount)}</td>
+              <td className="px-3 sm:px-5 py-3 text-right sm:text-left">
+                <div className="flex justify-end sm:justify-start">
+                  <StatusBadge status={o.status.charAt(0).toUpperCase() + o.status.slice(1)} />
+                </div>
+                <div className="font-medium sm:hidden text-xs mt-1.5">{formatNGN(o.total_amount)}</div>
+              </td>
               <td className="px-3 sm:px-5 py-3 text-muted-foreground hidden sm:table-cell">
                 {new Date(o.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
               </td>

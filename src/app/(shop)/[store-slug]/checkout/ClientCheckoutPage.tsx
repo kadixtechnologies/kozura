@@ -83,7 +83,7 @@ function BankTransferDetails({ onFileSelected, store }: { onFileSelected: (file:
         <div className="relative border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center gap-2 text-center hover:bg-muted/30 transition-colors cursor-pointer group">
           <Input 
             type="file" 
-            accept="image/*,.pdf" 
+            accept="image/*,.pdf,application/pdf" 
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             onChange={handleFileUpload}
           />
@@ -221,7 +221,10 @@ export function ClientCheckoutPage({ store }: { store: any }) {
         toast.error(res.error || "Failed to place order.");
       }
     } catch (err: any) {
-      toast.error(err.message);
+      const errorMessage = err?.message || "An unexpected error occurred.";
+      // Remove any URLs from the error message for a cleaner UI
+      const cleanMessage = errorMessage.replace(/https?:\/\/[^\s]+/g, "").trim();
+      toast.error(cleanMessage);
     } finally {
       setIsLoading(false);
     }

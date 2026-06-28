@@ -319,7 +319,7 @@ export default function LandingPage() {
                     Built for Nigerian Sellers
                   </div>
 
-                  <h1 className="text-5xl md:text-6xl lg:text-[72px] font-bold tracking-tight text-foreground leading-[1.05] mb-6">
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] mb-6">
                     Your Business Deserves <br className="hidden md:block" />
                     <span className="text-primary">a Real Store</span>
                   </h1>
@@ -344,7 +344,7 @@ export default function LandingPage() {
 
                 {/* Right Column: Visual Element */}
                 <div className="flex-1 w-full flex items-center justify-center lg:justify-end mt-20 lg:mt-0">
-                  <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end">
+                  <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/25 blur-[150px] rounded-full pointer-events-none" />
                     <div className="relative w-full h-full overflow-hidden [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]">
                       <img
@@ -637,7 +637,7 @@ export default function LandingPage() {
                 </span>
 
                 <div>
-                  <div className="text-7xl md:text-8xl lg:text-[100px] font-bold mb-4 tracking-tighter leading-none">
+                  <div className="text-7xl md:text-8xl lg:text-9xl font-bold mb-4 tracking-tighter leading-none">
                     99%
                   </div>
                   <div className="text-xl md:text-2xl font-medium text-primary-foreground/90 leading-tight max-w-sm">

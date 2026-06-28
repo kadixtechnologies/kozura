@@ -19,7 +19,7 @@ export function StoreNavbar({ store }: { store: any }) {
 
   return (
     <header className="sticky top-0 z-30 w-full bg-background/80 backdrop-blur-xl border-b border-border/60">
-      <div className="container flex h-16 items-center justify-between gap-6">
+      <div className="container flex h-16 items-center justify-between gap-4">
         <Link href={`/${store.slug}`} className="flex items-center gap-2.5">
           {store.logo_url ? (
             <div className="relative h-8 w-8 rounded-xl overflow-hidden shrink-0">
@@ -30,7 +30,7 @@ export function StoreNavbar({ store }: { store: any }) {
               {store.name.charAt(0)}
             </div>
           )}
-          <span className="font-semibold text-[15px] tracking-tight">{store.name}</span>
+          <span className="font-semibold text-sm tracking-tight min-w-0 truncate">{store.name}</span>
         </Link>
 
         <div className="flex items-center gap-1.5">

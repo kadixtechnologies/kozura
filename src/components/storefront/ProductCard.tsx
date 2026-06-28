@@ -29,7 +29,7 @@ export function ProductCard({ product, compact = false, index = 0, storeSlug }: 
         )}
 
         {product.brand && (
-          <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[11px] font-medium">
+          <div className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-xs font-medium">
             {product.brand}
           </div>
         )}
@@ -38,8 +38,7 @@ export function ProductCard({ product, compact = false, index = 0, storeSlug }: 
       <div className={compact ? "p-3.5" : "p-4"}>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Our Picks</div>
-            <div className={cn("font-medium mt-0.5 line-clamp-1", compact ? "text-[13px]" : "text-[15px]")}>
+            <div className={cn("font-medium line-clamp-1", compact ? "text-[13px]" : "text-[15px]")}>
               {product.name}
             </div>
           </div>

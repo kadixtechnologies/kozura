@@ -156,7 +156,7 @@ export function ClientProductPage({
           </div>
           <div className="lg:pt-3">
             {product.brand && (
-              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">
                 {product.brand}
               </div>
             )}
@@ -229,7 +229,7 @@ export function ClientProductPage({
                           {val}
                           {modifier !== 0 && (
                             <span className={cn(
-                              "text-[10px] font-semibold",
+                              "text-xs font-semibold",
                               isSel ? "text-ink-foreground/70" : "text-muted-foreground"
                             )}>
                               {modifier > 0 ? `+${formatNGN(modifier)}` : formatNGN(modifier)}

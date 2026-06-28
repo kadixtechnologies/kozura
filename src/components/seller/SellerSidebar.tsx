@@ -88,7 +88,7 @@ export function SellerSidebar() {
         </nav>
 
         <div className="mt-6">
-          <div className="text-[11px] uppercase tracking-wider text-muted-foreground px-3 mb-2">Quick actions</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground px-3 mb-2">Quick actions</div>
           <Link href="/seller/products/new" className="flex items-center gap-2 px-3 h-9 rounded-full text-sm text-foreground hover:bg-muted transition-colors">
             <Plus className="h-4 w-4" /> Add product
           </Link>
@@ -181,7 +181,7 @@ export function SellerLayout({ children }: { children: React.ReactNode }) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 w-14 h-12 rounded-xl text-[10px] font-medium transition-colors",
+                "flex flex-col items-center justify-center gap-1 flex-1 max-w-[4rem] h-12 rounded-xl text-xs font-medium transition-colors",
                 isActive
                   ? "text-ink"
                   : "text-muted-foreground hover:text-foreground"

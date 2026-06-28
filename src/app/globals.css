@@ -97,11 +97,26 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  /* ── High-DPI / responsive safety net ─────────────────────────────── */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    min-width: 0; /* prevent flex children from overflowing their container */
+  }
+  html {
+    overflow-x: hidden; /* global horizontal-scroll guard */
   }
   html, body {
+    max-width: 100%;
+    overflow-x: hidden;
     background: hsl(var(--canvas));
+  }
+  img, video, svg, iframe, canvas {
+    max-width: 100%; /* never wider than their container */
+    height: auto;
+  }
+  /* ─────────────────────────────────────────────────────────────────── */
+  * {
+    @apply border-border;
   }
   body {
     @apply text-foreground antialiased;

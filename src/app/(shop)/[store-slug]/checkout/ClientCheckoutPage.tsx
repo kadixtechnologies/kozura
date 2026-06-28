@@ -170,7 +170,13 @@ export function ClientCheckoutPage({ store }: { store: any }) {
   const storeItems = allItems.filter(i => i.storeId === store.id);
 
   const handlePlaceOrder = async () => {
-    if (!name || !email || !phone) return toast.error("Please fill in your contact details.");
+    if (!name || !phone) return toast.error("Please fill in your contact details.");
+    
+    if (email && email.trim() !== "") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) return toast.error("Please enter a valid email address.");
+    }
+
     if (shipping === "delivery" && (!address || !city || !state)) return toast.error("Please provide delivery address.");
     if (storeItems.length === 0) return toast.error("Your cart is empty.");
 

@@ -163,17 +163,7 @@ export function ClientProductPage({
             <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight mt-2">
               {product.name}
             </h1>
-            <div className="flex items-center gap-3 mt-3">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className="h-3.5 w-3.5 fill-foreground text-foreground"
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-muted-foreground">4.9 Reviews</span>
-            </div>
+
             <div className="mt-5 inline-flex items-baseline gap-3">
               <span className="text-3xl font-semibold tracking-tight">
                 {formatNGN(effectivePrice)}

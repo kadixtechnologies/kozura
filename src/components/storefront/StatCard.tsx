@@ -24,7 +24,7 @@ export function StatCard({
         {trend && <span className="text-[11px] font-medium text-foreground/70">{trend}</span>}
       </div>
       <div>
-        <div className="text-2xl font-semibold tracking-tight">{value}</div>
+        <div className="text-lg sm:text-2xl font-semibold tracking-tight truncate">{value}</div>
         <div className="text-xs text-foreground/60 mt-1">{label}</div>
       </div>
     </div>

@@ -265,10 +265,10 @@ export function ClientCheckoutPage({ store }: { store: any }) {
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setShowWelcomeBack(false)} className="h-8 rounded-lg text-xs">
-                  <Check className="h-3.5 w-3.5 mr-1" /> Use these
+                  <Check className="h-3.5 w-3.5 mr-1" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={clearSavedDetails} className="h-8 rounded-lg text-xs text-destructive hover:text-destructive hover:bg-destructive/10">
-                  <X className="h-3.5 w-3.5 mr-1" /> Clear
+                  <X className="h-3.5 w-3.5 mr-1" />
                 </Button>
               </div>
             </div>

@@ -34,8 +34,8 @@ function DeleteDialog({ onClose }: { onClose: () => void }) {
   const handle = async () => {
     setLoading(true);
     const res = await deleteAccount();
-    if (res.success) { 
-      toast.success("Your account has been permanently deleted."); 
+    if (res.success) {
+      toast.success("Your account has been permanently deleted.");
       onClose();
       window.location.href = "/";
     } else {
@@ -71,7 +71,7 @@ type DeliveryZone = { label: string; fee: number };
 export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: any; ordersThisMonth: number; plans: any[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     const success = searchParams.get('success');
     const error = searchParams.get('error');
@@ -89,7 +89,7 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
       window.history.replaceState({}, '', url);
     }
   }, [searchParams]);
-  
+
   const dynamicPlans = plans.map(p => ({
     id: p.name.toLowerCase(), // Or p.id if we update stores table to use plan UUIDs
     dbId: p.id,
@@ -117,7 +117,7 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to initiate payment');
-      
+
       // Redirect to Paystack
       window.location.href = data.authorization_url;
     } catch (error: any) {
@@ -130,7 +130,9 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
   const [name, setName] = useState(store.name || "");
   const [tagline, setTagline] = useState(store.tagline || "");
   const [description, setDescription] = useState(store.description || "");
-  const [whatsapp, setWhatsapp] = useState(store.whatsapp_number || "");
+  const initialWhatsapp = store.whatsapp_number || "";
+  const displayWhatsapp = initialWhatsapp.startsWith("+234") ? "0" + initialWhatsapp.slice(4) : initialWhatsapp;
+  const [whatsapp, setWhatsapp] = useState(displayWhatsapp);
 
   // --- Slug with availability check ---
   const [slug, setSlug] = useState(store.slug || "");
@@ -207,7 +209,13 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
     fd.append("name", name);
     fd.append("tagline", tagline);
     fd.append("description", description);
-    fd.append("whatsapp_number", whatsapp);
+    
+    let finalWhatsapp = whatsapp.trim();
+    if (finalWhatsapp.startsWith("0")) {
+      finalWhatsapp = "+234" + finalWhatsapp.slice(1);
+    }
+    fd.append("whatsapp_number", finalWhatsapp);
+    
     fd.append("currency", "NGN");
     fd.append("is_active", String(isActive));
 
@@ -241,9 +249,9 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
     fd.append("social_tiktok_enabled", String(socialTiktokEnabled));
 
     const res = await saveSettings(fd);
-    if (res.success) { 
-      toast.success("Settings saved!"); 
-      window.location.reload(); 
+    if (res.success) {
+      toast.success("Settings saved!");
+      window.location.reload();
     }
     else toast.error(res.error || "Failed to save");
     setSaving(false);
@@ -309,10 +317,12 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">WhatsApp number</Label>
-                    <div className="flex mt-1.5">
-                      <span className="inline-flex items-center h-9 sm:h-10 border border-r-0 border-input rounded-l-xl px-3 text-[13px] sm:text-sm bg-muted/60 text-foreground shrink-0">+234</span>
-                      <Input value={whatsapp} onChange={e => setWhatsapp(e.target.value)} className="rounded-l-none rounded-r-xl border-l-0 text-[13px] sm:text-sm h-9 sm:h-10" placeholder="8012345678" />
-                    </div>
+                    <Input 
+                      value={whatsapp} 
+                      onChange={e => setWhatsapp(e.target.value)} 
+                      className="mt-1.5 rounded-xl text-[13px] sm:text-sm h-9 sm:h-10" 
+                      placeholder="08123456789" 
+                    />
                   </div>
                   <div>
                     <Label className="text-xs text-muted-foreground">Currency</Label>
@@ -524,10 +534,10 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
                         <div className="text-xl font-bold">{plan.price}</div>
                         <div className="text-xs text-muted-foreground mt-1">{plan.ordersLabel} · {plan.productsLabel}</div>
                         {!isCurrent && (
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="mt-4 w-full rounded-xl" 
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="mt-4 w-full rounded-xl"
                             disabled={upgradingPlan !== null}
                             onClick={() => handleUpgrade(plan.id)}
                           >

@@ -26,7 +26,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-[20px] border border-border/60 p-6">
+    <div className="rounded-[20px] border border-border/60 p-4 sm:p-6">
       <h2 className="font-semibold text-sm">{title}</h2>
       <div className="mt-4">{children}</div>
     </div>
@@ -214,7 +214,7 @@ export default async function SellerOrderDetailPage({
         }
       />
 
-      <div className="p-7">
+      <div className="p-4 sm:p-7">
         <Link
           href="/seller/orders"
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors print:hidden"

@@ -71,7 +71,7 @@ export function VariantBuilder({ defaultGroups = [], onChange }: { defaultGroups
                   </button>
                 </span>
                 <span className="text-xs text-muted-foreground">+₦</span>
-                <Input type="number" defaultValue={v.modifier} onChange={(e) => updateModifier(gi, vi, Number(e.target.value))} className="h-8 w-32 rounded-lg" />
+                <Input type="number" defaultValue={v.modifier} onChange={(e) => updateModifier(gi, vi, Number(e.target.value))} className="h-8 sm:h-9 w-24 sm:w-32 rounded-lg text-[13px] sm:text-sm" />
               </div>
             ))}
           </div>
@@ -81,12 +81,12 @@ export function VariantBuilder({ defaultGroups = [], onChange }: { defaultGroups
         <div className="border border-border/60 rounded-2xl p-4 space-y-3 bg-muted/20">
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs text-muted-foreground">Type</Label>
-              <Input className="rounded-xl mt-1.5" placeholder="e.g. Size" value={newType} onChange={(e) => setNewType(e.target.value)} />
+              <Label className="text-[11px] sm:text-xs text-muted-foreground">Type</Label>
+              <Input className="rounded-xl mt-1.5 h-9 sm:h-10 text-[13px] sm:text-sm" placeholder="e.g. Size" value={newType} onChange={(e) => setNewType(e.target.value)} />
             </div>
             <div>
-              <Label className="text-xs text-muted-foreground">Values (comma separated)</Label>
-              <Input className="rounded-xl mt-1.5" placeholder="S, M, L" value={newValues} onChange={(e) => setNewValues(e.target.value)} />
+              <Label className="text-[11px] sm:text-xs text-muted-foreground">Values (comma separated)</Label>
+              <Input className="rounded-xl mt-1.5 h-9 sm:h-10 text-[13px] sm:text-sm" placeholder="S, M, L" value={newValues} onChange={(e) => setNewValues(e.target.value)} />
             </div>
           </div>
           <div className="flex gap-2">
@@ -95,7 +95,7 @@ export function VariantBuilder({ defaultGroups = [], onChange }: { defaultGroups
           </div>
         </div>
       ) : (
-        <Button variant="outline" onClick={() => setAdding(true)} className="gap-2" type="button">
+        <Button variant="outline" size="sm" onClick={() => setAdding(true)} className="gap-2 rounded-xl h-8 text-[11px] sm:text-xs" type="button">
           <Plus className="h-4 w-4" /> Add variant group
         </Button>
       )}

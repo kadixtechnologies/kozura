@@ -23,7 +23,7 @@ export default function NotFound() {
           
           {/* Background Huge 404 */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-            <span className="text-[180px] md:text-[300px] lg:text-[400px] font-bold text-muted/40 leading-none tracking-tighter">
+            <span className="text-[clamp(4rem,38vw,14rem)] md:text-[clamp(8rem,32vw,20rem)] lg:text-[clamp(12rem,28vw,25rem)] font-bold text-muted/40 leading-none tracking-tighter select-none">
               404
             </span>
           </div>

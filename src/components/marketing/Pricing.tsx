@@ -92,7 +92,7 @@ const Pricing = () => {
           <div className="flex flex-col gap-4 justify-center items-center animate-in fade-in slide-in-from-top-8 duration-700 ease-in-out">
             <span className="text-primary font-bold tracking-wider text-sm uppercase block">PRICING</span>
             
-            <div className="max-w-3xs sm:max-w-2xl mx-auto text-center">
+            <div className="max-w-xs sm:max-w-2xl mx-auto text-center">
               <h2 className="text-foreground text-4xl sm:text-5xl font-bold tracking-tight mb-4">
                 Simple pricing, no surprises
               </h2>

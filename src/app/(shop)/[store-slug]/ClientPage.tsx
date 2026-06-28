@@ -92,7 +92,7 @@ export function StorefrontClient({ store, products, categories }: { store: any, 
         <div className="bg-background rounded-[32px] p-8 md:p-12 min-h-[300px] flex flex-col justify-end border border-border/60">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-              <h1 className="text-6xl sm:text-8xl font-semibold tracking-tight leading-none">
+              <h1 className="text-4xl sm:text-6xl lg:text-8xl font-semibold tracking-tight leading-none">
                 Explore <br />
                 <span className="text-muted-foreground/40">{store.name}</span>
               </h1>

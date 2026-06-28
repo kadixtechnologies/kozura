@@ -246,9 +246,9 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
                   </th>
                   <th className="px-2 sm:px-3 py-3 font-medium">Product</th>
                   <th className="px-3 py-3 font-medium hidden sm:table-cell">Category</th>
-                  <th className="px-2 sm:px-3 py-3 font-medium">Price</th>
+                  <th className="px-2 sm:px-3 py-3 font-medium hidden sm:table-cell">Price</th>
                   <th className="px-3 py-3 font-medium hidden md:table-cell">Stock</th>
-                  <th className="px-2 sm:px-3 py-3 font-medium">Status</th>
+                  <th className="px-2 sm:px-3 py-3 font-medium hidden sm:table-cell">Status</th>
                   <th className="px-1 sm:px-3 py-3 w-8 sm:w-10"></th>
                 </tr>
               </thead>
@@ -278,7 +278,7 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
                             onCheckedChange={() => toggleSelect(p.id)}
                           />
                         </td>
-                        <td className="px-2 sm:px-3 py-3 w-full max-w-[100px] sm:w-auto sm:max-w-none">
+                        <td className="px-2 sm:px-3 py-3 w-full max-w-[150px] sm:w-auto sm:max-w-none">
                           <Link href={`/seller/products/${p.id}/edit`} className="flex items-center gap-2 sm:gap-3 group">
                             {p.images?.[0] ? (
                               <img src={p.images[0]} alt={p.name} className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl object-cover shrink-0" />
@@ -289,22 +289,30 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
                             )}
                             <div className="min-w-0">
                               <div className="font-medium truncate group-hover:underline">{p.name}</div>
+                              <div className="sm:hidden text-xs text-muted-foreground mt-0.5">{formatNGN(p.price)}</div>
                             </div>
                           </Link>
                         </td>
                         <td className="px-3 py-3 text-muted-foreground capitalize hidden sm:table-cell">{catName}</td>
-                        <td className="px-2 sm:px-3 py-3 font-medium whitespace-nowrap">{formatNGN(p.price)}</td>
+                        <td className="px-2 sm:px-3 py-3 font-medium whitespace-nowrap hidden sm:table-cell">{formatNGN(p.price)}</td>
                         <td className="px-3 py-3 hidden md:table-cell">
                           {p.stock_quantity !== null && p.stock_quantity !== undefined ? (
                             p.stock_quantity > 0 ? p.stock_quantity : <span className="text-destructive font-medium text-xs bg-destructive/10 px-2 py-1 rounded-full">Out of stock</span>
                           ) : "Unlimited"}
                         </td>
-                        <td className="px-2 sm:px-3 py-3"><StatusBadge status={p.is_published ? "Active" : "Inactive"} /></td>
-                        <td className="px-1 sm:px-3 py-3 text-right">
-                          <ActionMenu
-                            product={p}
-                            onDelete={() => handleDelete(p.id, p.name)}
-                          />
+                        <td className="px-2 sm:px-3 py-3 hidden sm:table-cell"><StatusBadge status={p.is_published ? "Active" : "Inactive"} /></td>
+                        <td className="px-1 sm:px-3 py-3 text-right align-top sm:align-middle">
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="-mt-1.5 sm:mt-0">
+                              <ActionMenu
+                                product={p}
+                                onDelete={() => handleDelete(p.id, p.name)}
+                              />
+                            </div>
+                            <div className="sm:hidden mt-0.5">
+                              <StatusBadge status={p.is_published ? "Active" : "Inactive"} />
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     )

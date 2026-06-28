@@ -72,7 +72,7 @@ export default function WaitlistLandingPage() {
                     Something Big is Coming
                   </div>
 
-                  <h1 className="text-5xl md:text-6xl lg:text-[72px] font-bold tracking-tight text-foreground leading-[1.05] mb-6">
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] mb-6">
                     Your Business Deserves <br className="hidden md:block" />
                     <span className="text-primary">a Real Store</span>
                   </h1>
@@ -91,7 +91,7 @@ export default function WaitlistLandingPage() {
 
                 {/* Right Column: Visual Element */}
                 <div className="flex-1 w-full flex items-center justify-center lg:justify-end mt-20 lg:mt-0">
-                  <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end">
+                  <div className="relative w-full max-w-[900px] flex items-center justify-center lg:justify-end overflow-hidden">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-primary/25 blur-[150px] rounded-full pointer-events-none" />
                     <div className="relative w-full h-full overflow-hidden [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]">
                       <img

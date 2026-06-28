@@ -78,16 +78,24 @@ export function ClientDashboard({ store, stats, recentOrders }: { store: any, st
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="border-b border-border/60 text-left text-muted-foreground text-xs"><th className="px-5 py-3 font-medium">Order</th><th className="px-5 py-3 font-medium">Customer</th><th className="px-5 py-3 font-medium">Amount</th><th className="px-5 py-3 font-medium">Status</th></tr></thead>
+                <thead><tr className="border-b border-border/60 text-left text-muted-foreground text-xs"><th className="px-5 py-3 font-medium">Order</th><th className="px-5 py-3 font-medium hidden sm:table-cell">Customer</th><th className="px-5 py-3 font-medium hidden sm:table-cell">Amount</th><th className="px-5 py-3 font-medium text-right sm:text-left">Status</th></tr></thead>
                 <tbody>
                   {recentOrders.length === 0 ? (
                     <tr><td colSpan={4} className="px-5 py-8 text-center text-muted-foreground">No orders yet</td></tr>
                   ) : recentOrders.map((o) => (
                     <tr key={o.id} className="border-b border-border/60 last:border-b-0 hover:bg-muted/30 transition-colors cursor-pointer" onClick={() => router.push(`/seller/orders/${o.id}`)}>
-                      <td className="px-5 py-3 font-medium">{o.order_number}</td>
-                      <td className="px-5 py-3 text-muted-foreground">{o.customer_name}</td>
-                      <td className="px-5 py-3 font-medium">{formatNGN(o.total_amount)}</td>
-                      <td className="px-5 py-3"><StatusBadge status={o.status.charAt(0).toUpperCase() + o.status.slice(1)} /></td>
+                      <td className="px-5 py-3">
+                        <div className="font-medium">{o.order_number}</div>
+                        <div className="text-muted-foreground truncate max-w-[140px] sm:hidden text-xs mt-0.5">{o.customer_name}</div>
+                      </td>
+                      <td className="px-5 py-3 text-muted-foreground hidden sm:table-cell">{o.customer_name}</td>
+                      <td className="px-5 py-3 font-medium hidden sm:table-cell">{formatNGN(o.total_amount)}</td>
+                      <td className="px-5 py-3 text-right sm:text-left">
+                        <div className="flex justify-end sm:justify-start">
+                          <StatusBadge status={o.status.charAt(0).toUpperCase() + o.status.slice(1)} />
+                        </div>
+                        <div className="font-medium sm:hidden text-xs mt-1.5">{formatNGN(o.total_amount)}</div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -95,7 +103,7 @@ export function ClientDashboard({ store, stats, recentOrders }: { store: any, st
             </div>
           </div>
           <div className="rounded-[20px] border border-border/60 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div><h3 className="font-semibold text-sm">Quick start</h3><p className="text-xs text-muted-foreground mt-0.5">Add your first product to your store.</p></div>
+            <div><h3 className="font-semibold text-sm">Quick start</h3><p className="text-xs text-muted-foreground mt-0.5">Add products to your store.</p></div>
             <Button asChild size="sm"><Link href="/seller/products/new">Add product</Link></Button>
           </div>
         </div>

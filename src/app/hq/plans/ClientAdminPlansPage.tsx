@@ -139,17 +139,17 @@ export function ClientAdminPlansPage({ initialPlans }: { initialPlans: any[] }) 
     <>
       <AdminLayout>
         <AdminTopBar title="Pricing Plans" count={String(plans.length)} subtitle="Manage subscription limits" />
-        <div className="p-7">
-          <div className="rounded-[20px] border border-border/60 bg-background">
+        <div className="p-4 sm:p-7">
+          <div className="rounded-[20px] border border-border/60 bg-background overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
                   <TableHead>Plan Name</TableHead>
-                  <TableHead>Monthly Price</TableHead>
-                  <TableHead>Order Limit</TableHead>
-                  <TableHead>Product Limit</TableHead>
-                  <TableHead>Category Limit</TableHead>
-                  <TableHead>Image Limit</TableHead>
+                  <TableHead className="hidden sm:table-cell">Monthly Price</TableHead>
+                  <TableHead className="hidden sm:table-cell">Order Limit</TableHead>
+                  <TableHead className="hidden md:table-cell">Product Limit</TableHead>
+                  <TableHead className="hidden md:table-cell">Category Limit</TableHead>
+                  <TableHead className="hidden md:table-cell">Image Limit</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -162,26 +162,32 @@ export function ClientAdminPlansPage({ initialPlans }: { initialPlans: any[] }) 
                           <div>
                             <div className="font-semibold text-sm">{plan.name}</div>
                             <div className="text-[10px] text-muted-foreground">{plan.description}</div>
+                            <div className="sm:hidden text-xs mt-1">
+                              {plan.price_monthly === 0 ? "Free" : formatCurrency(plan.price_monthly)} / mo
+                            </div>
+                            <div className="sm:hidden text-[10px] text-muted-foreground mt-0.5">
+                              Limits: {formatLimit(plan.order_limit)} orders, {formatLimit(plan.product_limit)} prods, {formatLimit(plan.category_limit)} cats
+                            </div>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium text-sm">
+                      <TableCell className="font-medium text-sm hidden sm:table-cell">
                         {plan.price_monthly === 0 ? "Free" : formatCurrency(plan.price_monthly)}
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-sm hidden sm:table-cell">
                         {formatLimit(plan.order_limit)} <span className="text-[10px] text-muted-foreground">/mo</span>
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-sm hidden md:table-cell">
                         {formatLimit(plan.product_limit)}
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-sm hidden md:table-cell">
                         {formatLimit(plan.category_limit)}
                       </TableCell>
-                      <TableCell className="text-sm">
+                      <TableCell className="text-sm hidden md:table-cell">
                         {formatLimit(plan.image_limit)}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="rounded-xl h-8 px-3 gap-1.5" onClick={() => setEditingPlan(plan)}>
+                        <Button variant="ghost" size="sm" className="rounded-xl h-8 px-3 gap-1.5 text-[11px] sm:text-xs" onClick={() => setEditingPlan(plan)}>
                           <Edit2 className="h-3.5 w-3.5" />
                           Edit
                         </Button>

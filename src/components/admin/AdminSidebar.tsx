@@ -21,7 +21,6 @@ const navItems = [
   { href: "/hq/users", icon: Users, label: "Users" },
   { href: "/hq/plans", icon: Zap, label: "Plans" },
   { href: "/hq/email-preview", icon: Mail, label: "Emails" },
-  { href: "/hq/settings", icon: Settings, label: "Settings" },
 ];
 
 async function handleSignOut() {

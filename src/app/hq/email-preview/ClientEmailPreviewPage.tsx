@@ -14,7 +14,8 @@ import { NewStoreNotificationEmail } from "@/lib/email/templates/new-store-notif
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
 type TemplateKey = 'waitlist' | 'upgrade' | 'warning' | 'cancelled' | 'notification';
@@ -76,36 +77,43 @@ export function ClientEmailPreviewPage() {
 
   return (
     <AdminLayout>
-      <AdminTopBar 
-        title="Email Templates Preview" 
-        subtitle="Test and preview platform emails with dynamic data" 
+      <AdminTopBar
+        title="Email Templates Preview"
+        subtitle="Preview emails with dynamic data"
       />
-      <div className="p-7 space-y-6">
+      <div className="p-4 sm:p-7 space-y-4 sm:space-y-6">
         <Tabs defaultValue="waitlist" value={activeTab} onValueChange={(val) => setActiveTab(val as TemplateKey)} className="w-full">
-          <TabsList className="flex flex-wrap h-auto gap-2 mb-6 bg-transparent">
-            <TabsTrigger value="waitlist" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-full px-4 py-2">Waitlist</TabsTrigger>
-            <TabsTrigger value="upgrade" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-full px-4 py-2">Plan Upgrade</TabsTrigger>
-            <TabsTrigger value="warning" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-full px-4 py-2">Payment Warning</TabsTrigger>
-            <TabsTrigger value="cancelled" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-full px-4 py-2">Plan Cancelled</TabsTrigger>
-            <TabsTrigger value="notification" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-full px-4 py-2">New Store</TabsTrigger>
-          </TabsList>
+          <div className="mb-5 w-full sm:w-64">
+            <Select value={activeTab} onValueChange={(val) => setActiveTab(val as TemplateKey)}>
+              <SelectTrigger className="w-full rounded-xl bg-background h-10 px-3 text-[13px] sm:text-sm font-medium shadow-sm border-border/60">
+                <SelectValue placeholder="Select template" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-border/60">
+                <SelectItem value="waitlist" className="text-[13px] sm:text-sm rounded-lg cursor-pointer">Waitlist</SelectItem>
+                <SelectItem value="upgrade" className="text-[13px] sm:text-sm rounded-lg cursor-pointer">Plan Upgrade</SelectItem>
+                <SelectItem value="warning" className="text-[13px] sm:text-sm rounded-lg cursor-pointer">Payment Warning</SelectItem>
+                <SelectItem value="cancelled" className="text-[13px] sm:text-sm rounded-lg cursor-pointer">Plan Cancelled</SelectItem>
+                <SelectItem value="notification" className="text-[13px] sm:text-sm rounded-lg cursor-pointer">New Store</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
             {/* Controls sidebar */}
-            <div className="lg:col-span-1 space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Dynamic Properties</CardTitle>
-                  <CardDescription>Adjust the properties to see how the template renders.</CardDescription>
+            <div className="lg:col-span-1 space-y-4 sm:space-y-6">
+              <Card className="rounded-[20px] sm:rounded-[24px]">
+                <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4">
+                  <CardTitle className="text-sm sm:text-base">Dynamic Properties</CardTitle>
+                  <CardDescription className="text-xs sm:text-sm">Adjust the properties to see how the template renders.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
                   {activeTab === 'waitlist' && (
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Name</Label>
-                        <Input 
-                          value={waitlistProps.name} 
-                          onChange={e => setWaitlistProps({...waitlistProps, name: e.target.value})} 
+                        <Label className="text-[11px] sm:text-xs">Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl"
+                          value={waitlistProps.name}
+                          onChange={e => setWaitlistProps({ ...waitlistProps, name: e.target.value })}
                         />
                       </div>
                     </div>
@@ -114,20 +122,20 @@ export function ClientEmailPreviewPage() {
                   {activeTab === 'upgrade' && (
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Store Name</Label>
-                        <Input value={upgradeProps.storeName} onChange={e => setUpgradeProps({...upgradeProps, storeName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Store Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={upgradeProps.storeName} onChange={e => setUpgradeProps({ ...upgradeProps, storeName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Plan Name</Label>
-                        <Input value={upgradeProps.planName} onChange={e => setUpgradeProps({...upgradeProps, planName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Plan Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={upgradeProps.planName} onChange={e => setUpgradeProps({ ...upgradeProps, planName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Amount</Label>
-                        <Input value={upgradeProps.amount} onChange={e => setUpgradeProps({...upgradeProps, amount: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Amount</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={upgradeProps.amount} onChange={e => setUpgradeProps({ ...upgradeProps, amount: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Next Billing Date</Label>
-                        <Input value={upgradeProps.nextBillingDate} onChange={e => setUpgradeProps({...upgradeProps, nextBillingDate: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Next Billing Date</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={upgradeProps.nextBillingDate} onChange={e => setUpgradeProps({ ...upgradeProps, nextBillingDate: e.target.value })} />
                       </div>
                     </div>
                   )}
@@ -135,20 +143,20 @@ export function ClientEmailPreviewPage() {
                   {activeTab === 'warning' && (
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Store Name</Label>
-                        <Input value={warningProps.storeName} onChange={e => setWarningProps({...warningProps, storeName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Store Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={warningProps.storeName} onChange={e => setWarningProps({ ...warningProps, storeName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Days Remaining</Label>
-                        <Input type="number" value={warningProps.daysRemaining} onChange={e => setWarningProps({...warningProps, daysRemaining: parseInt(e.target.value) || 0})} />
+                        <Label className="text-[11px] sm:text-xs">Days Remaining</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" type="number" value={warningProps.daysRemaining} onChange={e => setWarningProps({ ...warningProps, daysRemaining: parseInt(e.target.value) || 0 })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Grace Period Ends</Label>
-                        <Input value={warningProps.gracePeriodEnds} onChange={e => setWarningProps({...warningProps, gracePeriodEnds: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Grace Period Ends</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={warningProps.gracePeriodEnds} onChange={e => setWarningProps({ ...warningProps, gracePeriodEnds: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Login URL</Label>
-                        <Input value={warningProps.loginUrl} onChange={e => setWarningProps({...warningProps, loginUrl: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Login URL</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={warningProps.loginUrl} onChange={e => setWarningProps({ ...warningProps, loginUrl: e.target.value })} />
                       </div>
                     </div>
                   )}
@@ -156,12 +164,12 @@ export function ClientEmailPreviewPage() {
                   {activeTab === 'cancelled' && (
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Store Name</Label>
-                        <Input value={cancelledProps.storeName} onChange={e => setCancelledProps({...cancelledProps, storeName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Store Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={cancelledProps.storeName} onChange={e => setCancelledProps({ ...cancelledProps, storeName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Login URL</Label>
-                        <Input value={cancelledProps.loginUrl} onChange={e => setCancelledProps({...cancelledProps, loginUrl: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Login URL</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={cancelledProps.loginUrl} onChange={e => setCancelledProps({ ...cancelledProps, loginUrl: e.target.value })} />
                       </div>
                     </div>
                   )}
@@ -169,20 +177,20 @@ export function ClientEmailPreviewPage() {
                   {activeTab === 'notification' && (
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Store Name</Label>
-                        <Input value={notificationProps.storeName} onChange={e => setNotificationProps({...notificationProps, storeName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Store Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={notificationProps.storeName} onChange={e => setNotificationProps({ ...notificationProps, storeName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Owner Name</Label>
-                        <Input value={notificationProps.ownerName} onChange={e => setNotificationProps({...notificationProps, ownerName: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Owner Name</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={notificationProps.ownerName} onChange={e => setNotificationProps({ ...notificationProps, ownerName: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Owner Email</Label>
-                        <Input value={notificationProps.ownerEmail} onChange={e => setNotificationProps({...notificationProps, ownerEmail: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Owner Email</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={notificationProps.ownerEmail} onChange={e => setNotificationProps({ ...notificationProps, ownerEmail: e.target.value })} />
                       </div>
                       <div className="space-y-2">
-                        <Label>Login URL</Label>
-                        <Input value={notificationProps.loginUrl} onChange={e => setNotificationProps({...notificationProps, loginUrl: e.target.value})} />
+                        <Label className="text-[11px] sm:text-xs">Login URL</Label>
+                        <Input className="h-8 sm:h-10 text-[13px] sm:text-sm rounded-xl" value={notificationProps.loginUrl} onChange={e => setNotificationProps({ ...notificationProps, loginUrl: e.target.value })} />
                       </div>
                     </div>
                   )}
@@ -192,10 +200,10 @@ export function ClientEmailPreviewPage() {
 
             {/* Preview pane */}
             <div className="lg:col-span-2">
-              <Card className="h-[800px] flex flex-col">
-                <CardHeader className="py-4 border-b bg-muted/50">
+              <Card className="h-[600px] sm:h-[800px] flex flex-col rounded-[20px] sm:rounded-[24px] overflow-hidden">
+                <CardHeader className="py-3 sm:py-4 border-b bg-muted/50 px-4 sm:px-6">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <CardTitle className="text-xs sm:text-sm font-medium flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-red-400"></div>
                       <div className="h-3 w-3 rounded-full bg-yellow-400"></div>
                       <div className="h-3 w-3 rounded-full bg-green-400"></div>
@@ -204,7 +212,7 @@ export function ClientEmailPreviewPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="flex-1 p-0 overflow-hidden bg-white">
-                  <iframe 
+                  <iframe
                     srcDoc={htmlContent}
                     className="w-full h-full border-none"
                     title="Email Preview"

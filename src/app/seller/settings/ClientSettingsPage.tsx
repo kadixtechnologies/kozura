@@ -276,28 +276,20 @@ export function ClientSettingsPage({ store, ordersThisMonth, plans }: { store: a
         />
         <div className="p-4 sm:p-7">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            {/* Mobile: dropdown */}
-            <div className="sm:hidden mb-5">
+            <div className="mb-5 w-full sm:w-64">
               <Select value={activeTab} onValueChange={setActiveTab}>
-                <SelectTrigger className="w-full rounded-xl bg-background h-10 px-3 text-[13px] font-medium capitalize shadow-sm border-border/60">
+                <SelectTrigger className="w-full rounded-xl bg-background h-10 px-3 text-[13px] sm:text-sm font-medium capitalize shadow-sm border-border/60">
                   <SelectValue placeholder="Select section" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-border/60">
                   {["general", "appearance", "shipping", "payments", "plan", "seo", "socials"].map(t => (
-                    <SelectItem key={t} value={t} className="capitalize text-[13px] rounded-lg cursor-pointer">
+                    <SelectItem key={t} value={t} className="capitalize text-[13px] sm:text-sm rounded-lg cursor-pointer">
                       {t}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Desktop: pill tabs */}
-            <TabsList className="hidden sm:flex bg-muted rounded-full p-1 h-auto flex-wrap gap-1">
-              {["general", "appearance", "shipping", "payments", "plan", "seo", "socials"].map(t => (
-                <TabsTrigger key={t} value={t} className="rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-1.5 text-sm capitalize">{t}</TabsTrigger>
-              ))}
-            </TabsList>
 
             {/* ── GENERAL ── */}
             <TabsContent value="general" className="space-y-5 mt-6">

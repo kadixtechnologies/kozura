@@ -73,9 +73,9 @@ export function ClientCategories({ initialCategories }: { initialCategories: any
         count={String(cats.length)}
         title="Categories"
         subtitle="Organize your products"
-        action={<Button className="gap-2" onClick={() => setAdding(true)} disabled={isLoading}><Plus className="h-4 w-4" /> Add category</Button>}
+        action={<Button className="gap-2 rounded-xl text-xs sm:text-sm h-8 sm:h-9 w-full sm:w-auto" onClick={() => setAdding(true)} disabled={isLoading}><Plus className="h-4 w-4" /> Add category</Button>}
       />
-      <div className="p-7">
+      <div className="p-4 sm:p-7">
         <div className="rounded-[20px] border border-border/60 overflow-hidden bg-background divide-y divide-border/60">
           {cats.length === 0 && !adding && (
             <div className="px-5 py-8 text-center text-sm text-muted-foreground">No categories found. Add one to get started!</div>

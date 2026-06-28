@@ -5,6 +5,8 @@ import { AdminLayout, AdminTopBar } from "@/components/admin/AdminSidebar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TablePagination } from "@/components/shared/TablePagination";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Zap, TrendingUp, Briefcase, Crown, AlertTriangle, X, ChevronDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -115,19 +117,19 @@ function ActionMenu({ store, onToggle, onChangePlan, onDelete }: { store: any; o
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-1.5">
+        <Button variant="outline" size="sm" className="gap-1.5 rounded-xl h-8 text-[11px] sm:text-xs">
           Actions <ChevronDown className="h-3.5 w-3.5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44 rounded-2xl p-1.5">
-        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer" onClick={onToggle}>
+      <DropdownMenuContent align="end" className="w-40 rounded-2xl p-1.5">
+        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer text-[11px] sm:text-xs" onClick={onToggle}>
           {store.is_active ? "Deactivate" : "Activate"}
         </DropdownMenuItem>
-        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer" onClick={onChangePlan}>
+        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer text-[11px] sm:text-xs" onClick={onChangePlan}>
           Change plan
         </DropdownMenuItem>
         <DropdownMenuSeparator className="my-1 border-t border-border/60" />
-        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10" onClick={onDelete}>
+        <DropdownMenuItem className="rounded-xl px-3 py-2 cursor-pointer text-[11px] sm:text-xs text-destructive focus:text-destructive focus:bg-destructive/10" onClick={onDelete}>
           Delete store
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -189,20 +191,24 @@ export function ClientAdminStoresPage({ initialStores, plans }: { initialStores:
     <>
       <AdminLayout>
         <AdminTopBar title="Manage Stores" count={String(stores.length)} subtitle="All registered sellers" />
-        <div className="p-7">
+        <div className="p-4 sm:p-7">
           <div className="rounded-[20px] border border-border/60 bg-background">
             <Table>
-              <TableHeader><TableRow className="hover:bg-transparent"><TableHead>Store Name</TableHead><TableHead>Contact Info</TableHead><TableHead>Plan</TableHead><TableHead>Revenue</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="hover:bg-transparent"><TableHead>Store Name</TableHead><TableHead className="hidden sm:table-cell">Contact Info</TableHead><TableHead>Plan</TableHead><TableHead className="hidden sm:table-cell">Revenue</TableHead><TableHead className="hidden sm:table-cell">Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
               <TableBody>
                 {stores.length === 0 ? (
                   <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No stores found</TableCell></TableRow>
                 ) : paginatedStores.map((s) => (
                   <TableRow key={s.id}>
-                    <TableCell className="font-semibold">{s.name}</TableCell>
-                    <TableCell><div className="flex flex-col"><span className="font-medium text-sm">{s.seller?.full_name || s.account_name}</span><span className="text-[11px] text-muted-foreground">{s.seller?.email || s.contact_email}</span><span className="text-[11px] text-muted-foreground">{s.whatsapp_number}</span></div></TableCell>
+                    <TableCell>
+                      <div className="font-semibold">{s.name}</div>
+                      <div className="sm:hidden text-[11px] text-muted-foreground mt-0.5">{s.seller?.full_name || s.account_name} • {formatCurrency(s.totalRevenue)}</div>
+                      <div className="sm:hidden mt-1"><span className={cn("inline-flex items-center rounded-full px-2 py-0 text-[10px] font-semibold", s.is_active ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{s.is_active ? "Active" : "Inactive"}</span></div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell"><div className="flex flex-col"><span className="font-medium text-sm">{s.seller?.full_name || s.account_name}</span><span className="text-[11px] text-muted-foreground">{s.seller?.email || s.contact_email}</span><span className="text-[11px] text-muted-foreground">{s.whatsapp_number}</span></div></TableCell>
                     <TableCell><PlanBadge planName={s.subscription_plan} /></TableCell>
-                    <TableCell className="font-medium">{formatCurrency(s.totalRevenue)}</TableCell>
-                    <TableCell><span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", s.is_active ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{s.is_active ? "Active" : "Inactive"}</span></TableCell>
+                    <TableCell className="font-medium hidden sm:table-cell">{formatCurrency(s.totalRevenue)}</TableCell>
+                    <TableCell className="hidden sm:table-cell"><span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold", s.is_active ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive")}>{s.is_active ? "Active" : "Inactive"}</span></TableCell>
                     <TableCell className="text-right"><ActionMenu store={s} onToggle={() => toggleStatus(s.id)} onChangePlan={() => setPlanDialog(s)} onDelete={() => setDeleteDialog(s)} /></TableCell>
                   </TableRow>
                 ))}
@@ -210,27 +216,13 @@ export function ClientAdminStoresPage({ initialStores, plans }: { initialStores:
             </Table>
           </div>
           {stores.length > 0 && (
-            <div className="p-4 border-t border-border/60 flex flex-col sm:flex-row items-center justify-between text-sm text-muted-foreground gap-4 bg-background rounded-b-[20px] border-x border-b">
-              <div className="flex items-center gap-2">
-                <span>Show</span>
-                <Select value={String(itemsPerPage)} onValueChange={(v) => { setItemsPerPage(Number(v)); setCurrentPage(1); }}>
-                  <SelectTrigger className="h-8 w-16 text-xs rounded-xl"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="10">10</SelectItem>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="50">50</SelectItem>
-                    <SelectItem value="100">100</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, stores.length)} of {stores.length}
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="rounded-xl h-8" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Prev</Button>
-                <Button variant="outline" size="sm" className="rounded-xl h-8" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages || totalPages === 0}>Next</Button>
-              </div>
-            </div>
+            <TablePagination
+              currentPage={currentPage}
+              totalCount={stores.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={(v) => { setItemsPerPage(v); setCurrentPage(1); }}
+            />
           )}
         </div>
       </AdminLayout>

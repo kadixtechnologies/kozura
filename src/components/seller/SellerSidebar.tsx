@@ -141,19 +141,23 @@ export function SellerSidebar() {
 export function SellerTopBar({ title, count, subtitle, action }: { title: string; count?: string; subtitle?: string; action?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between flex-wrap gap-4 px-4 md:px-7 py-4 md:py-5 border-b border-border/60 print:pb-0 print:border-none">
-      <div className="flex items-baseline gap-3">
-        {count && <span className="text-3xl font-semibold tracking-tight">{count}</span>}
-        <div>
-          <div className="text-base font-semibold tracking-tight leading-none">{title}</div>
-          {subtitle && <div className="text-xs text-muted-foreground mt-1">{subtitle}</div>}
+      <div className="flex items-center justify-between w-full md:w-auto">
+        <div className="flex items-baseline gap-3">
+          {count && <span className="text-2xl sm:text-3xl font-semibold tracking-tight">{count}</span>}
+          <div>
+            <div className="text-sm sm:text-base font-semibold tracking-tight leading-none">{title}</div>
+            {subtitle && <div className="text-[11px] sm:text-xs text-muted-foreground mt-1">{subtitle}</div>}
+          </div>
         </div>
-      </div>
-      <div className="flex items-center gap-2 print:hidden w-full md:w-auto justify-between md:justify-end">
-        {action}
-        <button onClick={signOutSeller} className="md:hidden h-9 w-9 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0" title="Log out">
+        <button onClick={signOutSeller} className="md:hidden h-8 w-8 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0" title="Log out">
           <LogOut className="h-4 w-4" />
         </button>
       </div>
+      {action && (
+        <div className="flex items-center gap-2 print:hidden w-full md:w-auto justify-end">
+          {action}
+        </div>
+      )}
     </div>
   );
 }

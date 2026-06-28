@@ -140,42 +140,25 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
         title="Products"
         subtitle="Manage your catalog"
         action={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             {selectedIds.length > 0 && (
-              <Button variant="destructive" onClick={handleBulkDelete} disabled={deletingBulk} className="gap-2 rounded-xl">
+              <Button variant="destructive" onClick={handleBulkDelete} disabled={deletingBulk} className="gap-2 rounded-xl text-xs sm:text-sm h-8 sm:h-9 w-full sm:w-auto">
                 {deletingBulk ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                 Delete ({selectedIds.length})
               </Button>
             )}
-            <Button asChild className="gap-2 rounded-xl">
+            <Button asChild className="gap-2 rounded-xl text-xs sm:text-sm h-8 sm:h-9 w-full sm:w-auto">
               <Link href="/seller/products/new"><Plus className="h-4 w-4" /> Add product</Link>
             </Button>
           </div>
         }
       />
 
-      <div className="p-7">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-5">
-          <div className="relative flex-1 w-full sm:max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products…"
-              className="w-full h-10 pl-10 pr-10 rounded-full border border-border bg-background text-sm outline-none focus:border-foreground/30 transition-colors"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 text-muted-foreground"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            )}
-          </div>
+      <div className="p-4 sm:p-7">
+        <div className="flex flex-row items-center gap-2 sm:gap-3 mb-5">
           <Button
             variant="outline"
-            className={cn("rounded-full h-10 gap-2 transition-colors", filterOpen || activeFiltersCount > 0 ? "border-ink text-ink bg-muted/40" : "")}
+            className={cn("rounded-full h-9 sm:h-10 gap-2 transition-colors text-xs sm:text-sm shrink-0 px-3 sm:px-4", filterOpen || activeFiltersCount > 0 ? "border-ink text-ink bg-muted/40" : "")}
             onClick={() => setFilterOpen(!filterOpen)}
           >
             <SlidersHorizontal className="h-4 w-4" />
@@ -186,6 +169,23 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
               </span>
             )}
           </Button>
+          <div className="relative flex-1 w-full sm:max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products…"
+              className="w-full h-9 sm:h-10 pl-10 pr-10 rounded-full border border-border bg-background text-[13px] sm:text-sm outline-none focus:border-foreground/30 transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted/70 text-muted-foreground"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
         </div>
 
         {filterOpen && (
@@ -235,7 +235,7 @@ export function ClientProducts({ initialProducts, categories }: { initialProduct
 
         <div className="rounded-[20px] border border-border/60 overflow-hidden bg-background">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-[13px] sm:text-sm">
               <thead>
                 <tr className="border-b border-border/60 text-left text-muted-foreground text-xs">
                   <th className="pl-2 sm:pl-5 pr-1 sm:pr-2 py-3 w-8 sm:w-10">

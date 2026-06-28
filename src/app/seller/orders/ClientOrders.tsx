@@ -5,6 +5,7 @@ import { SellerLayout, SellerTopBar } from "@/components/seller/SellerSidebar";
 import { StatusBadge } from "@/components/storefront/StatusBadge";
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TablePagination } from "@/components/shared/TablePagination";
 import { formatNGN } from "@/lib/format";
 
@@ -94,17 +95,20 @@ export function ClientOrders({ orders }: { orders: any[] }) {
       />
       <div className="p-4 sm:p-7">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="bg-muted rounded-full p-1 h-auto">
-            {tabs.map((t) => (
-              <TabsTrigger
-                key={t.value}
-                value={t.value}
-                className="rounded-full data-[state=active]:bg-background data-[state=active]:shadow-sm px-4 py-1.5 text-sm capitalize"
-              >
-                {t.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <div className="mb-5 w-full sm:w-64">
+            <Select value={activeTab} onValueChange={setActiveTab}>
+              <SelectTrigger className="w-full rounded-xl bg-background h-10 px-3 text-[13px] sm:text-sm font-medium capitalize shadow-sm border-border/60">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-border/60">
+                {tabs.map((t) => (
+                  <SelectItem key={t.value} value={t.value} className="capitalize text-[13px] sm:text-sm rounded-lg cursor-pointer">
+                    {t.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           {tabs.map((t) => (
             <TabsContent key={t.value} value={t.value}>
               {renderTable(t.filter ? orders.filter((o) => o.status === t.filter) : orders)}

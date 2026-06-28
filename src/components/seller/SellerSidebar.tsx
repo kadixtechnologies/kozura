@@ -145,7 +145,7 @@ export function SellerTopBar({ title, count, subtitle, action }: { title: string
         <div className="flex items-baseline gap-3">
           {count && <span className="text-2xl sm:text-3xl font-semibold tracking-tight">{count}</span>}
           <div>
-            <div className="text-sm sm:text-base font-semibold tracking-tight leading-none">{title}</div>
+            <div className="text-base sm:text-lg font-semibold tracking-tight leading-none">{title}</div>
             {subtitle && <div className="text-[11px] sm:text-xs text-muted-foreground mt-1">{subtitle}</div>}
           </div>
         </div>
